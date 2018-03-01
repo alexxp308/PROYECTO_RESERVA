@@ -229,7 +229,7 @@ function createTable(cadena) {
     my += '</table>';
     return my;
 }
-
+//hola
    /*<div class="panel panel-default">
         <div class="panel-heading">
             <h4 class="panel-title">
