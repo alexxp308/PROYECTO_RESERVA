@@ -8,25 +8,9 @@
             return document.getElementsByClassName(name);
         }
 
-		/*$('#groupfechaR').datepicker({
-			format: "yyyy-mm-dd",
-		});*/
-
         $('#navegacion a').click(function (e) {
             e.preventDefault()
-            //$(this).tab('show')
         });
-
-        /*o.getCookie = function () {
-            var myCookie = {};
-            var mystring = document.cookie;
-            var groups = mystring.split(";");
-            for (var i = 0; i < groups.length; i++) {
-                var idValue = groups[i].split("=");
-                myCookie[(idValue[0].replace(" ", ""))] = idValue[1];
-            }
-            return myCookie;
-        }*/
 
         o.actualDate = function () {
             var midate = new Date();
@@ -210,9 +194,11 @@
                             if (data.length > 0) {
                                 var visualEvent = {};
                                 for (var i = 0; i < data.length; i++) {
-                                    visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].UserNameCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
-                                    o.myevents.push(visualEvent);
-                                    $('#calendar').fullCalendar('renderEvent', visualEvent, true);
+                                    if (data[i].estadoReserva != 0) {
+                                        visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].UserNameCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
+                                        o.myevents.push(visualEvent);
+                                        $('#calendar').fullCalendar('renderEvent', visualEvent, true);
+                                    }
                                 }
                             }
 
@@ -735,9 +721,11 @@
                 if (data.length > 0) {
                     var visualEvent = {};
                     for (var i = 0; i < data.length; i++) {
-                        visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].UserNameCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
-                        rs.myevents.push(visualEvent);
-                        $('#calendar').fullCalendar('renderEvent', visualEvent, true);
+                        if (data[i].estadoReserva != 0) {
+                            visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].UserNameCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
+                            rs.myevents.push(visualEvent);
+                            $('#calendar').fullCalendar('renderEvent', visualEvent, true);
+                        }
                     }
                 }
             }

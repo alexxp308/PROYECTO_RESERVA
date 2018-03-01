@@ -3,6 +3,8 @@
 }
 <br />
 <div class="loader"></div>
+<input type="hidden" id="paramInicio"/>
+<input type="hidden" id="salaSelect" />
 <div class="panel panel-primary">
     <div class="panel-heading" style="padding-bottom:0px;"><h4>MIS RESERVAS</h4></div>
     <div class="panel-body">
@@ -64,14 +66,14 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true">
+<div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true" style="overflow-y:hidden;">
     <div class="modal-dialog" style="width:60%;">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#428bca;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     ×
                 </button>
-                <h4 class="modal-title" style="color:white;">RESERVAS DE LA SALA <span id="miSalaM"></span></h4>
+                <h4 class="modal-title" style="color:white;">Reservas:<span id="miSalaM"></span>&nbsp;-&nbsp;Administrador:<span id="miAdmin"></span></h4>
             </div>
             <div class="modal-body" style="padding-bottom:0px;padding-top:10px;">
                 <div id="calendar"></div>
@@ -82,6 +84,83 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="dvMisEvents" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisEvents" aria-hidden="true">
+    <div class="modal-dialog" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <fieldset class="border:solid 1px;padding:10px;">
+                    <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Nueva reserva</legend>
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Descripción:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <textarea class="form-control" rows="3" id="tituloR" disabled></textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="dinicioR" style="padding-top:10px;padding-left:10px;">Dia inicio:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="dfinR" style="padding-top:10px;padding-left:10px;">Dia fin:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dfinR" max="2040-02-20" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="hinicioR" style="padding-top:10px;padding-left:10px;">Hora inicio:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" id="hinicioR" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="hfinR" style="padding-top:10px;padding-left:10px;">Hora fin:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" id="hfinR" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Solicitante:</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <input type="text" class="form-control" id="creadorR" disabled>
+                        </div>
+                    </div>
+                    <!--<input type="hidden" id="creadoPorR"/> usar cuando tengas el codigo de cookies!!!!!!!!!!!!!!!!!!-->
+                </fieldset>
+            </div>
+            <div class="modal-footer" style="margin-top:0px;padding-top:5px;padding-bottom:5px;">
+                <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @Styles.Render("~/styles/ProcesoReserva")
 <link href="~/Content/css/fullCalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
 @Scripts.Render("~/scripts/MisReservas")

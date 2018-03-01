@@ -36,7 +36,7 @@ namespace SalaJuntas.BL
             return lelReserva;
         }
 
-        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId)
+        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId,int idSede)
         {
             List<elReserva> lelReserva = null;
             using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -46,7 +46,7 @@ namespace SalaJuntas.BL
                     lelReserva = new List<elReserva>();
                     con.Open();
                     dlReserva odlReserva = new dlReserva();
-                    lelReserva = odlReserva.obtenerReservaxUsuario(salaId, userId, con);
+                    lelReserva = odlReserva.obtenerReservaxUsuario(salaId, userId,idSede, con);
                 }
                 catch (Exception ex)
                 {

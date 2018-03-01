@@ -30,12 +30,12 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,User,Administrador")]
-        public string obtenerReservaxUsuario(int idSala, int idUser)
+        public string obtenerReservaxUsuario(int idSala, int idUser,int idSede)
         {
             var result = "";
             List<elReserva> lelReserva = new List<elReserva>();
             blReserva blReserva = new blReserva();
-            lelReserva = blReserva.obtenerReservaxUsuario(idSala, idUser);
+            lelReserva = blReserva.obtenerReservaxUsuario(idSala, idUser,idSede);
             result = JsonConvert.SerializeObject(lelReserva);
             return result;
         }

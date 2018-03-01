@@ -29,16 +29,22 @@ namespace SalaJuntas.Librerias.DL
                 {
                     oelReserva = new elReserva();
                     oelReserva.idReserva = drd.GetInt32(0);
-                    oelReserva.idSala = drd.GetInt32(1);
-                    oelReserva.descripcion = drd.GetString(2);
-                    oelReserva.fhinicio = drd.GetString(3);
-                    oelReserva.fhfin = drd.GetString(4);
-                    oelReserva.duracion = drd.GetString(5);
-                    oelReserva.idCreator = drd.GetInt32(6);
-                    oelReserva.UserNameCreator = drd.GetString(7);
-                    oelReserva.idCharge = drd.GetInt32(9);
-                    oelReserva.UserNameCharge = drd.GetString(10);
-                    oelReserva.checkList = drd.GetString(11);
+                    oelReserva.estadoReserva = drd.GetInt32(1);
+                    oelReserva.idSala = drd.GetInt32(2);
+                    oelReserva.descripcion = drd.GetString(3);
+                    oelReserva.fhCreacion = drd.GetString(4);
+                    oelReserva.fhinicio = drd.GetString(5);
+                    oelReserva.fhfin = drd.GetString(6);
+                    oelReserva.idCreator = drd.GetInt32(7);
+                    oelReserva.UserNameCreator = drd.GetString(8);
+                    oelReserva.nombreCompletoCreator = drd.GetString(9);
+                    oelReserva.idCharge = drd.GetInt32(10);
+                    oelReserva.UserNameCharge = drd.GetString(11);
+                    oelReserva.nombreCompletoCharge = drd.GetString(12);
+                    oelReserva.checkListInicial = drd.GetString(13);
+                    oelReserva.fhCheckInicial = drd.GetString(14);
+                    oelReserva.checkListFinal = drd.GetString(15);
+                    oelReserva.fhCheckFinal = drd.GetString(16);
 
                     lelReserva.Add(oelReserva);
                 }
@@ -48,7 +54,7 @@ namespace SalaJuntas.Librerias.DL
             return lelReserva;
         }
 
-        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId, SqlConnection con)
+        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId, int idSede, SqlConnection con)
         {
             List<elReserva> lelReserva = null;
             elReserva oelReserva = null;
@@ -57,6 +63,7 @@ namespace SalaJuntas.Librerias.DL
             cmd.CommandTimeout = 1800;
             cmd.Parameters.AddWithValue("@idSala", salaId);
             cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@idSede", idSede);
             SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
             if (drd != null)
             {
@@ -65,18 +72,22 @@ namespace SalaJuntas.Librerias.DL
                 {
                     oelReserva = new elReserva();
                     oelReserva.idReserva = drd.GetInt32(0);
-                    oelReserva.idSala = drd.GetInt32(1);
-                    oelReserva.descripcion = drd.GetString(2);
-                    oelReserva.fhinicio = drd.GetString(3);
-                    oelReserva.fhfin = drd.GetString(4);
-                    oelReserva.duracion = drd.GetString(5);
-                    oelReserva.idCreator = drd.GetInt32(6);
-                    oelReserva.UserNameCreator = drd.GetString(7);
-                    oelReserva.nombreCompletoCreator = drd.GetString(8);
-                    oelReserva.idCharge = drd.GetInt32(9);
-                    oelReserva.UserNameCharge = drd.GetString(10);
-                    oelReserva.nombreCompletoCharge = drd.GetString(11);
-                    oelReserva.checkList = drd.GetString(12);
+                    oelReserva.estadoReserva = drd.GetInt32(1);
+                    oelReserva.idSala = drd.GetInt32(2);
+                    oelReserva.descripcion = drd.GetString(3);
+                    oelReserva.fhCreacion = drd.GetString(4);
+                    oelReserva.fhinicio = drd.GetString(5);
+                    oelReserva.fhfin = drd.GetString(6);
+                    oelReserva.idCreator = drd.GetInt32(7);
+                    oelReserva.UserNameCreator = drd.GetString(8);
+                    oelReserva.nombreCompletoCreator = drd.GetString(9);
+                    oelReserva.idCharge = drd.GetInt32(10);
+                    oelReserva.UserNameCharge = drd.GetString(11);
+                    oelReserva.nombreCompletoCharge = drd.GetString(12);
+                    oelReserva.checkListInicial = drd.GetString(13);
+                    oelReserva.fhCheckInicial = drd.GetString(14);
+                    oelReserva.checkListFinal = drd.GetString(15);
+                    oelReserva.fhCheckFinal = drd.GetString(16);
 
                     lelReserva.Add(oelReserva);
                 }

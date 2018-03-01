@@ -427,24 +427,31 @@ END
 
 create table RESERVA(
 	idReserva int primary key identity(1, 1),
+	estadoReserva int, --0:cancelada, 1: en espera, 2: en reserva, 3: finalizada
 	idSala int,
 	descripcion varchar(200),
+	fhCreacion char(16), -- hora de creacion de la reserva
 	fhinicio char(19),
 	fhfin char(19),
-	duracion char(8),
 	idCreator int,
 	UserNameCreator varchar(50),
 	nombreCompletoCreator varchar(100),
 	idCharge int,
 	UserNameCharge varchar(50),
 	nombreCompletoCharge varchar(100),
-	checklist nvarchar(max)
+	checklistInicial nvarchar(max),
+	fhCheckInicial char(16),
+	checklistFinal nvarchar(max),
+	fhCheckFinal char(16),
 )
-
+drop table RESERVA
+select CONVERT(nvarchar(16), getdate(), 120)
 select * from UserProfile
-insert into RESERVA(idSala,descripcion,fhinicio,fhfin,duracion,idCreator,UserNameCreator,nombreCompletoCreator,
-idCharge,UserNameCharge,nombreCompletoCharge,checklist)
-values (2,'prueba1','2018-02-27T10:00:00','2018-02-27T11:30:00','01:30:00',2,'user','usuario',6,'456789','pru pru, pru','');
+insert into RESERVA(estadoReserva,idSala,descripcion,fhCreacion,fhinicio,fhfin,idCreator,
+UserNameCreator,nombreCompletoCreator,
+idCharge,UserNameCharge,nombreCompletoCharge,checklistInicial,fhCheckInicial,checklistFinal,fhCheckFinal)
+values (1,2,'prueba1','2018-03-01 09:00','2018-03-02T10:00:00','2018-03-02T11:30:00',2,'user','usuario',
+6,'456789','pru pru, pru','','','','');
 
 insert into RESERVA(idSala,descripcion,fhinicio,fhfin,duracion,idCreator,UserNameCreator,nombreCompletoCreator,
 idCharge,UserNameCharge,nombreCompletoCharge,checklist)
@@ -478,25 +485,39 @@ alter procedure USP_GUARDAR_RESERVA(
 )
 AS
 BEGIN
-	INSERT INTO RESERVA(idSala,descripcion,fhinicio,fhfin,duracion,idCreator,UserNameCreator,nombreCompletoCreator,
-	idCharge,UserNameCharge,nombreCompletoCharge,checklist)
-	VALUES (@idSala,@descripcion,@fhinicio,@fhfin,'',@idCreator,@UserNameCreator,@nombreCompletoCreator,
-	@idCharge,@UserNameCharge,@nombreCompletoCharge,'');
+	INSERT INTO RESERVA(estadoReserva,idSala,descripcion,fhCreacion,fhinicio,fhfin,idCreator,UserNameCreator,nombreCompletoCreator,
+	idCharge,UserNameCharge,nombreCompletoCharge,checklistInicial,fhCheckInicial,checklistFinal,fhCheckFinal)
+	VALUES (1,@idSala,@descripcion,CONVERT(nvarchar(16), getdate(), 120),@fhinicio,@fhfin,@idCreator,@UserNameCreator,@nombreCompletoCreator,
+	@idCharge,@UserNameCharge,@nombreCompletoCharge,'','','','');
 END
+
+exec USP_GUARDAR_RESERVA 2,'prueba2','2018-03-02T12:00:00','2018-03-02T14:30:00',2,'user','usuario',
+6,'456789','pru pru, pru'
+
+insert into RESERVA(estadoReserva,idSala,descripcion,fhCreacion,fhinicio,fhfin,duracion,idCreator,
+UserNameCreator,nombreCompletoCreator,
+idCharge,UserNameCharge,nombreCompletoCharge,checklistInicial,fhCheckInicial,checklistFinal,fhCheckFinal)
+values (1,2,'prueba1','2018-03-01 09:00','2018-03-02T10:00:00','2018-03-02T11:30:00','',2,'user','usuario',
+6,'456789','pru pru, pru','','','','');
 
 select * from RESERVA
 select * from sala
+select * from Sede
 
 alter PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
 	@idSala int,
-	@userId int
+	@userId int,
+	@idSede int
 )
 AS
 BEGIN
 	declare @val int = @idSala;
 	if(@val=0)
 	begin
-		select * from RESERVA where idCreator=@userId order by fhinicio desc
+		select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+		a.UserNameCreator,a.nombreCompletoCreator,
+	a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+	where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
 	end
 	else
 	begin
@@ -504,5 +525,5 @@ BEGIN
 	end
 END
 
-exec USP_OBTENER_RESERVASXUSUARIO 1,4
+exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
 select * from UserProfile
