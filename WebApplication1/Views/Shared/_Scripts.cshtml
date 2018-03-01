@@ -1,0 +1,10 @@
+﻿@{/Html.RenderPartial("_Scripts", RenderSection("pagespecific", false)); }
+@{
+    ViewBag.Title = "_Scripts";
+}
+@Scripts.Render("~/bundles/jquery")
+<script src="~/Scripts/app/cookie.js" type="text/javascript"></script>
+<script src="~/Scripts/app/web.js" type="text/javascript"></script>
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/bootstrap")

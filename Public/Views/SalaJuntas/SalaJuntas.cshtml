@@ -1,0 +1,206 @@
+﻿
+@{
+	ViewBag.Title = "SalaJuntas";
+}
+<h3>SALA DE <span>@ViewBag.tipo</span> <span style="font-style:italic;color:#BDBCBC;font-size:22px;">- @ViewBag.pais</span></h3>
+<button type="button" class="btn btn-primary btn-number" data-type="plus" onclick="crearSala()">
+	<span class="glyphicon glyphicon-plus"></span>
+</button>
+<br />
+<br />
+<input id="hdnSedes" type="hidden" value="@ViewBag.sedexPais" />
+<input id="hdnPais" type="hidden" value="@ViewBag.pais" />
+<input id="hdnTipo" type="hidden" value="@ViewBag.tipo" />
+<table class="table">
+	<thead class="blue-grey lighten-4">
+		<tr>
+			<th align="center">#</th>
+			<th align="center">Sala</th>
+			<!--<th align="center">Tipo</th>-->
+			<th align="center">Horario</th>
+			<th align="center">Activos</th>
+			<th align="center">Ubicación</th>
+			<th align="center">Sede</th>
+			<th align="center">Estado</th>
+			<th align="center">Accion</th>
+		</tr>
+	</thead>
+	<tbody id="listarSala"></tbody>
+</table>
+
+<div class="modal fade" id="dvCrearSala" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCrearSalaLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#428bca;text-align:center;">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" style="color:white;">REGISTRO DE NUEVA SALA</h4>
+			</div>
+			<div class="modal-body">
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="nombreS" style="padding-top:10px;padding-left:10px;">Nombre de la Sala:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<input type="text" placeholder="nombre de la sala" id="nombreS" class="form-control" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="SedeS" style="padding-top:10px;padding-left:10px;">Sede:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<select class="form-control" id="SedeS" onchange="listarTorres(this); listarActivos(this);">
+							<option value="0">--SELECCIONAR--</option>
+						</select>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="torreS" style="padding-top:10px;padding-left:10px;">Torre:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<select class="form-control" id="torreS" onchange="listarPisos(this)">
+							<option value="0">--SELECCIONAR--</option>
+						</select>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="pisoS" style="padding-top:10px;padding-left:10px;">Piso:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<select class="form-control" id="pisoS">
+							<option value="0">--SELECCIONAR--</option>
+						</select>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tipoS" style="padding-top:10px;padding-left:10px;">Tipo:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<input type="text" id="tipoS" class="form-control" value="@ViewBag.tipo" readonly/>
+						<!--<select class="form-control" id="tipoS">
+							<option value="0">--SELECCIONAR--</option>
+							<option value="JUNTAS">JUNTAS</option>
+							<option value="CAPACITACION">CAPACITACION</option>
+						</select>-->
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="ActivosS" style="padding-top:10px;padding-left:10px;">Activos:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<select class="form-control" id="ActivosS"> 
+                                <option value="0">--SELECCIONAR--</option>
+							</select>
+							<div class="input-group-btn">
+								<button class="btn btn-contact btn-info" title="Añadir" type="button" onclick="agregarActivo();">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row" style="margin: 0 auto;">
+					<div class="col-sm-12 col-md-3 col-lg-3"></div>
+					<div class="col-sm-12 col-md-6 col-lg-6" id="misActivos"></div>
+					<div class="col-sm-12 col-md-3 col-lg-3"></div>
+				</div>
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4" style="padding-top:10px;padding-left:10px;">Horario de atención:</label>
+					<table class="table">
+						<thead class="blue-grey lighten-4">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Día</th>
+                                <th>Hora</th>
+                            </tr>
+						</thead>
+						<tbody>
+                            <tr>
+                                <th scope="row">Inicio</th>
+                                <td>
+                                    <select id="diai" class="form-control">
+                                        <option value="0">--SELECIONAR--</option>
+                                        <option value="Lunes">Lunes</option>
+                                        <option value="Martes">Martes</option>
+                                        <option value="Miercoles">Miercoles</option>
+                                        <option value="Jueves">Jueves</option>
+                                        <option value="Viernes">Viernes</option>
+                                        <option value="Sabado">Sabado</option>
+                                        <option value="Domingo">Domingo</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="horai" class="form-control"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Fin</th>
+                                <td>
+                                    <select id="diaf" class="form-control">
+                                        <option value="0">--SELECIONAR--</option>
+                                        <option value="Lunes">Lunes</option>
+                                        <option value="Martes">Martes</option>
+                                        <option value="Miercoles">Miercoles</option>
+                                        <option value="Jueves">Jueves</option>
+                                        <option value="Viernes">Viernes</option>
+                                        <option value="Sabado">Sabado</option>
+                                        <option value="Domingo">Domingo</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select id="horaf" class="form-control"></select>
+                                </td>
+                            </tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+				<button type="button" class="btn btn-primary" onclick="guardarSala()">Guardar</button>
+				<span style="display:none;" id="verifica"></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dvMisActivos" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisActivosLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:30%;">
+		<div class="modal-content">
+			<div class="modal-body">
+				<fieldset class="border:solid 1px;padding:10px;">
+					<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala"></legend>
+					<table class="table">
+						<thead class="blue-grey lighten-4">
+							<tr>
+								<th>Activo</th>
+								<th>Cantidad</th>
+							</tr>
+						</thead>
+						<tbody id="listActivos"></tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+@Scripts.Render("~/scripts/SalaJuntas")
+@Styles.Render("~/styles/SalaJuntas")

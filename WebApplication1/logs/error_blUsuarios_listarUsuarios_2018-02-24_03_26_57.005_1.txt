@@ -1,0 +1,7 @@
+Nombre:		blUsuarios_listarUsuarios
+URL:		http://localhost:58901/Usuarios/listarUsuarios
+Mensaje:	La conversión especificada no es válida.
+Detalle:	en System.Data.SqlClient.SqlBuffer.get_Int32()
+   en System.Data.SqlClient.SqlDataReader.GetInt32(Int32 i)
+   en SalaJuntas.Librerias.DL.dlUsuarios.listarUsuarios(String pais, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlUsuarios.cs:línea 25
+   en SalaJuntas.BL.blUsuarios.listarUsuarios(String pais) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blUsuarios.cs:línea 25

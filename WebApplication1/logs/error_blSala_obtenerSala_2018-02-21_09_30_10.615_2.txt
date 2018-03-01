@@ -1,0 +1,7 @@
+Nombre:		blSala_obtenerSala
+URL:		http://localhost:58901/Reserva/obtenerSala
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlSala.obtenerSala(String tipo, Int32 idSede, String ubicacion, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlSala.cs:línea 116
+   en SalaJuntas.BL.blSala.obtenerSala(String tipo, Int32 idSede, String ubicacion) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blSala.cs:línea 141

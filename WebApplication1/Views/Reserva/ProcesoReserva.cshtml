@@ -1,0 +1,301 @@
+﻿@{
+    ViewBag.Title = "ProcesoReserva";
+}
+<h2>Proceso Reserva</h2>
+<br />
+<input id="hdnSalas" type="hidden" value="@ViewBag.sedexPais" />
+<input id="hdnfi" type="hidden"/>
+<input id="hdnuserId" type="hidden" />
+<input id="hdnuserName" type="hidden" />
+<input id="hdnuserNc" type="hidden" />
+<div class="loader"></div>
+<div id="main" role="tabpanel">
+    <div id="cabecera" style="margin:0 auto;width:70%;">
+        <ul class="nav nav-tabs" role="tablist" id="navegacion">
+            <li class="active"><a href="#Inicio" aria-controls="Inicio" role="tab" data-toggle="tab" id="liInicio" style="color:#398CD3;">1. Inicio</a></li>
+            <li class="disabledli"><a href="#Seleccion" aria-controls="Seleccion" role="tab" data-toggle="tab" id="liSeleccion">2. Selección</a></li>
+            <li class="disabledli"><a href="#Resumen" aria-controls="Resumen" role="tab" data-toggle="tab" id="liResumen">3. Resumen</a></li>
+        </ul>
+    </div>
+    <div class="tab-content" id="cuerpo" style="margin:0 auto;width:70%;">
+        <!--<span class="glyphicon glyphicon-chevron-left" style="position:fixed;font-size:40px;left:20%;top:50%;"></span>-->
+        <br />
+        <br />
+        <div role="tabpanel" class="tab-pane fade in active" id="Inicio" style="margin:0 auto;width:60%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="text-align:center;">RESERVA DE LA SALA DE JUNTAS</div>
+                <div class="panel-body">
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="paisR" style="padding-top:10px;padding-left:10px;">País</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-globe" aria-hidden="true"></i></span>
+                                <select class="form-control" id="paisR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                    <option value="PERU">Perú</option>
+                                    <option value="MEXICO">México</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="sedeR" style="padding-top:10px;padding-left:10px;">Sede</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                                <select class="form-control" id="sedeR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="tipoR" style="padding-top:10px;padding-left:10px;">Tipo</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                                <select class="form-control" id="tipoR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                    <option value="JUNTAS">JUNTAS</option>
+                                    <option value="CAPACITACION">CAPACITACION</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="torreR" style="padding-top:10px;padding-left:10px;">Torre</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                                <select class="form-control" id="torreR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="pisoR" style="padding-top:10px;padding-left:10px;">Piso</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                                <select class="form-control" id="pisoR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="salaR" style="padding-top:10px;padding-left:10px;">Sala</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                                <select class="form-control" id="salaR">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <!--<div class="form-group">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="fechaR" style="padding-top:10px;padding-left:10px;">Día</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div id="groupfechaR" class="input-group date">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" placeholder="YYYY-MM-DD" data-date-end-date="0d" id="fechaR" style="cursor:pointer;">
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />-->
+                    <div style="text-align:center;">
+                        <button type="button" class="btn btn-primary" id="inicioButton">
+                            Continuar<i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="Seleccion" style="margin:0 auto;width:90%;">
+            <h4>Horario de atención: <span style="font-style:italic;color:#A4A4A4;font-size:20px;" id="daysHours"></span></h4>
+            <div id="calendar"></div>
+            <div class="modal fade" id="dvMisEvents" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisEvents" aria-hidden="true">
+                <div class="modal-dialog" style="width:40%;">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <fieldset class="border:solid 1px;padding:10px;">
+                                <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Nueva reserva</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Titulo:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <input type="text" placeholder="descripición" id="tituloR" class="form-control" />
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="dinicioR" style="padding-top:10px;padding-left:10px;">Dia inicio:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" style="cursor:pointer;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="dfinR" style="padding-top:10px;padding-left:10px;">Dia fin:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dfinR" max="2040-02-20" style="cursor:pointer;" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="hinicioR" style="padding-top:10px;padding-left:10px;">Hora inicio:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                            <select class="form-control" id="hinicioR">
+                                                <option value="0">--SELECCIONAR--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="hfinR" style="padding-top:10px;padding-left:10px;">Hora fin:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                            <select class="form-control" id="hfinR" disabled>
+                                                <option value="0">--SELECCIONAR--</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<input type="hidden" id="creadoPorR"/> usar cuando tengas el codigo de cookies!!!!!!!!!!!!!!!!!!-->
+                            </fieldset>
+                        </div>
+                        <div class="modal-footer" style="margin-top:0px;padding-top:5px;padding-bottom:5px;">
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+                            <button class="btn btn-primary" id="btncue">Guardar</button>
+                            <span id="idcue" style="display:none;"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="panel-footer row">
+                <div class="col-xs-6 text-left">
+                    <div class="previous">
+                        <button type="button" class="btn btn-default btn-lg" title="ir a resumen" id="volverInicio">
+                            <span class="glyphicon glyphicon-chevron-left"></span>Atras
+                        </button>
+                    </div>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <div class="next">
+                        <button type="button" class="btn btn-default btn-lg" title="ir a inicio" id="irAresumen">
+                            Continuar<span class="glyphicon glyphicon-chevron-right"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="Resumen" style="margin:0 auto;width:110%;">
+            <div class="row row-eq-height">
+                <div class="col-sm-12 col-md-7 col-lg-7">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading" style="text-align:center;padding-bottom:0px;padding-top:2px;"><h4>SALA: <span id="salaSelect"></span></h4></div>
+                        <div class="panel-body" style="padding-top:0px;padding-left:5px;">
+                            <br />
+                            <div class="form-group">
+                                <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:15px;">País:</label>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
+                                    <input type="text" id="paisSelect" class="form-control" disabled />
+                                </div>
+                                <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:15px;">Sede:</label>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
+                                    <input type="text" id="sedeSelect" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:15px;">Tipo:</label>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
+                                    <input type="text" id="tipoSelect" class="form-control" disabled />
+                                </div>
+                                <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:15px;">Ubic.:</label>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
+                                    <input type="text" id="ubiSelect" class="form-control" disabled />
+                                </div>
+                            </div>
+                            <fieldset style="margin: 0 auto;width:60%">
+                                <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">Activos:</legend>
+                                <table class="table">
+                                    <thead class="blue-grey lighten-4">
+                                        <tr>
+                                            <th>Activo</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listActivos"></tbody>
+                                </table>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="panel-footer row">
+                        <div class="col-xs-6 text-left">
+                            <div class="previous">
+                                <button type="button" class="btn btn-default btn-lg" title="ir a resumen" id="volverSelec">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>&nbsp;&nbsp;Atras
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <div class="next">
+                                <button type="button" class="btn btn-primary btn-lg" title="Guardar resrva" id="guardarReserva">
+                                    Guardar &nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-5 col-lg-5">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="listReservas">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Styles.Render("~/styles/ProcesoReserva")
+<link href="~/Content/css/fullCalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
+@Scripts.Render("~/scripts/ProcesoReserva")

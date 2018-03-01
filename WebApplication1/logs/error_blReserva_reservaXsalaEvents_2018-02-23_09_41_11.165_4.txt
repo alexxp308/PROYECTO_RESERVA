@@ -1,0 +1,7 @@
+Nombre:		blReserva_reservaXsalaEvents
+URL:		http://localhost:58901/Reserva/reservaXsalaEvents
+Mensaje:	Los datos tienen valor Null. No se puede llamar a este método o propiedad con valores Null.
+Detalle:	en System.Data.SqlClient.SqlBuffer.get_String()
+   en System.Data.SqlClient.SqlDataReader.GetString(Int32 i)
+   en SalaJuntas.Librerias.DL.dlReserva.reservaXsalaEvents(Int32 salaId, String fhinicio, String fhfin, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlReserva.cs:línea 41
+   en SalaJuntas.BL.blReserva.reservaXsalaEvents(Int32 salaId, String fhinicio, String fhfin) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blReserva.cs:línea 27

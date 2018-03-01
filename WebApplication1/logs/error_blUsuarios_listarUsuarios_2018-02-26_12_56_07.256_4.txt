@@ -1,0 +1,7 @@
+Nombre:		blUsuarios_listarUsuarios
+URL:		http://localhost:58901/Usuarios/listarUsuarios
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlUsuarios.listarUsuarios(String pais, Int32 sedeId, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlUsuarios.cs:línea 30
+   en SalaJuntas.BL.blUsuarios.listarUsuarios(String pais, Int32 sedeId) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blUsuarios.cs:línea 25

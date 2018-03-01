@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6FE0EBA7-D57E-407F-8FC1-33181D109A6F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SalaJuntas.BL</RootNamespace>
+    <AssemblyName>SalaJuntas.BL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="blActivo.cs" />
+    <Compile Include="blGeneral.cs" />
+    <Compile Include="blLogin.cs" />
+    <Compile Include="blReserva.cs" />
+    <Compile Include="blSala.cs" />
+    <Compile Include="blSede.cs" />
+    <Compile Include="blUsuarios.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\General.Librerias.CodigoUsuario\General.Librerias.CodigoUsuario.csproj">
+      <Project>{c6c4f037-ad7f-4052-b3fc-3761999447f8}</Project>
+      <Name>General.Librerias.CodigoUsuario</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalaJuntas.Librerias.DL\SalaJuntas.Librerias.DL.csproj">
+      <Project>{B263CC3B-4140-4E29-9D4C-3AC9CBF77367}</Project>
+      <Name>SalaJuntas.Librerias.DL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SalaJuntas.Librerias.EL\SalaJuntas.Librerias.EL.csproj">
+      <Project>{7fc59033-cbd7-472d-9e14-68d46d2f46e3}</Project>
+      <Name>SalaJuntas.Librerias.EL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

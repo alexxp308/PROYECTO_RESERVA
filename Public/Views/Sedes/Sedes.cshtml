@@ -1,0 +1,177 @@
+﻿
+@{
+	ViewBag.Title = "Sedes";
+}
+
+<h2>Sedes</h2>
+<button type="button" class="btn btn-primary btn-number" data-type="plus" onclick="crearSede();">
+	<span class="glyphicon glyphicon-plus"></span>
+</button>
+
+<table class="table">
+	<thead class="blue-grey lighten-4">
+		<tr>
+			<th>#</th>
+			<th>Nombre</th>
+			<th># Torres</th>
+			<th>Pisos</th>
+			<th>Activos</th>
+			<th>País</th>
+			<th>Acción</th>
+		</tr>
+	</thead>
+	<tbody id="listarSedes"></tbody>
+</table>
+<div class="modal fade" id="dvCrearSede" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCrearSedeLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#428bca;text-align:center;">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" style="color:white;">REGISTRO DE NUEVA SEDE</h4>
+			</div>
+			<div class="modal-body">
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="nombreS" style="padding-top:10px;padding-left:10px;">Nombre de la sede:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<input type="text" placeholder="nombre de la sala" id="nombreS" class="form-control" />
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="paisS" style="padding-top:10px;padding-left:10px;">País:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<select class="form-control" id="paisS">
+							<option value="0">Seleccionar</option>
+							<option value="PERU">Perú</option>
+							<option value="MEXICO">México</option>
+						</select>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="ActivosS" style="padding-top:10px;padding-left:10px;">Activos:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<select class="form-control" id="activosS">
+								<option value="0">--SELECCIONAR--</option>
+							</select>
+							<div class="input-group-btn">
+								<button class="btn btn-contact btn-info" title="Añadir" type="button" onclick="agregarActivo();">
+									<span class="glyphicon glyphicon-plus"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-sm-12 col-md-3 col-lg-3"></div>
+					<div class="col-sm-12 col-md-6 col-lg-6" id="misActivos" style="display:none;">
+						<fieldset class="border:solid 1px;padding:10px;">
+							<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Activos:</legend>
+							<table class="table">
+								<thead class="blue-grey lighten-4">
+									<tr>
+										<th>#</th>
+										<th>Activo</th>
+										<th>Accion</th>
+									</tr>
+								</thead>
+								<tbody id="tActivos"></tbody>
+							</table>
+						</fieldset>
+						<br />
+						<br />
+					</div>
+					<div class="col-sm-12 col-md-3 col-lg-3"></div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-12 col-md-1 col-lg-1"></div>
+					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="torresS" style="padding-top:10px;padding-left:10px;">Numero de torres:</label>
+					<div class="col-sm-12 col-md-6 col-lg-6">
+						<div class="input-group">
+							<input type="number" placeholder="# de torres de la sede" id="torresS" class="form-control" />
+							<div class="input-group-btn">
+								<button class="btn btn-contact btn-info" title="Guardar torres" type="button" onclick="guardarTorres();">
+									<span class="glyphicon glyphicon-floppy-disk"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-sm-12 col-md-2 col-lg-2"></div>
+					<div class="col-sm-12 col-md-8 col-lg-8" id="misTorres"></div>
+					<div class="col-sm-12 col-md-2 col-lg-2"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+				<input type="button" class="btn btn-primary" onclick="guardarSede();" value="Guardar" />
+				<span style="display:none;" id="verifica"></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dvMisPisos" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisPisosLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:30%;">
+		<div class="modal-content">
+			<div class="modal-body">
+				<fieldset class="border:solid 1px;padding:10px;">
+					<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameTowel"></legend>
+					<table class="table">
+						<thead class="blue-grey lighten-4">
+							<tr>
+								<th>Torre</th>
+								<th>Pisos</th>
+							</tr>
+						</thead>
+						<tbody id="misPisos">
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="dvMisActivos" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisActivosLabel" aria-hidden="true">
+	<div class="modal-dialog" style="width:30%;">
+		<div class="modal-content">
+			<div class="modal-body">
+				<fieldset class="border:solid 1px;padding:10px;">
+					<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameActivo"></legend>
+					<table class="table">
+						<thead class="blue-grey lighten-4">
+							<tr>
+								<th>#</th>
+								<th>Activos</th>
+							</tr>
+						</thead>
+						<tbody id="listActivos">
+						</tbody>
+					</table>
+				</fieldset>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
+@Scripts.Render("~/scripts/Sedes")

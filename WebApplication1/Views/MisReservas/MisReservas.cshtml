@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Mis reservas";
+}
+<br />
+<div class="loader"></div>
+<div class="panel panel-primary">
+    <div class="panel-heading" style="padding-bottom:0px;"><h4>MIS RESERVAS</h4></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="pais" style="padding-top:10px;padding-left:10px;">Pais:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="pais" disabled>
+                        <option value="0">--SELECCIONAR--</option>
+                        <option value="PERU">PERU</option>
+                        <option value="MEXICO">MEXICO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sede" style="padding-top:10px;padding-left:10px;">Sede:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="sede" onchange="listarSalas(this);">
+                        <option value="0">--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sala" style="padding-top:10px;padding-left:10px;">Sala:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="sala">
+                        <option value="0">--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="buscarReservas();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Buscar</button>
+    </div>
+    <div class="panel-heading" style="padding-bottom:0px;background:#E7E7E7;color:black;border:1px solid #D6D6D6"><h4 style="font-weight:bold;">Resultado:</h4></div>
+    <div class="panel-body" id="content" style="display:none;">
+        <div class="panel-group" id="result"></div>
+    </div>
+</div>
+<div class="modal fade" id="dvMisActivos" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvMisActivosLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:30%;">
+        <div class="modal-content">
+            <div class="modal-body" style="padding-bottom:0px;padding-top:10px;">
+                <fieldset class="border:solid 1px;padding:10px;">
+                    <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala"></legend>
+                    <table class="table">
+                        <thead class="blue-grey lighten-4">
+                            <tr>
+                                <th>Activo</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listActivos"></tbody>
+                    </table>
+                </fieldset>
+            </div>
+            <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
+                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:60%;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#428bca;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" style="color:white;">RESERVAS DE LA SALA <span id="miSalaM"></span></h4>
+            </div>
+            <div class="modal-body" style="padding-bottom:0px;padding-top:10px;">
+                <div id="calendar"></div>
+            </div>
+            <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
+                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+@Styles.Render("~/styles/ProcesoReserva")
+<link href="~/Content/css/fullCalendar/fullcalendar.print.min.css" rel="stylesheet" media="print">
+@Scripts.Render("~/scripts/MisReservas")

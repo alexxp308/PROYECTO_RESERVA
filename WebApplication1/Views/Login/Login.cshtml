@@ -1,0 +1,198 @@
+﻿@model WebApplication1.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/fonts/icon-font.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/css/vendor/animate.css">
+<link rel="stylesheet" type="text/css" href="~/Content/css/vendor/hamburgers.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/css/vendor/select2.min.css">
+<link rel="stylesheet" type="text/css" href="~/Content/css/vendor/util.css">
+<link rel="stylesheet" type="text/css" href="~/Content/css/vendor/main.css">
+<style>
+    input,
+    select,
+    textarea {
+        max-width: none !important;
+    }
+
+    body {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+</style>
+<!--
+<div class="limiter">
+    <div role="tabpanel">
+        <div style="display:none;">
+            <ul class="nav nav-tabs" role="tablist" id="navegacion">
+                <li class="active"><a href="#Login" aria-controls="Login" role="tab" data-toggle="tab" id="liLogin" style="color:#398CD3;">login</a></li>
+                <li class="disabledli"><a href="#Register" aria-controls="Register" role="tab" data-toggle="tab" id="liRegister">registro</a></li>
+            </ul>
+        </div>
+        <div class="container-login100" style="background-image: url('../../Content/img/img-01.jpg');">
+            <div class="wrap-login100 p-t-30 p-b-30">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="Login">
+                        <form class="login100-form validate-form" action="@Url.Action("Login", "Login")" method="post" id="login-form">
+                            @Html.AntiForgeryToken()
+                            <div class="login100-form-avatar">
+                                <img src="~/Content/img/avatar-01.jpg" alt="AVATAR">
+                            </div>
+
+                            <span class="login100-form-title p-t-20 p-b-45">
+                                Sala de Juntas
+                            </span>
+                            @Html.ValidationSummary(true, "El nombre del usuario o la contraseña es incorrecta.", new { @class = "text-danger" })
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="nombre del usuario es requerido">
+                                <input class="input100" type="text" id="UserName" name="UserName" placeholder="Usuario">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="contraseña es requerido">
+                                <input class="input100" type="password" id="Password" name="Password" placeholder="Contraseña">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+
+                            <div class="container-login100-form-btn p-t-10">
+                                <button class="login100-form-btn">
+                                    Login
+                                </button>
+                            </div>
+
+                            <div class="text-center w-full p-t-25 p-b-100">
+                            </div>
+
+                            <div class="text-center w-full">
+                                <a class="txt1" onclick="document.getElementById('liRegister').click();">
+                                    Crear nueva cuenta
+                                    <i class="fa fa-long-arrow-right"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="Register">
+                        <form class="login100-form validate-form" method="post" id="register-form" style="background:white;padding:30px;border-radius:30px;">
+                            <span class="login100-form-title p-t-20 p-b-45" style="color:#545454">
+                                Registro nuevo usuario
+                            </span>
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="campo es requerido">
+                                <input class="input100" type="text" id="lastName" name="lastName" placeholder="Apellido paterno" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-male"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="campo es requerido">
+                                <input class="input100" type="text" id="momName" name="momName" placeholder="Apellido materno" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-female"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="campo es requerido">
+                                <input class="input100" type="text" id="firstName" name="firstName" placeholder="Primer nombre" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="correo es requerido">
+                                <input class="input100" type="text" id="email" name="email" placeholder="Correo electrónico" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="glyphicon glyphicon-envelope"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="contraseña es requerido">
+                                <input class="input100" type="password" id="passRegister" name="passRegister" placeholder="Contraseña" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+
+                            <div class="wrap-input100 validate-input m-b-10" data-validate="contraseña es requerido">
+                                <input class="input100" type="password" id="passRegisterRepet" name="passRegisterRepet" placeholder="Repetir Contraseña" style="border:1px solid #545454">
+                                <span class="focus-input100"></span>
+                                <span class="symbol-input100">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </div>
+
+                            <div class="container-login100-form-btn p-t-10">
+                                <button class="login100-form-btn">
+                                    Registrar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+<div class="limiter">
+    <div class="container-login100" style="background-image: url('../../Content/img/img-01.jpg');">
+        <div class="wrap-login100 p-t-30 p-b-30">
+            <form class="login100-form validate-form" action="@Url.Action("Login", "Login")" method="post" id="login-form">
+                @Html.AntiForgeryToken()
+                <div class="login100-form-avatar">
+                    <img src="~/Content/img/avatar-01.jpg" alt="AVATAR">
+                </div>
+
+                <span class="login100-form-title p-t-20 p-b-45">
+                    Sala de Juntas
+                </span>
+
+                <div class="wrap-input100 validate-input m-b-10" data-validate="Username is required">
+                    <input class="input100" type="text" id="UserName" name="UserName" placeholder="Usuario">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-user"></i>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 validate-input m-b-10" data-validate="Password is required">
+                    <input class="input100" type="password" id="Password" name="Password" placeholder="Contraseña">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-lock"></i>
+                    </span>
+                </div>
+
+                <div class="container-login100-form-btn p-t-10">
+                    <button class="login100-form-btn">
+                        Login
+                    </button>
+                </div>
+
+                <!--<div class="text-center w-full p-t-25 p-b-100">
+        <a href="#" class="txt1">
+            Forgot Username / Password?
+        </a>
+    </div>
+
+    <div class="text-center w-full">
+        <a class="txt1" href="#">
+            Crear nueva cuenta
+            <i class="fa fa-long-arrow-right"></i>
+        </a>
+    </div>-->
+            </form>
+        </div>
+    </div>
+</div>
+
+@Scripts.Render("~/scripts/Login")

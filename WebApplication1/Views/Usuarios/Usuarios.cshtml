@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+<h2>Usuarios - <span style="font-style:italic;color:#BDBCBC;font-size:22px;" id="descr"></span></h2>
+<button type="button" class="btn btn-primary btn-number" data-type="plus" onclick="crearUsuario();">
+    <span class="glyphicon glyphicon-plus"></span>
+</button>
+<input id="hdnSede" type="hidden" value="@ViewBag.sede" />
+<input id="hdnPais" type="hidden" value="@ViewBag.pais" />
+<input id="hdnSedes" type="hidden" value="@ViewBag.sedexPais" />
+<table class="table">
+    <thead class="blue-grey lighten-4">
+        <tr>
+            <th>#</th>
+            <th>Codigo</th>
+            <th>Nombre completo</th>
+            <th>Rol</th>
+            <th>Sede</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody id="listarUsuarios"></tbody>
+</table>
+<div class="modal fade" id="dvCrearUser" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCrearUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#428bca;text-align:center;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 class="modal-title" style="color:white;">REGISTRO DE NUEVO USUARIO</h4>
+            </div>
+            <div class="modal-body">
+                <!--<div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="paterno" style="padding-top:10px;padding-left:10px;">Apellido paterno:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-male" aria-hidden="true"></i></span>
+                            <input class="form-control" type="text" id="paterno" name="paterno" placeholder="Apellido paterno">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />-->
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="apellidos" style="padding-top:10px;padding-left:10px;">Apellidos:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-female" aria-hidden="true"></i><i class="fa fa-male" aria-hidden="true"></i></span>
+                            <input class="form-control" type="text" id="apellidos" name="apellidos" placeholder="Apellido paterno, apellido materno">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="nombre" style="padding-top:10px;padding-left:10px;">Nombre:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
+                            <input class="form-control" type="text" id="nombre" name="nombre" placeholder="Nombre completo">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="userName" style="padding-top:10px;padding-left:10px;">CE:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
+                            <input class="form-control" type="text" id="userName" name="userName" placeholder="codigo del empleado">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="email" style="padding-top:10px;padding-left:10px;">Email:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                            <input class="form-control" type="email" id="email" name="email" placeholder="Correo electronico">
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="role" style="padding-top:10px;padding-left:10px;">Perfil:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-users" aria-hidden="true"></i></span>
+                            <select class="form-control" id="role">
+                                <option value="0">--SELECCIONAR--</option>
+                                <option value="Administrador">Administrador</option>
+                                <option value="User">Usuario</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="cargo" style="padding-top:10px;padding-left:10px;">Cargo:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                            <select class="form-control" id="cargo">
+                                <option value="0" selected>--SELECCIONAR--</option>
+                                <option value="Soporte">Soporte</option>
+                                <option value="Supervisor">Supervisor</option>
+                                <option value="Coordinador">Coordinador</option>
+                                <option value="Gerente">Gerente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--<br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="pais" style="padding-top:10px;padding-left:10px;">Pais:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+                            <select class="form-control" id="pais">
+                                <option value="0">--SELECCIONAR--</option>
+                                <option value="PERU">PERU</option>
+                                <option value="MEXICO">MEXICO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>-->
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="sede" style="padding-top:10px;padding-left:10px;">Sede:</label>
+                    <div class="col-sm-12 col-md-8 col-lg-8">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                            <select class="form-control" id="sede">
+                                <option value="0">--SELECCIONAR--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">
+                    Guardar&nbsp;&nbsp;<i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i>
+                </button>
+                <span style="display:none;" id="verifica"></span>
+            </div>
+        </div>
+    </div>
+</div>
+@Scripts.Render("~/scripts/Usuarios")
+@Styles.Render("~/styles/SalaJuntas")
