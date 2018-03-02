@@ -121,13 +121,14 @@ namespace SalaJuntas.Librerias.DL
             return result;
         }
 
-        public string obtenerCorreos(int idSala, SqlConnection con)
+        public string obtenerCorreos(int idSala,int idCreator, SqlConnection con)
         {
             string result = "";
             SqlCommand cmd = new SqlCommand("USP_OBTENER_CORREOS", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandTimeout = 1800;
             cmd.Parameters.AddWithValue("@idSala", idSala);
+            cmd.Parameters.AddWithValue("@idCreator", idCreator);
             SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
             if (drd != null)
             {

@@ -1,4 +1,5 @@
 use SALA_JUNTAS
+
 Create Table UserProfile  
     (  
         UserId int primary key identity(1, 1),  
@@ -13,12 +14,12 @@ Create Table UserProfile
         firstTime bit
     )
     
-    insert into UserProfile (UserName,[Password],Roles,cargo,NombreCompleto,Email,idSede,IsActive,firstTime) values ('admin','123456','Admin','Soporte','administrador','adm@gmail.com',2,1,0);
+    insert into UserProfile (UserName,[Password],Roles,cargo,NombreCompleto,Email,idSede,IsActive,firstTime) values ('admin','123456','Admin','Soporte','administrador','adm@gmail.com',0,1,0);
     insert into UserProfile (UserName,[Password],Roles,cargo,NombreCompleto,Email,idSede,IsActive,firstTime) values ('user','123456','User','Supervisor','usuario','usu@gmail.com',2,1,0);
     truncate table UserProfile
 select * from UserProfile
 
-CREATE procedure USP_LISTAR_USUARIOS
+create procedure USP_LISTAR_USUARIOS
 (
 @PAIS varchar(10),
 @sedeId int
@@ -37,15 +38,15 @@ BEGIN
 	end
 END
 
-exec USP_LISTAR_USUARIOS 'PERU',0
+exec USP_LISTAR_USUARIOS 'PERU',1
 select * from sede
 
-exec USP_CREAR_USUARIO '12346','Administrador','soporte','a a, a','a@gmail.com',3
+exec USP_CREAR_USUARIO '12346','Administrador','Coordinador','a a, a','a@gmail.com',3
 alter procedure USP_CREAR_USUARIO
 (
 	@username varchar(50),
 	@roles varchar(20),
-	@cargo varchar(10),
+	@cargo varchar(20),
 	@nombreCompleto varchar(100),
 	@email varchar(60),
 	@idSede int
@@ -66,7 +67,6 @@ BEGIN
 		FROM UserProfile a WHERE a.UserId = @idUser
 	end
 END
-exec USP_CREAR_USUARIO
 
 select * from UserProfile
 
@@ -95,11 +95,23 @@ alter PROCEDURE USP_OBTENER_USUARIO
 )
 as
 begin
-select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS
+declare @sede int = (select idSede from UserProfile where UserId=@iduser)
+if(@sede!=0)
+begin
+	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS
 	from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
 end
-exec USP_OBTENER_USUARIO 7
+else
+begin
+	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS
+	from UserProfile a where a.UserId = @iduser
+end
+end
+select *  from UserProfile
+exec USP_OBTENER_USUARIO 1
+
 (select idSede from UserProfile where UserId=7)
 
 
@@ -107,16 +119,19 @@ select * from UserProfile
 select * from SALA
 select * from Sede
 select * from RESERVA
-alter procedure USP_OBTENER_CORREOS
+create procedure USP_OBTENER_CORREOS
 (
-	@idSala int
+	@idSala int,
+	@idCreator int
 )
 as
 begin
-select top 1 a.nombreSala,a.tipo,a.ubicacion,b.nombreSede,b.PAIS,a.activos,(SELECT STUFF((SELECT distinct ','+Email FROM UserProfile where idSede=(select idSede from SALA where idSala=@idSala) FOR XML PATH('')),1,1, '')) correosSede
+select top 1 a.nombreSala,a.tipo,a.ubicacion,b.nombreSede,b.PAIS,a.activos,(SELECT Email from UserProfile WHERE UserId=@idCreator) correosSede
 from SALA a,Sede b WHERE idSala=@idSala and b.idSede=a.idSede
 end
-exec USP_OBTENER_CORREOS 1
+-- (SELECT STUFF((SELECT distinct ','+Email FROM UserProfile where idSede=(select idSede from SALA where idSala=@idSala) FOR XML PATH('')),1,1, ''))
+
+exec USP_OBTENER_CORREOS 1,1
 
 CREATE PROCEDURE USP_CAMBIAR_CONTRASENIA
 (
@@ -138,7 +153,7 @@ BEGIN
 	select idSede,nombreSede from Sede where idSede=@idSede;
 END
 
-alter procedure USP_ACTUALIZAR_USUARIO
+create procedure USP_ACTUALIZAR_USUARIO
 (
 	@userId int,
 	@username varchar(50),
@@ -155,20 +170,6 @@ BEGIN
 	
 	SELECT a.UserId,a.UserName,a.Roles,a.cargo,a.NombreCompleto,a.Email,a.idSede,IsActive 
 	FROM UserProfile a WHERE a.UserId = @userId
-END
-
-create procedure USP_REGISTER_USER
-(
-@userName varchar(50),
-@password varchar(50),
-@email varchar(60),
-@idSede int,
-@nombreCompleto varchar(100)
-)
-AS
-BEGIN
-insert into UserProfile (UserName,[Password],Roles,NombreCompleto,Email,idSede,IsActive) 
-values (@userName,@password,'User',@nombreCompleto,@email,@idSede,1);-- podria empezar con cero, y ya ve el administrador si le da 1 o no
 END
 
 alter procedure USP_CHECK_LOGIN
@@ -241,7 +242,7 @@ END
 
 truncate table Sede
 
-create procedure USP_LISTAR_SEDES
+alter procedure USP_LISTAR_SEDES
 AS
 BEGIN
 	select * from Sede
@@ -317,7 +318,7 @@ END
 
 exec USP_LISTAR_SALA 'PERU','CAPACITACION'
 
-create procedure USP_ACTUALIZAR_ESTADO_SALA_JUNTAS
+alter procedure USP_ACTUALIZAR_ESTADO_SALA_JUNTAS
 (
 	@idSala int,
 	@estado bit
@@ -327,7 +328,7 @@ BEGIN
 	update SALA_JUNTAS set estado=@estado where idSala = @idSala;
 END
 
-create procedure USP_ACTUALIZAR_SALA
+alter procedure USP_ACTUALIZAR_SALA
 (
 	@idSala INT,
 	@nombre VARCHAR(40),
@@ -459,7 +460,7 @@ values (2,'prueba2','2018-03-29T11:00:00','2018-03-29T13:00:00','02:00:00',2,'us
 
 select * from RESERVA where fhinicio>'2018-02-22T08:00:00'
 
-create procedure USP_OBTENER_RESERVAXSALA(
+alter procedure USP_OBTENER_RESERVAXSALA(
 	@idSala int,
 	@fhinicio char(19),
 	@fhfin char(19)
@@ -504,7 +505,7 @@ select * from RESERVA
 select * from sala
 select * from Sede
 
-alter PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
+create PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
 	@idSala int,
 	@userId int,
 	@idSede int
@@ -527,3 +528,44 @@ END
 
 exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
 select * from UserProfile
+--------------------------------------------------------------------------------
+
+alter PROCEDURE USP_OBTENER_USUARIO
+(
+@iduser int
+)
+as
+begin
+declare @sede int = (select idSede from UserProfile where UserId=@iduser)
+if(@sede!=0)
+begin
+	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS
+	from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
+end
+else
+begin
+	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS
+	from UserProfile a where a.UserId = @iduser
+end
+end
+
+ALTER procedure [dbo].[USP_ACTUALIZAR_USUARIO]
+(
+	@userId int,
+	@username varchar(50),
+	@roles varchar(20),
+	@cargo varchar(20),
+	@nombreCompleto varchar(100),
+	@email varchar(60),
+	@idSede int
+)
+AS
+BEGIN
+	update UserProfile set UserName=@username,Roles=@roles,cargo=@cargo,
+	NombreCompleto=@nombreCompleto,Email=@email,idSede=@idSede where UserId=@userId
+	
+	SELECT a.UserId,a.UserName,a.Roles,a.cargo,a.NombreCompleto,a.Email,a.idSede,IsActive 
+	FROM UserProfile a WHERE a.UserId = @userId
+END

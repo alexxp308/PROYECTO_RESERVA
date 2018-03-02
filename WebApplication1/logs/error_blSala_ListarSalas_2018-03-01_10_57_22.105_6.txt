@@ -1,0 +1,7 @@
+Nombre:		blSala_ListarSalas
+URL:		http://localhost:58901/SalaJuntas/ListarSalas
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlSala.ListarSalas(String pais, String tipo, SqlConnection con) en C:\Users\ana\Desktop\webReserva\PROYECTO_RESERVA\SalaJuntas.Librerias.DL\dlSala.cs:línea 56
+   en SalaJuntas.BL.blSala.ListarSalas(String pais, String tipo) en C:\Users\ana\Desktop\webReserva\PROYECTO_RESERVA\SalaJuntas.BL\blSala.cs:línea 41

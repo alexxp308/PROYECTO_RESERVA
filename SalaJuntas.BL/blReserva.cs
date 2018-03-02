@@ -87,7 +87,7 @@ namespace SalaJuntas.BL
                     con.Open();
                     string correos = "";
                     dlReserva odlReserva = new dlReserva();
-                    correos = odlReserva.obtenerCorreos(lelReserva[0].idSala, con);
+                    correos = odlReserva.obtenerCorreos(lelReserva[0].idSala, lelReserva[0].idCreator, con);
                     result = EnviarCorreo(lelReserva, correos);
                 }
                 catch (Exception ex)
@@ -103,7 +103,7 @@ namespace SalaJuntas.BL
         {
             string[] param = correos.Split('|');
             int result = 0;
-            string mensaje = "<br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
+            string mensaje = "<div style='border:1px solid black;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
             mensaje += "<table>";
             mensaje+= "<tr><td style='font-weight:bold;'>Pais:</td><td>" + param[4] + "</td><td style='font-weight:bold;'>Solicitante:</td><td>" + lelReserva[0].nombreCompletoCreator + "</td></tr>";
             mensaje += "<tr><td style='font-weight:bold;'>Sede:</td><td>" + param[3] + "</td><td style='font-weight:bold;'>Sala de reserva:</td><td>" + param[0]+" - "+ param[1] + "</td></tr>";
@@ -118,20 +118,19 @@ namespace SalaJuntas.BL
             for(int j=0;j< keyvalue.Length; j++)
             {
                 activos = keyvalue[j].Split(':');
-                msg += "<tr><td>" + activos[0] + "</td><td>" + activos[1] + "</td></tr>";
+                msg += "<tr><td style='border: 1px solid black;text-align:center;'>" + activos[0] + "</td><td style='border: 1px solid black;text-align:center;'>" + activos[1] + "</td></tr>";
             }
-            mensaje += "<table><thead><tr><th>Activo</th><th>Cantidad</th></tr><thead><tbody>"+msg+"</tbody></table>";
+            mensaje += "<table style='border: 1px solid black;border-collapse: collapse;'><thead><tr><th style='border: 1px solid black;'>Activo</th><th style='border: 1px solid black;'>Cantidad</th></tr><thead><tbody>" + msg+"</tbody></table>";
             mensaje += "************************************************************************************";
             for (int i = 0; i < lelReserva.Count; i++)
             {
                 mensaje += "<p style='font-weight:bold;'>Reserva #" + (i + 1) + "</p>";
                 mensaje += "<p><span style='font-weight:bold;'>Descripción: </span>" + lelReserva[i].descripcion + "</p>";
                 mensaje += "<p><span style='font-weight:bold;'>Fecha y hora inicio: </span>" + lelReserva[i].fhinicio.Replace("T"," ") +"</p>";
-                mensaje += "<p><span style='font-weight:bold;'>Fecha y hora fin: </span>" + lelReserva[i].fhfin.Replace("T", " ") + "</p>";
-                mensaje += "---------------------------------------------------------------------------------";
+                mensaje += "<p><span style='font-weight:bold;'>Fecha y hora fin: </span>" + lelReserva[i].fhfin.Replace("T", " ") + "</p><br>";
             }
 
-            mensaje += "<p style='font-size:10px;font-style:italic;'>Este correo se envía automáticamente después de la validación, no responda a este correo.<p>";
+            mensaje += "<p style='font-size:10px;font-style:italic;'>Este correo se envía automáticamente después de la validación, no responda a este correo.<p></div>";
 
             MailMessage Correo = new MailMessage();
             Correo.From = new MailAddress(CorreoUserName);

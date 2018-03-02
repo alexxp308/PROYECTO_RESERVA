@@ -85,7 +85,7 @@ function limpiar() {
     $("#nombre").val("");
     $("#userName").val("");
     $("#email").val("");
-    $("#cargo").val("");
+    $("#cargo").val("0");
     ($("#hdnSede").val() * 1 > 0) ? $("#sede").val($("#hdnSede").val()) : $("#sede").val("0");
     ($("#hdnSedes").val().length > 0) ? $("#role").val("Administrador") : $("#role").val("User");
 }

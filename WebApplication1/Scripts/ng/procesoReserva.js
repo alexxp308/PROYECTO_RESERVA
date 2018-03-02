@@ -195,7 +195,7 @@
                                 var visualEvent = {};
                                 for (var i = 0; i < data.length; i++) {
                                     if (data[i].estadoReserva != 0) {
-                                        visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].UserNameCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
+                                        visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + " \n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: false };
                                         o.myevents.push(visualEvent);
                                         $('#calendar').fullCalendar('renderEvent', visualEvent, true);
                                     }
@@ -248,9 +248,16 @@
                         $(".loader").toggle(false);
                         var sedes = response.split(";");
                         var sede = null;
+                        var verifica = "";
                         for (var i = 0; i < sedes.length; i++) {
                             sede = sedes[i].split("|");
-                            str += "<option value='" + sede[0] + "'>" + sede[1] + "</option>";
+                            verifica = "";
+                            if (window.cookie.getCookie()["role"]=="User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo")) {
+                                if (sede[1] == o.id("sede-profile").innerHTML) {
+                                    verifica = "selected";
+                                }
+                            }
+                            str += "<option value='" + sede[0] + "' "+verifica+">" + sede[1] + "</option>";
                             sedesArray.push({
                                 id: sede[0] * 1,
                                 nombreSede: sede[1],
@@ -259,6 +266,10 @@
                             });
                         }
                         $("#sedeR").html(str);
+                        if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo")) {
+                            o.id("sedeR").setAttribute("disabled", "disabled");
+                            o.id("sedeR").onchange();
+                        }
                     }
                 });
             } else {
@@ -416,7 +427,7 @@
                 o.id("hfinR").setAttribute("disabled", "disabled"); 
                 o.id("btncue").setAttribute("disabled", "disabled");
             }
-
+            o.id("solicitante").value = (title != "") ? title.substring(title.indexOf("\n") + 14, title.length) : o.id("nombre-profile").innerHTML;
             $("#dvMisEvents").modal("show");
 
         }
@@ -433,7 +444,7 @@
                     if ((o.id("idcue").innerHTML * 1) == 99999) {
                         o.myevents.push({
                             id: o.id("idcue").innerHTML * 100 + Math.floor((Math.random() * 100) + 1),
-                            title: "Titulo: " + o.id("tituloR").value + "\n Solicitante: " + window.cookie.getCookie().userName,
+                            title: "Titulo: " + o.id("tituloR").value + "\n Solicitante: " + o.id("nombre-profile").innerHTML,
                             start: elevent.start,
                             end: elevent.end,
                             editable: true
@@ -731,4 +742,17 @@
             }
         });
     }
+
+    if (window.cookie.getCookie()["role"] != "Admin") {
+        rs.id("paisR").setAttribute("disabled", "disabled");
+        var interval = setInterval(function () {
+            if (rs.id("pais-profile").innerHTML != "" && rs.id("sede-profile").innerHTML != "") {
+            clearInterval(interval);
+            rs.id("paisR").value = rs.id("pais-profile").innerHTML;
+            rs.id("paisR").onchange();
+    }
+    }, 0);
+    }
+    
+
 })();

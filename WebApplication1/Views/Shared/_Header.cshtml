@@ -15,11 +15,55 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="nav-item">@Html.ActionLink("Inicio", "Index", "Home")</li>
-                <li class="nav-item">@Html.ActionLink("Reserva", "ProcesoReserva", "Reserva")</li>
-                <li class="nav-item">@Html.ActionLink("Mis reservas", "Index", "MisReservas")</li>
+                <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Reserva
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="dropUsers">
+                            <li><a href='@Url.Action("ProcesoReserva", "Reserva")'>Nueva reserva</a></li>
+                            <li><a href='@Url.Action("Index","MisReservas")'>Historial de reservas</a></li>
+                        </ul>
+                    </li>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Mantenimiento
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" id="dropUsers">
+                            <li><a href='@Url.Action("Index", "Activos")'>Activos</a></li>
+                            <li><a href='@Url.Action("Index","Usuarios")'>Usuarios</a></li>
+                        </ul>
+                    </li>
+                }
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            Mantenimiento
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu multi-level" id="dirSedes">
+                            <li>
+                                <a href='@Url.Action("Index", "Activos")'>Activos</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-submenu">
+                                <a class="test" tabindex="-1" href="#">Usuarios</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href='@Url.Action("Index","Usuarios",new {Pais="PERU"})'>PERU</a></li>
+                                    <li><a href='@Url.Action("Index","Usuarios",new {Pais="MEXICO"})'>MEXICO</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
                 @if (User.IsInRole("Admin") || User.IsInRole("Administrador"))
                 {
-                    <li class="nav-item">@Html.ActionLink("Activos", "Index", "Activos")</li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             Salas
@@ -47,23 +91,6 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">@Html.ActionLink("Sedes", "Index", "Sedes")</li>
-                }
-                @if (User.IsInRole("Admin"))
-                {
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Usuarios
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" id="dropUsers">
-                            <li><a href='@Url.Action("Index","Usuarios",new {Pais="PERU"})'>PERU</a></li>
-                            <li><a href='@Url.Action("Index","Usuarios",new {Pais="MEXICO"})'>MEXICO</a></li>
-                        </ul>
-                    </li>
-                }
-                @if (User.IsInRole("Administrador"))
-                {
-                    <li class="nav-item">@Html.ActionLink("Usuarios", "Index", "Usuarios")</li>
                 }
 
             </ul>
@@ -97,7 +124,7 @@
                                         <p class="text-left small" id="sede-profile" style="border-bottom:1px solid;"></p>
                                         <p class="text-left" style="margin-bottom:0px;"><strong>Email</strong></p>
                                         <p class="text-left small" id="email-profile" style="border-bottom:1px solid;"></p>
-                                        <p class="text-left" style="margin-bottom:0px;"><strong>Rol</strong></p>
+                                        <p class="text-left" style="margin-bottom:0px;"><strong>Cargo</strong></p>
                                         <p class="text-left small" id="rol-profile" style="border-bottom:1px solid;"></p>
                                         <p class="text-left" style="margin-bottom:0px;"><strong>Administrador</strong></p>
                                         <p class="text-left small" id="administrador-profile" style="border-bottom:1px solid;"></p>
@@ -157,7 +184,7 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
-                                <input class="form-control" type="password" id="password" name="password" placeholder="Contraseña">
+                                <input class="form-control" type="password" id="password" name="password" placeholder="Contraseña" ondragstart="return false">
                             </div>
                         </div>
                     </div>

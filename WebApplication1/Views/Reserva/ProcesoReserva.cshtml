@@ -144,11 +144,13 @@
                             <fieldset class="border:solid 1px;padding:10px;">
                                 <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Nueva reserva</legend>
                                 <div class="form-group">
-                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Titulo:</label>
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Descripción:</label>
                                     <div class="col-sm-12 col-md-8 col-lg-8">
-                                        <input type="text" placeholder="descripición" id="tituloR" class="form-control" />
+                                        <textarea placeholder="Motivo de la reserva" id="tituloR" class="form-control" rows="3"></textarea>
                                     </div>
                                 </div>
+                                <br />
+                                <br />
                                 <br />
                                 <br />
                                 <div class="form-group">
@@ -194,6 +196,17 @@
                                             <select class="form-control" id="hfinR" disabled>
                                                 <option value="0">--SELECCIONAR--</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="solicitante" style="padding-top:10px;padding-left:10px;">Solicitante:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                            <input type="text"  id="solicitante" class="form-control" disabled/>
                                         </div>
                                     </div>
                                 </div>

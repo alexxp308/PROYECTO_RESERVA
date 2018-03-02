@@ -17,7 +17,7 @@ function obtenerDatos() {
                 $("#sede-profile").html(data[6]);
                 $("#email-profile").html(data[5]);
                 $("#nombre-profile").html(data[4]);
-                $("#rol-profile").html(data[2]);
+                $("#rol-profile").html(data[3]);
                 $("#administrador-profile").html(data[8]);
                 $("#pais-profile").html(data[9]);
                 if (data[7] == "True") {
