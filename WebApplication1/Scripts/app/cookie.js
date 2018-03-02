@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function () {//hola
     "use strict";
     var cookie = (function (o) {
         o.getCookie = function () {
