@@ -54,7 +54,7 @@ namespace SalaJuntas.Librerias.DL
             return lelReserva;
         }
 
-        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId, int idSede, SqlConnection con)
+        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId, int idSede,int estado, SqlConnection con)
         {
             List<elReserva> lelReserva = null;
             elReserva oelReserva = null;
@@ -64,6 +64,7 @@ namespace SalaJuntas.Librerias.DL
             cmd.Parameters.AddWithValue("@idSala", salaId);
             cmd.Parameters.AddWithValue("@userId", userId);
             cmd.Parameters.AddWithValue("@idSede", idSede);
+            cmd.Parameters.AddWithValue("@estado", estado);
             SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
             if (drd != null)
             {
@@ -138,6 +139,39 @@ namespace SalaJuntas.Librerias.DL
                 }
                 drd.Close();
             }
+            return result;
+        }
+
+        public int eliminarReserva(int idReserva, SqlConnection con)
+        {
+            int result = 0;
+            SqlCommand cmd = new SqlCommand("USP_ELIMINAR_RESERVA", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 1800;
+            cmd.Parameters.AddWithValue("@idReserva", idReserva);
+            result = cmd.ExecuteNonQuery();
+            return result;
+        }
+
+        public string CheckList(int idReserva, int iniFin, string checkList, SqlConnection con)
+        {
+            string result = "";
+            SqlCommand cmd = new SqlCommand("USP_GUARDAR_CHECKLIST", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 1800;
+            cmd.Parameters.AddWithValue("@idReserva", idReserva);
+            cmd.Parameters.AddWithValue("@iniFin", iniFin);
+            cmd.Parameters.AddWithValue("@checkList", checkList);
+            SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
+            if (drd != null)
+            {
+                while (drd.Read())
+                {
+                    result = drd.GetString(0) + "|" + drd.GetString(1) ;
+                }
+                drd.Close();
+            }
+
             return result;
         }
     }

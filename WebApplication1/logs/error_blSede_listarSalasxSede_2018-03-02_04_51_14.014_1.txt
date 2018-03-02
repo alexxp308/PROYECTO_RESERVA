@@ -1,0 +1,7 @@
+Nombre:		blSede_listarSalasxSede
+URL:		http://localhost:58901/MisReservas/listarSalasxSede
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlSala.listarSalasxSede(Int32 sede, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlSala.cs:línea 147
+   en SalaJuntas.BL.blSala.listarSalasxSede(Int32 sede) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blSala.cs:línea 121

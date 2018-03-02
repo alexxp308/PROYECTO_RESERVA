@@ -30,13 +30,33 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,User,Administrador")]
-        public string obtenerReservaxUsuario(int idSala, int idUser,int idSede)
+        public string obtenerReservaxUsuario(int idSala, int idUser,int idSede,int estado)
         {
             var result = "";
             List<elReserva> lelReserva = new List<elReserva>();
             blReserva blReserva = new blReserva();
-            lelReserva = blReserva.obtenerReservaxUsuario(idSala, idUser,idSede);
+            lelReserva = blReserva.obtenerReservaxUsuario(idSala, idUser,idSede,estado);
             result = JsonConvert.SerializeObject(lelReserva);
+            return result;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,User,Administrador")]
+        public int eliminarReserva(int idReserva)
+        {
+            int result = 0;
+            blReserva blReserva = new blReserva();
+            result = blReserva.eliminarReserva(idReserva);
+            return result;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,User,Administrador")]
+        public string CheckList(int idReserva, int iniFin, string check)
+        {
+            string result = "";
+            blReserva blReserva = new blReserva();
+            result = blReserva.CheckList(idReserva, iniFin, check);
             return result;
         }
     }

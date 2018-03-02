@@ -109,6 +109,7 @@ begin
 	from UserProfile a where a.UserId = @iduser
 end
 end
+
 select *  from UserProfile
 exec USP_OBTENER_USUARIO 1
 
@@ -119,7 +120,7 @@ select * from UserProfile
 select * from SALA
 select * from Sede
 select * from RESERVA
-create procedure USP_OBTENER_CORREOS
+alter procedure USP_OBTENER_CORREOS
 (
 	@idSala int,
 	@idCreator int
@@ -153,12 +154,12 @@ BEGIN
 	select idSede,nombreSede from Sede where idSede=@idSede;
 END
 
-create procedure USP_ACTUALIZAR_USUARIO
+ALTER procedure [dbo].[USP_ACTUALIZAR_USUARIO]
 (
 	@userId int,
 	@username varchar(50),
 	@roles varchar(20),
-	@cargo varchar(10),
+	@cargo varchar(20),
 	@nombreCompleto varchar(100),
 	@email varchar(60),
 	@idSede int
@@ -505,10 +506,11 @@ select * from RESERVA
 select * from sala
 select * from Sede
 
-create PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
+alter PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
 	@idSala int,
 	@userId int,
-	@idSede int
+	@idSede int,
+	@estado int
 )
 AS
 BEGIN
@@ -526,46 +528,35 @@ BEGIN
 	end
 END
 
-exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
-select * from UserProfile
---------------------------------------------------------------------------------
-
-alter PROCEDURE USP_OBTENER_USUARIO
-(
-@iduser int
+create procedure USP_ELIMINAR_RESERVA(
+	@idReserva int
 )
 as
 begin
-declare @sede int = (select idSede from UserProfile where UserId=@iduser)
-if(@sede!=0)
-begin
-	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS
-	from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
-end
-else
-begin
-	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS
-	from UserProfile a where a.UserId = @iduser
-end
+	update RESERVA set estadoReserva=0 where idReserva=@idReserva
 end
 
-ALTER procedure [dbo].[USP_ACTUALIZAR_USUARIO]
+exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
+select * from UserProfile
+
+alter PROCEDURE USP_GUARDAR_CHECKLIST
 (
-	@userId int,
-	@username varchar(50),
-	@roles varchar(20),
-	@cargo varchar(20),
-	@nombreCompleto varchar(100),
-	@email varchar(60),
-	@idSede int
+	@idReserva int,
+	@iniFin int,
+	@checkList nvarchar(max)
 )
 AS
 BEGIN
-	update UserProfile set UserName=@username,Roles=@roles,cargo=@cargo,
-	NombreCompleto=@nombreCompleto,Email=@email,idSede=@idSede where UserId=@userId
-	
-	SELECT a.UserId,a.UserName,a.Roles,a.cargo,a.NombreCompleto,a.Email,a.idSede,IsActive 
-	FROM UserProfile a WHERE a.UserId = @userId
+	if(@iniFin=0)
+	begin
+		update RESERVA set checklistInicial=@checkList,fhCheckInicial= CONVERT(nvarchar(16), getdate(), 120),estadoReserva=2 where idReserva=@idReserva
+		select checklistInicial,fhCheckInicial from RESERVA where idReserva=@idReserva;
+	end
+	else
+	begin
+	update RESERVA set checklistFinal=@checkList,fhCheckFinal= CONVERT(nvarchar(16), getdate(), 120),estadoReserva=3 where idReserva=@idReserva
+	select checklistFinal,fhCheckFinal from RESERVA where idReserva=@idReserva;
+	end
 END
+
+exec USP_GUARDAR_CHECKLIST 4,0,'hola'

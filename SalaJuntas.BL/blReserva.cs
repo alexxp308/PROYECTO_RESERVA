@@ -36,7 +36,7 @@ namespace SalaJuntas.BL
             return lelReserva;
         }
 
-        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId,int idSede)
+        public List<elReserva> obtenerReservaxUsuario(int salaId, int userId,int idSede,int estado)
         {
             List<elReserva> lelReserva = null;
             using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -46,7 +46,7 @@ namespace SalaJuntas.BL
                     lelReserva = new List<elReserva>();
                     con.Open();
                     dlReserva odlReserva = new dlReserva();
-                    lelReserva = odlReserva.obtenerReservaxUsuario(salaId, userId,idSede, con);
+                    lelReserva = odlReserva.obtenerReservaxUsuario(salaId, userId,idSede,estado, con);
                 }
                 catch (Exception ex)
                 {
@@ -72,6 +72,46 @@ namespace SalaJuntas.BL
                 {
                     string url = HttpContext.Current.Request.Url.ToString();
                     Log.Error(logPath, "blReserva_guardarReserva", url, ex);
+                }
+            }
+            return result;
+        }
+
+        public int eliminarReserva(int idReserva)
+        {
+            int result = 0;
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    con.Open();
+                    dlReserva odlReserva = new dlReserva();
+                    result = odlReserva.eliminarReserva(idReserva, con);
+                }
+                catch (Exception ex)
+                {
+                    string url = HttpContext.Current.Request.Url.ToString();
+                    Log.Error(logPath, "blReserva_eliminarReserva", url, ex);
+                }
+            }
+            return result;
+        }
+
+        public string CheckList(int idReserva, int iniFin, string checkList)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    con.Open();
+                    dlReserva odlReserva = new dlReserva();
+                    result = odlReserva.CheckList(idReserva, iniFin, checkList, con);
+                }
+                catch (Exception ex)
+                {
+                    string url = HttpContext.Current.Request.Url.ToString();
+                    Log.Error(logPath, "blReserva_CheckList", url, ex);
                 }
             }
             return result;

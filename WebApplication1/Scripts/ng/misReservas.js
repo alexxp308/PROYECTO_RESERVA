@@ -72,6 +72,20 @@
     }
 });
 
+function getcurrentDate() {
+    var midate = new Date();
+    var dd = midate.getDate();
+    var mm = midate.getMonth() + 1;
+    var yyyy = midate.getFullYear();
+    dd = (dd < 10) ? '0' + dd : dd;
+    mm = (mm < 10) ? '0' + mm : mm;
+    var hh = midate.getHours();
+    var min = midate.getMinutes();
+    hh = (hh < 10) ? '0' + hh : hh;
+    min = (min < 10) ? '0' + min : min;
+    return yyyy + '-' + mm + '-' + dd + "T" + hh + ":" + min + ":00";
+}
+
 function addDays(mydate, days) {
     var myday = mydate.split("T")[0];
     var array = myday.split("-");
@@ -101,7 +115,7 @@ function listarSedes(pais) {
         success: function (response) {
             var sedes = response.split(";");
             var sede = null;
-            var str = "<option value='0'>--SELECCIONAR--</option>";
+            var str = "<option value='0'>--SELEC--</option>";
             for (var i = 0; i < sedes.length; i++) {
                 sede = sedes[i].split("|");
                 str += "<option value='" + sede[0] + "'>" + sede[1] + "</option>";
@@ -123,7 +137,7 @@ function listarSalas(elem) {
             var salas = response.split("#");
             var sala = null;
             var descrpt = "";
-            var str = "<option value='0'>--SELECCIONAR--</option>";
+            var str = "<option value='0'>--SELEC--</option>";
             for (var i = 0; i < salas.length; i++) {
                 sala = salas[i].split("|");
                 descrpt = "Tipo: " + sala[2] + "; " + sala[5];
@@ -142,13 +156,14 @@ function listarSalas(elem) {
     });
 }
 
+var salas = {};
 function buscarReservas() {
     if ($("#sede").val != "0") {
         $(".loader").toggle(true);
         $.ajax({
             method: "POST",
             url: "/MisReservas/obtenerReservaxUsuario",
-            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1 },
+            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1, estado: $("#estado").val() * 1 },
             dataType: "json",
             success: function (data) {
                 $("#result").html("");
@@ -157,7 +172,7 @@ function buscarReservas() {
                     document.getElementById("content").style.display = "block";
                     var str = "";
                     var campos = "";
-                    var salas = {};
+                    salas = {};
                     for (var j = 0; j < data.length; j++) {
                         if (jQuery.isEmptyObject(salas[data[j].idSala])) {
                             console.log(data[j].idSala);
@@ -178,10 +193,10 @@ function buscarReservas() {
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhfin.substring(0,16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'>estado</td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist' onclick='realizarCheckListIni(\"" + reservas[i].idReserva + "\")'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist' onclick='realizarCheckListFin(\"" + reservas[i].idReserva + "\")'><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(\"" + reservas[i].idReserva + "\")' " + ((reservas[i].estadoReserva == 0)?"disabled":"")+"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='en espera'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'")))+"'></div></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0)?"disabled":"")+"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") +"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio)?"disabled":"")+"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
                             campos += "</tr>";
                         }
 
@@ -202,6 +217,7 @@ function buscarReservas() {
                         str += "</div></div></div>"
                     }
                     $("#result").html(str);
+                    console.log(salas);
                 }
                 else {
                     alert("No se han hecho reservas");
@@ -210,6 +226,193 @@ function buscarReservas() {
         });
     } else {
         alert("Debes seleccionar una sede");
+    }
+}
+
+function eliminarReserva(id,fechaIni,elem) {
+    if (getcurrentDate() < fechaIni) {
+        var info = confirm("¿Esta seguro que deseas cancelar esta reserva?");
+        if (info) {
+            $.ajax({
+                method: "GET",
+                url: "/MisReservas/eliminarReserva",
+                contentType: "application/json",
+                data: { idReserva: id },
+                dataType: "text",
+                success: function (response) {
+                    if (response * 1 > 0) {
+                        elem.setAttribute("disabled", "disabled");
+                        elem.parentNode.previousSibling.firstChild.setAttribute("disabled", "disabled");
+                        elem.parentNode.previousSibling.previousSibling.firstChild.setAttribute("disabled", "disabled");
+                        elem.parentNode.previousSibling.previousSibling.previousSibling.firstChild.setAttribute("class", "esfera cancelada");
+                        elem.parentNode.previousSibling.previousSibling.previousSibling.firstChild.setAttribute("title", "cancelada");
+                        elem.parentNode.parentNode.style.opacity = "0.65";
+                        alert("Cancelada correctamente");
+                    } else {
+                        alert("Error");
+                    }
+                }
+            });
+        }
+    }
+    else {
+        alert("No puede eliminar esta reserva");
+    }
+}
+
+function limpiarCheck() {
+    $("#checkList").html("");
+    $("#checkRealizado").html("");
+    $("#bodyCheck").html("");
+    $("#miCheck").removeAttr("disabled");
+    $("#idReserva").html("");
+    $("#idSala").html("");
+    $("#iniFin").html("");
+    $("#advertencia").html("");
+}
+
+function realizarCheckList(idReserva, idSala, param) {
+    limpiarCheck();
+    var checkList = "";
+    var arrayCheck = {};
+    var actual = getcurrentDate();
+    var reserva = salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva);
+    if (param == 0) { //deberia mostrarse el checklist cuando ya acabo la reserva? o antes de que empieze?
+        $("#checkList").html("Checklist inicial");
+        checkList = reserva["checkListInicial"];
+        if (checkList != "") {
+            $("#checkRealizado").html(" - " + reserva["fhCheckInicial"]);
+            $("#miCheck").attr("disabled", "disabled");
+            arrayCheck = JSON.parse(checkList);
+        } else {
+            if (actual < reserva["fhinicio"]) {
+                $("#miCheck").attr("disabled", "disabled");
+                $("#advertencia").html(" -- Aun no comienza su reserva");
+            } else if (actual > reserva["fhfin"]) {
+                $("#miCheck").attr("disabled", "disabled");
+                $("#advertencia").html(" -- Ya termino su reserva");
+            }
+        } 
+    }
+    else {
+        $("#checkList").html("Checklist final");
+        checkList = reserva["checkListFinal"];
+        if (checkList != "") {
+            $("#checkRealizado").html("- " + reserva["fhCheckFinal"]);
+            $("#miCheck").attr("disabled", "disabled");
+            arrayCheck = JSON.parse(checkList);
+        } else {
+            if (reserva["checkListInicial"] == "") {
+                alert("Debe realizar primero el Checklist inicial");
+                return;
+            }
+            /*if (actual < reserva["fhinicio"]) {
+                $("#miCheck").attr("disabled", "disabled");
+                $("#advertencia").html(" -- Aun no comienza tu reserva");
+            } else if (actual > reserva["fhfin"]) {
+                $("#miCheck").attr("disabled", "disabled");
+                $("#advertencia").html(" -- Ya termino tu reserva");
+            }*/
+        }
+    }
+
+    var activos = salasArray.find((x) => x.id == idSala)["activos"];
+    var keys = Object.keys(activos);
+    var str = "";
+    var detalle = [];
+    for (var i = 0; i < keys.length; i++) {//si se modifican los activos esto no va a funcionar!!!!!! ya que se cambiaria la estructura .. seria mejor que cuando no esta vacio se cree un checklist con la estructura guardada en reserva?
+        str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
+        str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">'+keys[i]+'</legend>';
+        str += '<div class="form-group">';
+        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="detalle_' + keys[i]+'" style="padding-top:10px;padding-left:10px;">Detalle:</label>';
+        str += '<div class="col-sm-12 col-md-8 col-lg-8">';
+        str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_' + keys[i] + '"' + (jQuery.isEmptyObject(arrayCheck) ? (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"]))?"disabled >":">") : "disabled >"+arrayCheck[keys[i]]["descripcion"])+'</textarea>';
+        str += '</div></div><br><br><br><br>';
+        if (!jQuery.isEmptyObject(arrayCheck)) detalle = arrayCheck[keys[i]]["Detalle"];
+        for (var j = 0; j < activos[keys[i]]; j++) {
+            str += '<div class="form-group">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + keys[i]+(j+1) +'" style="padding-top:10px;padding-left:10px;">' + keys[i]+' '+(j+1)+':</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8">';
+            str += '<select class="form-control checkSelect" id="' + keys[i] + (j + 1) + '" ' + ((jQuery.isEmptyObject(arrayCheck) && !((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])))?"":"disabled")+'>';
+            str += '<option value="0">--SELECCIONAR--</option>';
+            str += '<option value="funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "funcional")?"selected":""))+'>funcional</option>';
+            str += '<option value="no_funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "no_funcional") ? "selected" : "")) +'>no funcional</option>';
+            str += '</select></div></div><br><br>';
+        }
+        str += '</fieldset>';
+    }
+    $("#bodyCheck").html(str);
+    document.getElementById("idReserva").innerHTML = idReserva;
+    document.getElementById("iniFin").innerHTML = param;
+    $("#idSala").html(idSala);
+    $("#dvCheck").modal();
+}
+
+function guardarCheck() {
+    var validarDet = true;
+    var validarSel = true;
+    var detalles = document.getElementsByClassName("checkDetalle");
+    var select = document.getElementsByClassName("checkSelect");
+    for (var i = 0; i < detalles.length; i++) {
+        if (detalles[i].value == "") {
+            validarDet = false;
+            break;
+        }
+    }
+    for (var i = 0; i < select.length; i++) {
+        if (select[i].value == "0") {
+            validarSel = false;
+            break;
+        }
+    }
+
+    if (validarDet && validarSel) {
+        var checkList = {};
+        var idSala = $("#idSala").html() * 1;
+        var activos = salasArray.find((x) => x.id == idSala)["activos"];
+        var keys = Object.keys(activos);
+        for (var i = 0; i < keys.length; i++) {
+            checkList[keys[i]] = {};
+            checkList[keys[i]]["descripcion"] = $("#detalle_" + keys[i]).val();
+            checkList[keys[i]]["Detalle"] = [];
+            for (var j = 0; j < activos[keys[i]]; j++) {
+                checkList[keys[i]]["Detalle"].push($("#"+keys[i] + (j + 1)).val());
+            }
+        }
+        
+        var idReserva = document.getElementById("idReserva").innerHTML*1;
+        var iniFin = document.getElementById("iniFin").innerHTML*1;
+        debugger;
+        $.ajax({
+            method: "POST",
+            url: "/MisReservas/CheckList",
+            data: { idReserva: idReserva, iniFin: iniFin , check: JSON.stringify(checkList) },
+            dataType: "text",
+            success: function (response) {
+                if (response.length > 0) {
+                    var datos = response.split("|");
+                    if (iniFin == 0) {
+                        debugger;
+                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("class", "esfera reserva");
+                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("title", "en reserva");
+                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListInicial"] = datos[0];
+                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckInicial"] = datos[1];
+                    } else {
+                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("class", "esfera terminada");
+                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("title", "terminada");
+                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListFinal"] = datos[0];
+                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckFinal"] = datos[1];
+                    }
+                    alert("El checklist se guardo correctamente");
+                    $("#dvCheck").modal("hide");
+                } else {
+                    alert("Error");
+                    $("#dvCheck").modal("hide");
+                }
+            }
+        });
+    } else {
+        alert("falta completar campos");
     }
 }
 

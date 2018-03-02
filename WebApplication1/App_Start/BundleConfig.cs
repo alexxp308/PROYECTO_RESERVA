@@ -30,7 +30,8 @@ namespace WebApplication1
 
 			bundles.Add(new ScriptBundle("~/scripts/ProcesoReserva").Include("~/scripts/lib/fullCalendar/moment.min.js", "~/scripts/lib/fullCalendar/fullcalendar.min.js","~/scripts/lib/fullCalendar/es.js","~/scripts/ng/procesoReserva.js"));
 			bundles.Add(new StyleBundle("~/styles/ProcesoReserva").Include("~/Content/css/ProcesoReserva.css", "~/Content/css/fullCalendar/fullcalendar.min.css"));
-			bundles.Add(new ScriptBundle("~/scripts/Login").Include("~/Scripts/ng/Login.js","~/Content/css/vendor/popper.min.js", "~/Content/css/vendor/slect2.min.js", "~/Content/css/vendor/main.js"));
+            bundles.Add(new StyleBundle("~/styles/MisReservas").Include("~/Content/css/MisReservas.css"));
+            bundles.Add(new ScriptBundle("~/scripts/Login").Include("~/Scripts/ng/Login.js","~/Content/css/vendor/popper.min.js", "~/Content/css/vendor/slect2.min.js", "~/Content/css/vendor/main.js"));
 			bundles.Add(new ScriptBundle("~/scripts/SalaJuntas").Include("~/Scripts/ng/SalaJuntas.js"));
 			bundles.Add(new ScriptBundle("~/scripts/Activos").Include("~/Scripts/ng/Activos.js"));
 			bundles.Add(new StyleBundle("~/styles/SalaJuntas").Include("~/Content/css/SalaJuntas.css"));
