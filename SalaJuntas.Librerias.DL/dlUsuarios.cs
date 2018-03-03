@@ -101,7 +101,7 @@ namespace SalaJuntas.Librerias.DL
             {
                 while (drd.Read())
                 {
-                    result = drd.GetString(0) + "|" + drd.GetString(1) + "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6) + "|" + drd.GetBoolean(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9);
+                    result = drd.GetString(0) + "|" + drd.GetString(1) + "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6) + "|" + drd.GetBoolean(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9) + "|" + drd.GetInt32(10);
                 }
                 drd.Close();
             }

@@ -20,14 +20,37 @@ function obtenerDatos() {
                 $("#rol-profile").html(data[3]);
                 $("#administrador-profile").html(data[8]);
                 $("#pais-profile").html(data[9]);
+                var reservaProxima = data[10] * 1;
                 if (data[7] == "True") {
                     document.getElementById("obli").style.display = "block";
                     document.getElementById("cancelardvp").setAttribute("disabled", "disabled");
                     $("#dvPassword").modal("show");
                 }
+                if (reservaProxima == 1) {
+                    mostrarAlerta();
+                }
             }
         }
     });
+}
+
+function mostrarAlerta() {
+    var div = document.getElementById("divAlert");
+    div.style.opacity = "0.00";
+    var my = setInterval(function () {
+        if (div.style.opacity == "1") {
+            clearInterval(my);
+        } else {
+            div.style.opacity = div.style.opacity * 1 + 0.05;
+            console.log(div.style.opacity);
+        }
+    }, 50)
+}
+
+function quitarAlerta(elem) {
+    var div = elem.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function () { div.style.display = "none"; }, 600);
 }
 
 function mostrardvContra() {

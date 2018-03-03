@@ -193,7 +193,7 @@ function buscarReservas() {
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhfin.substring(0,16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='en espera'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'")))+"'></div></td>";
+                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'")))+"'></div></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0)?"disabled":"")+"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") +"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio)?"disabled":"")+"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
@@ -289,8 +289,10 @@ function realizarCheckList(idReserva, idSala, param) {
                 $("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Aun no comienza su reserva");
             } else if (actual > reserva["fhfin"]) {
-                $("#miCheck").attr("disabled", "disabled");
-                $("#advertencia").html(" -- Ya termino su reserva");
+                alert("ya termino su reserva y ya no puede realizar el checkList inicial");
+                return;
+                /*$("#miCheck").attr("disabled", "disabled");
+                $("#advertencia").html(" -- Ya termino su reserva");*/
             }
         } 
     }
@@ -306,10 +308,10 @@ function realizarCheckList(idReserva, idSala, param) {
                 alert("Debe realizar primero el Checklist inicial");
                 return;
             }
-            /*if (actual < reserva["fhinicio"]) {
-                $("#miCheck").attr("disabled", "disabled");
-                $("#advertencia").html(" -- Aun no comienza tu reserva");
-            } else if (actual > reserva["fhfin"]) {
+            if (actual > reserva["fhfin"]) {
+                alert("ya termino su reserva y ya no puede realizar el checkList final");
+                return;
+            } /*else if (actual > reserva["fhfin"]) {
                 $("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Ya termino tu reserva");
             }*/

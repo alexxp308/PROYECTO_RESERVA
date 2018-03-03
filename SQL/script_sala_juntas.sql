@@ -99,19 +99,25 @@ declare @sede int = (select idSede from UserProfile where UserId=@iduser)
 if(@sede!=0)
 begin
 	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS
+	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,(select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser) RESERVA_PROXIMA
 	from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
 end
 else
 begin
 	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS
+	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS,(select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser) RESERVA_PROXIMA
 	from UserProfile a where a.UserId = @iduser
 end
 end
 
+select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=4
+select replace(CONVERT(nvarchar(16), DATEADD([MINUTE],-10,GETDATE()), 120)+':00',' ','T')
+
 select *  from UserProfile
-exec USP_OBTENER_USUARIO 1
+exec USP_OBTENER_USUARIO 4
 
 (select idSede from UserProfile where UserId=7)
 
@@ -517,14 +523,32 @@ BEGIN
 	declare @val int = @idSala;
 	if(@val=0)
 	begin
-		select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+		if(@estado=9)
+		begin
+				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 		a.UserNameCreator,a.nombreCompletoCreator,
 	a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
 	where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+		end
+		else
+		begin
+						select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+		a.UserNameCreator,a.nombreCompletoCreator,
+	a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+	where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+		end
 	end
 	else
 	begin
-		select * from RESERVA where idSala=@idSala and idCreator=@userId order by fhinicio desc
+	if(@estado=9)
+	begin
+	select * from RESERVA where idSala=@idSala and idCreator=@userId order by fhinicio desc
+	end
+	else
+	begin
+	select * from RESERVA where idSala=@idSala and idCreator=@userId and estadoReserva=@estado order by fhinicio desc
+	end
+		
 	end
 END
 
