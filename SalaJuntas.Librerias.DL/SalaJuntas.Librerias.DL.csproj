@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dlCampania.cs" />
     <Compile Include="dlUsuarios.cs" />
     <Compile Include="dlActivo.cs" />
     <Compile Include="dlLogin.cs" />

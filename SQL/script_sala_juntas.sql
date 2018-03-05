@@ -437,6 +437,7 @@ create table RESERVA(
 	idReserva int primary key identity(1, 1),
 	estadoReserva int, --0:cancelada, 1: en espera, 2: en reserva, 3: finalizada
 	idSala int,
+	idCampania int,
 	descripcion varchar(200),
 	fhCreacion char(16), -- hora de creacion de la reserva
 	fhinicio char(19),
@@ -520,35 +521,69 @@ alter PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
 )
 AS
 BEGIN
+	declare @rol varchar(20)= (select Roles from UserProfile where UserId=@userId);
 	declare @val int = @idSala;
 	if(@val=0)
 	begin
 		if(@estado=9)
 		begin
+			if(@rol='Administrador')
+			begin
 				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
-		a.UserNameCreator,a.nombreCompletoCreator,
-	a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-	where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+				a.UserNameCreator,a.nombreCompletoCreator,
+				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+				where a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+			end
+			else
+			begin
+				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				a.UserNameCreator,a.nombreCompletoCreator,
+				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+			end
 		end
 		else
 		begin
-						select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
-		a.UserNameCreator,a.nombreCompletoCreator,
-	a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-	where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+			if(@rol='Administrador')
+			begin
+				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				a.UserNameCreator,a.nombreCompletoCreator,
+				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+				where a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+			end
+			else
+			begin
+				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				a.UserNameCreator,a.nombreCompletoCreator,
+				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
+				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+			end
 		end
 	end
 	else
 	begin
-	if(@estado=9)
-	begin
-	select * from RESERVA where idSala=@idSala and idCreator=@userId order by fhinicio desc
-	end
-	else
-	begin
-	select * from RESERVA where idSala=@idSala and idCreator=@userId and estadoReserva=@estado order by fhinicio desc
-	end
-		
+		if(@estado=9)
+		begin
+			if(@rol='Administrador')
+			begin
+				select * from RESERVA where idSala=@idSala order by fhinicio desc
+			end
+			else
+			begin
+				select * from RESERVA where idSala=@idSala and idCreator=@userId order by fhinicio desc
+			end
+		end
+		else
+		begin
+			if(@rol='Administrador')
+			begin
+				select * from RESERVA where idSala=@idSala and estadoReserva=@estado order by fhinicio desc
+			end
+			else
+			begin
+				select * from RESERVA where idSala=@idSala and idCreator=@userId and estadoReserva=@estado order by fhinicio desc
+			end
+		end
 	end
 END
 
@@ -584,3 +619,63 @@ BEGIN
 END
 
 exec USP_GUARDAR_CHECKLIST 4,0,'hola'
+
+create procedure USP_ACTUALIZAR_RESERVA
+(
+	@idReserva int,
+	@descripcion varchar(200),
+	@fhinicio char(19),
+	@fhfin char(19)
+)
+as
+begin
+	update RESERVA SET descripcion = @descripcion,fhinicio=@fhinicio,fhfin=@fhfin where idReserva=@idReserva
+end
+
+create table CAMPANIA(
+	idCampania int primary key identity(1, 1),
+	nombreCampania varchar(100),
+	idSede int
+)
+truncate table CAMPANIA
+
+
+alter procedure USP_CREAR_CAMPANIA(
+	@nombreCampania varchar(100),
+	@idSede int
+)
+as
+BEGIN
+	DECLARE @CONT INT = (SELECT COUNT(*) FROM CAMPANIA WHERE nombreCampania=@nombreCampania and idSede=@idSede)
+	if(@CONT=0)
+	begin
+			INSERT INTO CAMPANIA (nombreCampania,idSede) VALUES (@nombreCampania,@idSede)
+			declare @idCampania int= @@IDENTITY;
+			SELECT * FROM CAMPANIA WHERE idCampania = @idCampania
+	end
+END
+exec USP_CREAR_CAMPANIA 'hola',1
+
+alter procedure USP_ACTUALIZAR_CAMPANIA(
+	@nombreCampania varchar(100),
+	@idSede int,
+	@idCampania INT
+)
+as
+begin
+	DECLARE @CONT INT = (SELECT COUNT(*) FROM CAMPANIA WHERE nombreCampania=@nombreCampania and idSede=@idSede)
+	if(@CONT=0)
+	begin
+		update CAMPANIA SET nombreCampania=@nombreCampania where idCampania = @idCampania
+		SELECT * FROM CAMPANIA WHERE idCampania = @idCampania
+	end
+end
+
+alter procedure USP_LISTAR_CAMPANIAS
+(
+	@idSede int
+)
+AS
+BEGIN
+	SELECT * FROM CAMPANIA WHERE idSede = @idSede;
+END

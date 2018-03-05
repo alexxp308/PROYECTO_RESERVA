@@ -102,7 +102,6 @@
                 o.id("dfinR").removeAttribute("min");
                 o.id("dfinR").setAttribute("disabled", "disabled");
             }
-
         }
 
         o.myBussinessHour = function (micadena) {
@@ -252,7 +251,7 @@
                         for (var i = 0; i < sedes.length; i++) {
                             sede = sedes[i].split("|");
                             verifica = "";
-                            if (window.cookie.getCookie()["role"]=="User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo")) {
+                            if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo" || o.id("rol-profile").innerHTML == "Jefe")) {
                                 if (sede[1] == o.id("sede-profile").innerHTML) {
                                     verifica = "selected";
                                 }
@@ -266,7 +265,7 @@
                             });
                         }
                         $("#sedeR").html(str);
-                        if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo")) {
+                        if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo" || o.id("rol-profile").innerHTML == "Jefe")) {
                             o.id("sedeR").setAttribute("disabled", "disabled");
                             o.id("sedeR").onchange();
                         }
@@ -293,6 +292,12 @@
             o.id("pisoR").value = "0";
             o.id("pisoR").innerHTML = "<option value='0'>--SELECCIONAR--</option>";
             o.id("salaR").innerHTML = "<option value='0'>--SELECCIONAR--</option>";
+            if (this.value == "CAPACITACION") {
+                o.id("divCampania").style.display = "block";
+                //listarCampañasxSede();
+            } else {
+                o.id("divCampania").style.display = "none";
+            } 
         }
 
         o.id("torreR").onchange = function () {

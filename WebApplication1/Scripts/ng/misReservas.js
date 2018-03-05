@@ -1,10 +1,12 @@
 ﻿$(document).ready(function () {
     var my = setInterval(function () {
-        if ($("#pais-profile").html() != "") {
+        if ($("#pais-profile").html() != "" && $("#rol-profile").html() != "" && $("#sede-profile").html() != "") {
             clearInterval(my);
             var pais = $("#pais-profile").html();
+            var rol = $("#rol-profile").html();
+            var sede = $("#sede-profile").html();
             $("#pais").val(pais);
-            listarSedes(pais);
+            listarSedes(pais,rol,sede);
         }
     }, 0);
 
@@ -16,11 +18,14 @@
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay,listWeek'
+            right: 'month,listWeek'
         },
         selectable: true,
         eventRender: function (event, element) {
             element.attr('title', event.tip);
+        },
+        eventDrop: function (event) {
+            changelimits(event);
         },
         /*validRange: {
             start: rs.getcurrentDatequitDays(1),
@@ -61,7 +66,7 @@
                     var visualEvent = {};
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].estadoReserva != 0) {
-                            if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c" };
+                            if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c"};
                             else visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin };
                             $('#calendar').fullCalendar('renderEvent', visualEvent, true);
                         }
@@ -71,6 +76,172 @@
         });
     }
 });
+
+function cambioInicio(elem) {
+    if (elem.value != "") {
+        if ((elem.value.substring(8, 10) * 1) > (document.getElementById("dfinR").value.substring(8, 10) * 1)) document.getElementById("dfinR").value = "";
+        document.getElementById("dfinR").setAttribute("min", elem.value);
+        document.getElementById("dfinR").removeAttribute("disabled");
+    } else {
+        document.getElementById("dfinR").removeAttribute("min");
+        document.getElementById("dfinR").setAttribute("disabled", "disabled");
+    }
+}
+
+function changelimits(event) {
+    var buscador = myevents.find((x) => x.id == event.id);
+    if (formatdatetoString(event.start._i) > getcurrentDate()) {
+        buscador.start = formatdatetoString(event.start._i);
+        buscador.end = formatdatetoString(event.end._i);
+        buscador.update = true;
+        //updateBBDD(buscador);
+    } else {
+        $('#calendar').fullCalendar('removeEvents', [buscador.id]);
+        var visualEvent = {};
+        visualEvent = {
+            id: buscador.id,
+            title: buscador.title,
+            start: buscador.start,
+            end: buscador.end,
+            //color: ((buscador.idCreator == window.cookie.getCookie()["userId"] * 1) ? "#5cb85c" : "#2a6496"),
+            editable: true
+        };
+        $('#calendar').fullCalendar('renderEvent', visualEvent, true);
+        alert("No puedes cambiar la reserva a dias pasados")
+    }
+    
+    console.log(myevents);
+}
+
+function cerrarModal() {
+    var sePuedeCerrar = true;
+    console.log(myevents[2].update);
+    for (var i = 0; i < myevents.length; i++) {
+        if (myevents[i].update !== undefined) {
+            sePuedeCerrar = false;
+            break;
+        }
+    }
+    if (sePuedeCerrar) {
+        $("#dvCalendario").modal("hide")
+    }
+    else {
+        var question = confirm("¿Esta seguro que no desea guardar los cambios de la reserva?");
+        if (question) {
+            $("#dvCalendario").modal("hide");
+        }
+    }
+}
+
+function guardarAllUpdates() {
+    $("#dvCalendario").modal("hide");
+
+    var cont = 0;
+    var str = "";
+    for (var j = 0; j < myevents.length; j++) {
+        if (myevents[j].update == true) {
+            cont++;
+            str += '<div class="card-block">';
+            str += '<h4 class="card-title">Reserva #' + (cont) + '</h4>';
+            str += '<ul class="list-group list-group-flush">';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Titulo:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].title.substring(myevents[j].title.indexOf(":") + 2, myevents[j].title.indexOf("\n")) + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Fecha inicio:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].start.split("T")[0] + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Fecha fin:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].end.split("T")[0] + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Día inicio:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].start.split("T")[1] + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Día fin:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].end.split("T")[1] + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '<div class="row">';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Solicitante:</label>';
+            str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].title.substring(myevents[j].title.indexOf("\n")+15, myevents[j].length) + '"/>';
+            str += '</div></div></li>';
+            str += '<li class="list-group-item">'
+            str += '</div></li></ul></div>';
+        }
+    }
+    $("#listReservas").html(str);
+    if (str != "") $("#dvUpdateEvents").modal();
+    else alert("No se ha alterado ninguna reserva");
+}
+
+function cerrarModalUpdate() {
+    $("#dvUpdateEvents").modal("hide");
+    $("#listReservas").html("");
+    $("#dvCalendario").modal();
+}
+
+function EnviarUpdates() {
+    var arrayUpdate = [];
+    for (var j = 0; j < myevents.length; j++) {
+        if (myevents[j].update == true) {
+            arrayUpdate.push({
+                idReserva: myevents[j].id,
+                descripcion: myevents[j].title.substring(myevents[j].title.indexOf(":") + 2, myevents[j].title.indexOf("\n")),
+                fhinicio: myevents[j].start+":00",
+                fhfin: myevents[j].end+":00",
+            });
+        }
+    }
+
+    $.ajax({
+        method: "POST",
+        url: "/MisReservas/actualizarReserva",
+        contentType: "application/json",
+        data: JSON.stringify(arrayUpdate),
+        dataType: "text",
+        success: function (response) {
+            if (response * 1 > 0) {
+                alert(response + " actualizadas correctamente");
+            } else {
+                alert("Error!");
+            }
+            $("#dvUpdateEvents").modal("hide");
+        }
+    });
+}
+
+/*function updateBBDD(reserva) {
+    var data = {};
+    data.fhinicio = reserva.start;
+    data.fhfin = reserva.end;
+    data.idReserva = reserva.id;
+    data.descripcion = reserva.title.substring(reserva.title.indexOf(":") + 2, reserva.title.indexOf("\n"));
+    $.ajax({
+        method: "POST",
+        url: "/Reserva/actualizarReserva",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        dataType: "text",
+        success: function (response) {
+            console.log(response)
+        }
+    });
+}*/
 
 function getcurrentDate() {
     var midate = new Date();
@@ -94,19 +265,90 @@ function addDays(mydate, days) {
     return formatdatetoString([d.getFullYear(), d.getMonth(), d.getDate(), 23, 59]);
 }
 
+function cargarHoras(elem) {
+    var str = "<option value='0'>--SELECCIONAR--</option>";
+    for (var i = 0; i < 24; i++) {
+        if (i >= restrictHour[0] && i < restrictHour[1]) {
+            str += "<option value='" + ((i < 10) ? "0" + i : i) + ":00'>" + ((i < 10) ? "0" + i : i) + ":00</option>";
+            str += "<option value='" + ((i < 10) ? "0" + i : i) + ":30'>" + ((i < 10) ? "0" + i : i) + ":30</option>";
+        }
+    }
+    elem.innerHTML = str;
+}
+
 function showDetailEvent(inicio, fin, title, id) {
-    var hdinicio = inicio.split("T");
-    var hdfin = fin.split("T");
+
+    if (window.cookie.getCookie()["role"] == "Administrador") {
+        $("#tituloR").removeAttr("disabled");
+        $("#dinicioR").removeAttr("disabled");
+        $("#dfinR").removeAttr("disabled");
+        $("#hinicioR").removeAttr("disabled");
+        $("#hfinR").removeAttr("disabled");
+    }
+    cargarHoras(document.getElementById("hinicioR"));
+    var hdinicio = [];
+    if (Array.isArray(inicio)) {
+        var strIni = formatdatetoString(inicio);
+        hdinicio = strIni.split("T");
+    } else {
+        hdinicio = inicio.split("T");
+    }
+    var hdfin = [];
+    if (Array.isArray(fin)) {
+        var strfin = formatdatetoString(fin);
+        hdfin = strfin.split("T");
+    } else {
+        hdfin = fin.split("T");
+    }
+
     $("#tituloR").val(title.substring(title.indexOf(":") + 2, title.indexOf("\n")));
     $("#creadorR").val(title.substring(title.indexOf("\n") + 14, title.length));
     $("#dinicioR").val(hdinicio[0]);
     $("#dfinR").val(hdfin[0]);
-    $("#hinicioR").val(hdinicio[1]);
-    $("#hfinR").val(hdfin[1]);
+    $("#hinicioR").val(hdinicio[1].substring(0, 5));
+    changeHinicio(document.getElementById("hinicioR"));
+    $("#hfinR").val(hdfin[1].substring(0, 5));
     $("#dvMisEvents").modal("show");
+    $("#idcue").html(id);
 }
 
-function listarSedes(pais) {
+function updateEvent() {
+    if ($("#tituloR").val() != "" && $("#dinicioR").val() != "" && $("#dfinR").val() != "" && $("#hinicioR").val() != "0" && $("#hfinR").val() != "0") {
+        debugger;
+        var elevent = {};
+        elevent.start = $("#dinicioR").val() + "T" + $("#hinicioR").val();
+        elevent.end = $("#dfinR").val() + "T" + $("#hfinR").val();
+        elevent.id = $("#idcue").html() * 1;
+        if (!isOverlapping(elevent)) {
+            var buscador = myevents.find((x) => x.id == (document.getElementById("idcue").innerHTML * 1));
+            buscador.title = "Titulo: " + $("#tituloR").val() + "\n Solicitante: " + $("#creadorR").val();
+            buscador.start = elevent.start;
+            buscador.end = elevent.end;
+            buscador.update = true;
+            $('#calendar').fullCalendar('removeEvents', [($("#idcue").html() * 1)]);
+            $('#calendar').fullCalendar('renderEvent', buscador, true);
+            $("#dvMisEvents").modal("hide");
+        } else {
+            alert("hay un cruce de reserva en el horario seleccionado");
+        }
+    } else {
+        alert("se deben completar todos los campos!");
+    }
+}
+
+function isOverlapping(event) {
+    var array = myevents;
+    for (var i in array) {
+        if (array[i].id != event.id) {
+            if (event.end >= array[i].start && event.start <= array[i].end) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function listarSedes(pais,rol,sedep) {
     $.ajax({
         method: "POST",
         url: "/Reserva/listarSedesxPais",
@@ -116,11 +358,16 @@ function listarSedes(pais) {
             var sedes = response.split(";");
             var sede = null;
             var str = "<option value='0'>--SELEC--</option>";
+            var isRol = (window.cookie.getCookie()["role"] == "Administrador" || (rol == "Supervisor" || rol == "ejecutivo" || rol =="Jefe"))?false:true;
             for (var i = 0; i < sedes.length; i++) {
                 sede = sedes[i].split("|");
-                str += "<option value='" + sede[0] + "'>" + sede[1] + "</option>";
+                str += "<option value='" + sede[0] + "' " + ((!isRol && (sedep == sede[1])) ? 'selected' : '' )+" >" + sede[1] + "</option>";
             }
             $("#sede").html(str);
+            if (!isRol) {
+                listarSalas(document.getElementById("sede"));
+                $("#sede").attr("disabled", "disabled");
+            }
         }
     });
 }
@@ -158,12 +405,12 @@ function listarSalas(elem) {
 
 var salas = {};
 function buscarReservas() {
-    if ($("#sede").val != "0") {
+    if ($("#sede").val() != "0") {
         $(".loader").toggle(true);
         $.ajax({
             method: "POST",
             url: "/MisReservas/obtenerReservaxUsuario",
-            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1, estado: $("#estado").val() * 1 },
+            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1, estado: $("#estado").val() * 1},
             dataType: "json",
             success: function (data) {
                 $("#result").html("");
@@ -190,6 +437,7 @@ function buscarReservas() {
                         for (var i = 0; i < reservas.length; i++) {
                             campos += "<tr id='tr_" + reservas[i].idReserva + "'>";
                             campos += "<th scope='row' align='center'><span style='display:none;' id='col_" + reservas[i].idReserva + "'></span><p>" + (i + 1) + "</p></th>";
+                            campos += "<td align='center'>" + reservas[i].nombreCompletoCreator + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhfin.substring(0,16).replace("T", " ") + "</td>";
@@ -289,7 +537,7 @@ function realizarCheckList(idReserva, idSala, param) {
                 $("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Aun no comienza su reserva");
             } else if (actual > reserva["fhfin"]) {
-                alert("ya termino su reserva y ya no puede realizar el checkList inicial");
+                alert("ya termino la reserva y ya no puede realizar el checkList inicial");
                 return;
                 /*$("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Ya termino su reserva");*/
@@ -309,7 +557,7 @@ function realizarCheckList(idReserva, idSala, param) {
                 return;
             }
             if (actual > reserva["fhfin"]) {
-                alert("ya termino su reserva y ya no puede realizar el checkList final");
+                alert("ya termino la reserva y ya no puede realizar el checkList final");
                 return;
             } /*else if (actual > reserva["fhfin"]) {
                 $("#miCheck").attr("disabled", "disabled");
@@ -448,7 +696,59 @@ function mostrarActivos(idSala) {
     $("#dvMisActivos").modal();
 }
 
-//var myevents = [];
+var myevents = [];
+
+function myBussinessHour(micadena) {
+    var dia = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+    var hd = micadena.split(";")
+    var dias = hd[0].split("-");
+    var my = [];
+    var myn = [0, 1, 2, 3, 4, 5, 6, 7];
+    var inid = dia.findIndex((x) => x == dias[0].toLowerCase());
+    var find = dia.findIndex((x) => x == dias[1].toLowerCase());
+    var horas = hd[1].split("-");
+    var inih = horas[0];
+    var finh = horas[1];
+    if (find > inid) {
+        for (var i = inid; i <= find; i++) {
+            my.push(i);
+        }
+    } else {
+        var d = 0;
+        for (var i = find; i <= inid + 7; i++) {
+            d = i % 7;
+            my.push(i);
+        }
+    }
+
+    return { dow: my, start: inih, end: finh, days: hd[0], hours: hd[1] };
+}
+
+
+function changeHinicio(elem) {
+    var elfin = document.getElementById("hfinR");
+    var str = "<option value='0'>--SELECCIONAR--</option>";
+    if (elem.value != "") {
+        var elInicio = elem.value;
+        var valInicio = elInicio.split(":")[0] * 100 + elInicio.split(":")[1] * 1;
+        for (var z = 0; z < 24; z++) {
+            if (z * 100 > valInicio && z < restrictHour[1]) {
+                str += "<option value='" + ((z < 10) ? "0" + z : z) + ":00'>" + ((z < 10) ? "0" + z : z) + ":00</option>";
+            }
+
+            if ((z * 100) + 30 > valInicio && z < restrictHour[1]) {
+                str += "<option value='" + ((z < 10) ? "0" + z : z) + ":30'>" + ((z < 10) ? "0" + z : z) + ":30</option>";
+            }
+        }
+        elfin.innerHTML = str;
+        elfin.value = "0";
+        elfin.removeAttribute("disabled");
+    } else {
+        elfin.setAttribute("disabled", "disabled");
+    }
+}
+
+restrictHour = [];
 function mostrarReservas(idSala,nombreAdmin) {
     $("#miSalaM").html($("#sala option[value='" + idSala + "']").text());
     $("#miAdmin").html(nombreAdmin);
@@ -458,7 +758,7 @@ function mostrarReservas(idSala,nombreAdmin) {
     data.fhfin = getLastDayMonth(getFirstDayMonth());
     $("#paramInicio").val(data.fhfin);
     $("#salaSelect").val(idSala);
-    //myevents = [];
+    myevents = [];
     $(".loader").toggle(true);
     $.ajax({
         method: "POST",
@@ -473,8 +773,22 @@ function mostrarReservas(idSala,nombreAdmin) {
                 var visualEvent = {};
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].estadoReserva != 0) {//deberia mostrar las eliminadas de rojo?
-                        if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c" };
-                        else visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin };
+
+                        var mihorario = salasArray.find((x) => x.idSala = idSala)["horario"];
+                        var mbh = myBussinessHour(mihorario);
+                        restrictHour = [];
+                        restrictHour.push(mbh.hours.split("-")[0].split(":")[0] * 1)
+                        restrictHour.push(mbh.hours.split("-")[1].split(":")[0] * 1)
+                        $('#calendar').fullCalendar('option', {
+                            businessHours: [{
+                                start: mbh.start,
+                                end: mbh.end,
+                                dow: mbh.dow
+                            }]
+                        });
+                        if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c", editable: ((window.cookie.getCookie()["role"] == "Administrador" && data[i].fhinicio>getcurrentDate()) ? true : false) };
+                        else visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: ((window.cookie.getCookie()["role"] == "Administrador" && data[i].fhinicio > getcurrentDate()) ? true : false) };
+                        if (window.cookie.getCookie()["role"] == "Administrador") myevents.push(visualEvent);
                         $('#calendar').fullCalendar('renderEvent', visualEvent, true);
                     }
                 }
@@ -490,6 +804,7 @@ function createTable(cadena) {
     my += '<thead class="blue-grey lighten-4">';
     my += '<tr>';
     my += '<th align="center">Nro</th>';
+    if (window.cookie.getCookie()["role"] == "Administrador" || window.cookie.getCookie()["role"] == "Admin") my+='<th align="center">Usuario</th>'
     my += '<th align="center">Fecha creación</th>';
     my += '<th align="center">Fecha inicio</th>';
     my += '<th align="center">Fecha fin</th>';
@@ -505,40 +820,3 @@ function createTable(cadena) {
     my += '</table>';
     return my;
 }
-//hola
-   /*<div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Collapsible Group 1</a>
-            </h4>
-        </div>
-        <div id="collapse1" class="panel-collapse collapse in">
-            <div class="panel-body">
-                hola1.
-            </div>
-        </div>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Collapsible Group 2</a>
-            </h4>
-        </div>
-        <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-                hola2
-            </div>
-        </div>
-    </div>
-
-   <div class="panel panel-default">
-       <div class="panel- heading row">
-           <div>
-               <h5 class="col-sm-12 col-md-6 col-lg-6 panel-title">
-                   <a data-toggle="collapse" data-parent="#result" href="#tabla1" class="">
-                       <span style="font-weight:bold">SALA:</span> TR984
-                       </a>
-               </h5>
-               <div>
-                   <button type="button" class="btn btn-default col-sm-6 col-md-1 col-lg-1" style="font-size:15px;float:right;margin-right:10px;" title="ver activos" onclick="mostrarActivos(&quot;2&quot;)"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></button><button type="button" class="btn btn-default col-sm-6 col-md-1 col-lg-1" style="font-size:15px;float:right;margin-right:10px;" title="reservas de la sala" onclick="mostrarReservas(&quot;2&quot;)"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></button></div></div> <div id="tabla1" class="panel-collapse in" style="height: auto;"><div class="panel-body"></div></div></div></div>
-*/

@@ -138,6 +138,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActivosController.cs" />
+    <Compile Include="Controllers\CampaniasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MisReservasController.cs" />
@@ -150,6 +151,7 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\activosDTO.cs" />
+    <Compile Include="Models\CampaniaDTO.cs" />
     <Compile Include="Models\usuarioDTO.cs" />
     <Compile Include="Models\reservaDTO.cs" />
     <Compile Include="Models\salaDTO.cs" />
@@ -214,6 +216,7 @@
     <Content Include="Scripts\lib\fullCalendar\fullcalendar.min.js" />
     <Content Include="Scripts\lib\fullCalendar\moment.min.js" />
     <Content Include="Scripts\ng\Activos.js" />
+    <Content Include="Scripts\ng\Campañas.js" />
     <Content Include="Scripts\ng\Login.js" />
     <Content Include="Scripts\ng\misReservas.js" />
     <Content Include="Scripts\ng\procesoReserva.js" />
@@ -246,6 +249,7 @@
     <Content Include="Views\Usuarios\Usuarios.cshtml" />
     <Content Include="Views\MisReservas\MisReservas.cshtml" />
     <Content Include="Views\Shared\_Scripts.cshtml" />
+    <Content Include="Views\Campanias\Campanias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

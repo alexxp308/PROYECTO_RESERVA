@@ -38,6 +38,7 @@ namespace WebApplication1
 			bundles.Add(new ScriptBundle("~/scripts/Sedes").Include("~/Scripts/ng/Sedes.js"));
             bundles.Add(new ScriptBundle("~/scripts/Usuarios").Include("~/Scripts/ng/usuarios.js"));
             bundles.Add(new ScriptBundle("~/scripts/MisReservas").Include("~/scripts/lib/fullCalendar/moment.min.js", "~/scripts/lib/fullCalendar/fullcalendar.min.js", "~/scripts/lib/fullCalendar/es.js","~/Scripts/ng/misReservas.js"));
+            bundles.Add(new ScriptBundle("~/scripts/Campañas").Include("~/Scripts/ng/Campañas.js"));
             BundleTable.EnableOptimizations = true;
         }
 	}

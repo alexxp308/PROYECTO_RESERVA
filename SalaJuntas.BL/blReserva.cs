@@ -77,6 +77,27 @@ namespace SalaJuntas.BL
             return result;
         }
 
+
+        public int actualizarReserva(List<elReserva> lelReserva)
+        {
+            int result = 0;
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    con.Open();
+                    dlReserva odlReserva = new dlReserva();
+                    result = odlReserva.actualizarReserva(lelReserva, con);
+                }
+                catch (Exception ex)
+                {
+                    string url = HttpContext.Current.Request.Url.ToString();
+                    Log.Error(logPath, "blReserva_actualizarReserva", url, ex);
+                }
+            }
+            return result;
+        }
+
         public int eliminarReserva(int idReserva)
         {
             int result = 0;
@@ -143,7 +164,7 @@ namespace SalaJuntas.BL
         {
             string[] param = correos.Split('|');
             int result = 0;
-            string mensaje = "<div style='border:1px solid black;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
+            string mensaje = "<div style='border:1px solid black;width:50%;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
             mensaje += "<table>";
             mensaje+= "<tr><td style='font-weight:bold;'>Pais:</td><td>" + param[4] + "</td><td style='font-weight:bold;'>Solicitante:</td><td>" + lelReserva[0].nombreCompletoCreator + "</td></tr>";
             mensaje += "<tr><td style='font-weight:bold;'>Sede:</td><td>" + param[3] + "</td><td style='font-weight:bold;'>Sala de reserva:</td><td>" + param[0]+" - "+ param[1] + "</td></tr>";
@@ -158,7 +179,7 @@ namespace SalaJuntas.BL
             for(int j=0;j< keyvalue.Length; j++)
             {
                 activos = keyvalue[j].Split(':');
-                msg += "<tr><td style='border: 1px solid black;text-align:center;'>" + activos[0] + "</td><td style='border: 1px solid black;text-align:center;'>" + activos[1] + "</td></tr>";
+                msg += "<tr><td style='border: 1px solid black;text-align:left;'>" + activos[0] + "</td><td style='border: 1px solid black;text-align:center;'>" + activos[1] + "</td></tr>";
             }
             mensaje += "<table style='border: 1px solid black;border-collapse: collapse;'><thead><tr><th style='border: 1px solid black;'>Activo</th><th style='border: 1px solid black;'>Cantidad</th></tr><thead><tbody>" + msg+"</tbody></table>";
             mensaje += "************************************************************************************";

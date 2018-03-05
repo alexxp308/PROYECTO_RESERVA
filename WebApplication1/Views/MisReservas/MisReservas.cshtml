@@ -6,7 +6,7 @@
 <input type="hidden" id="paramInicio" />
 <input type="hidden" id="salaSelect" />
 <div class="panel panel-primary">
-    <div class="panel-heading" style="padding-bottom:0px;"><h4>MIS RESERVAS</h4></div>
+    <div class="panel-heading" style="padding-bottom:0px;"><h4>HISTORIAL RESERVASS</h4></div>
     <div class="panel-body">
         <div class="row">
             <div class="form-group col-sm-12 col-md-3 col-lg-3">
@@ -78,11 +78,11 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true" style="overflow-y:hidden;">
+<div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true">
     <div class="modal-dialog" style="width:60%;">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#428bca;">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                <button type="button" class="close" aria-hidden="true" @Html.Raw((User.IsInRole("Administrador") ? "onclick='cerrarModal()'" : "data-dismiss='modal'")) >
                     ×
                 </button>
                 <h4 class="modal-title" style="color:white;">Reservas:<span id="miSalaM"></span>&nbsp;-&nbsp;Administrador:<span id="miAdmin"></span></h4>
@@ -91,7 +91,15 @@
                 <div id="calendar"></div>
             </div>
             <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
-                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <button class="btn btn-default" onclick="cerrarModal()">Cancelar</button>
+                    <button class="btn btn-primary" onclick="guardarAllUpdates()">Guardar</button>
+                }
+                else
+                {
+                    <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+                }
             </div>
         </div>
     </div>
@@ -118,7 +126,7 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
-                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" disabled>
+                                <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" onchange="cambioInicio(this);" disabled>
                             </div>
                         </div>
                     </div>
@@ -140,7 +148,9 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control" id="hinicioR" disabled>
+                                <select class="form-control" id="hinicioR" onchange="changeHinicio(this);">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -151,7 +161,9 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control" id="hfinR" disabled>
+                                <select class="form-control" id="hfinR" disabled>
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -167,7 +179,16 @@
                 </fieldset>
             </div>
             <div class="modal-footer" style="margin-top:0px;padding-top:5px;padding-bottom:5px;">
-                <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" onclick="updateEvent()">Guardar</button>
+                    <span id="idcue" style="display:none;"></span>
+                }
+                else
+                {
+                    <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+                }
             </div>
         </div>
     </div>
@@ -196,6 +217,34 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="dvUpdateEvents" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvUpdateEvents" aria-hidden="true">
+    <div class="modal-dialog" style="width:40%;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#428bca;">
+                <button type="button" class="close" aria-hidden="true" onclick="cerrarModalUpdate();" >
+                    ×
+                </button>
+                <h4 class="modal-title" style="color:white;">Reservas actualizadas:</h4>
+            </div>
+            <div class="modal-body" style="padding-bottom:0px;padding-top:10px;">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item" id="listReservas">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
+                <button class="btn btn-default" onclick="cerrarModalUpdate();">Cancelar</button>
+                <button class="btn btn-primary" onclick="EnviarUpdates()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @Styles.Render("~/styles/ProcesoReserva")
 @Styles.Render("~/styles/MisReservas")

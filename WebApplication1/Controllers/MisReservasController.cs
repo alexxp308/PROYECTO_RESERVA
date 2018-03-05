@@ -59,5 +59,15 @@ namespace WebApplication1.Controllers
             result = blReserva.CheckList(idReserva, iniFin, check);
             return result;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,User,Administrador")]
+        public int actualizarReserva(List<elReserva> lelReserva)
+        {
+            int result = 0;
+            blReserva blReserva = new blReserva();
+            result = blReserva.actualizarReserva(lelReserva);
+            return result;
+        }
     }
 }

@@ -122,6 +122,24 @@ namespace SalaJuntas.Librerias.DL
             return result;
         }
 
+        public int actualizarReserva(List<elReserva> lelreserva, SqlConnection con)
+        {
+            int result = 0;
+            SqlCommand cmd = null;
+            for (int i = 0; i < lelreserva.Count; i++)
+            {
+                cmd = new SqlCommand("USP_ACTUALIZAR_RESERVA", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1800;
+                cmd.Parameters.AddWithValue("@idReserva", lelreserva[i].idReserva);
+                cmd.Parameters.AddWithValue("@descripcion", lelreserva[i].descripcion);
+                cmd.Parameters.AddWithValue("@fhinicio", lelreserva[i].fhinicio);
+                cmd.Parameters.AddWithValue("@fhfin", lelreserva[i].fhfin);
+                result += cmd.ExecuteNonQuery();
+            }
+            return result;
+        }
+
         public string obtenerCorreos(int idSala,int idCreator, SqlConnection con)
         {
             string result = "";
