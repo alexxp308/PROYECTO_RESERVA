@@ -6,7 +6,7 @@
             var rol = $("#rol-profile").html();
             var sede = $("#sede-profile").html();
             $("#pais").val(pais);
-            listarSedes(pais,rol,sede);
+            listarSedes(pais, rol, sede);
         }
     }, 0);
 
@@ -66,7 +66,7 @@
                     var visualEvent = {};
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].estadoReserva != 0) {
-                            if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c"};
+                            if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c" };
                             else visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin };
                             $('#calendar').fullCalendar('renderEvent', visualEvent, true);
                         }
@@ -109,13 +109,12 @@ function changelimits(event) {
         $('#calendar').fullCalendar('renderEvent', visualEvent, true);
         alert("No puedes cambiar la reserva a dias pasados")
     }
-    
+
     console.log(myevents);
 }
 
 function cerrarModal() {
     var sePuedeCerrar = true;
-    console.log(myevents[2].update);
     for (var i = 0; i < myevents.length; i++) {
         if (myevents[i].update !== undefined) {
             sePuedeCerrar = false;
@@ -178,7 +177,7 @@ function guardarAllUpdates() {
             str += '<div class="row">';
             str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Solicitante:</label>';
             str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
-            str += '<input type="text" class="form-control" readonly value="' + myevents[j].title.substring(myevents[j].title.indexOf("\n")+15, myevents[j].length) + '"/>';
+            str += '<input type="text" class="form-control" readonly value="' + myevents[j].title.substring(myevents[j].title.indexOf("\n") + 15, myevents[j].length) + '"/>';
             str += '</div></div></li>';
             str += '<li class="list-group-item">'
             str += '</div></li></ul></div>';
@@ -202,8 +201,8 @@ function EnviarUpdates() {
             arrayUpdate.push({
                 idReserva: myevents[j].id,
                 descripcion: myevents[j].title.substring(myevents[j].title.indexOf(":") + 2, myevents[j].title.indexOf("\n")),
-                fhinicio: myevents[j].start+":00",
-                fhfin: myevents[j].end+":00",
+                fhinicio: myevents[j].start + ":00",
+                fhfin: myevents[j].end + ":00",
             });
         }
     }
@@ -348,7 +347,7 @@ function isOverlapping(event) {
     return false;
 }
 
-function listarSedes(pais,rol,sedep) {
+function listarSedes(pais, rol, sedep) {
     $.ajax({
         method: "POST",
         url: "/Reserva/listarSedesxPais",
@@ -358,10 +357,10 @@ function listarSedes(pais,rol,sedep) {
             var sedes = response.split(";");
             var sede = null;
             var str = "<option value='0'>--SELEC--</option>";
-            var isRol = (window.cookie.getCookie()["role"] == "Administrador" || (rol == "Supervisor" || rol == "ejecutivo" || rol =="Jefe"))?false:true;
+            var isRol = (window.cookie.getCookie()["role"] == "Administrador" || (rol == "Supervisor" || rol == "ejecutivo" || rol == "Jefe")) ? false : true;
             for (var i = 0; i < sedes.length; i++) {
                 sede = sedes[i].split("|");
-                str += "<option value='" + sede[0] + "' " + ((!isRol && (sedep == sede[1])) ? 'selected' : '' )+" >" + sede[1] + "</option>";
+                str += "<option value='" + sede[0] + "' " + ((!isRol && (sedep == sede[1])) ? 'selected' : '') + " >" + sede[1] + "</option>";
             }
             $("#sede").html(str);
             if (!isRol) {
@@ -410,7 +409,7 @@ function buscarReservas() {
         $.ajax({
             method: "POST",
             url: "/MisReservas/obtenerReservaxUsuario",
-            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1, estado: $("#estado").val() * 1},
+            data: { idSala: $("#sala").val() * 1, idUser: window.cookie.getCookie()["userId"] * 1, idSede: $("#sede").val() * 1, estado: $("#estado").val() * 1 },
             dataType: "json",
             success: function (data) {
                 $("#result").html("");
@@ -429,6 +428,7 @@ function buscarReservas() {
                             salas[data[j].idSala]["reservas"].push(data[j]);
                         }
                     }
+                    console.log(salas);
                     var keys = Object.keys(salas)
                     var reservas = null;
                     for (var z = 0; z < keys.length; z++) {
@@ -440,11 +440,11 @@ function buscarReservas() {
                             campos += "<td align='center'>" + reservas[i].nombreCompletoCreator + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'>" + reservas[i].fhfin.substring(0,16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'")))+"'></div></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0)?"disabled":"")+"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") +"><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio)?"disabled":"")+"><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'>" + reservas[i].fhfin.substring(0, 16).replace("T", " ") + "</td>";
+                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'"))) + "'></div></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
                             campos += "</tr>";
                         }
 
@@ -459,7 +459,7 @@ function buscarReservas() {
                         str += "</div>";
                         str += "</h5>";
                         str += "</div>";
-                        str += ' <div id="tabla' + z + '" class="panel-collapse collapse'+((z==0)?' in':'')+'">';
+                        str += ' <div id="tabla' + z + '" class="panel-collapse collapse' + ((z == 0) ? ' in' : '') + '">';
                         str += '<div class="panel-body">';
                         str += createTable(campos);
                         str += "</div></div></div>"
@@ -477,7 +477,7 @@ function buscarReservas() {
     }
 }
 
-function eliminarReserva(id,fechaIni,elem) {
+function eliminarReserva(id, fechaIni, elem) {
     if (getcurrentDate() < fechaIni) {
         var info = confirm("¿Esta seguro que deseas cancelar esta reserva?");
         if (info) {
@@ -542,7 +542,7 @@ function realizarCheckList(idReserva, idSala, param) {
                 /*$("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Ya termino su reserva");*/
             }
-        } 
+        }
     }
     else {
         $("#checkList").html("Checklist final");
@@ -570,32 +570,67 @@ function realizarCheckList(idReserva, idSala, param) {
     var keys = Object.keys(activos);
     var str = "";
     var detalle = [];
+    str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
+    str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Detalles de la sala:</legend>';
+    str += '<div class="form-group">';
+    str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="ticket" style="padding-top:10px;padding-left:10px;">Ticket ServiceDesk:</label>';
+    str += '<div class="col-sm-12 col-md-9 col-lg-9">';
+    str += '<div class="input-group">';
+    str += '<input type="text" class="form-control" id="ticket">';
+    str += '<span class="input-group-addon" id="basic-addon1" style="cursor:pointer;background:#39b3d7;"><a style="color:#fff">Ir a ServiceDesk</a></span>';
+    str += '</div></div></div><br><br>';
+    str += '<div class="form-group">';
+    str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
+    str += '<div class="col-sm-12 col-md-9 col-lg-9">';
+    str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_sala"></textarea>';
+    str += '</div></div>';
+    str += '</fieldset>';
+    str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
+    str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Activos:</legend>';
     for (var i = 0; i < keys.length; i++) {//si se modifican los activos esto no va a funcionar!!!!!! ya que se cambiaria la estructura .. seria mejor que cuando no esta vacio se cree un checklist con la estructura guardada en reserva?
-        str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
-        str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">'+keys[i]+'</legend>';
+        str += '<fieldset style="padding-left:25px;padding-right:25px;padding-top:10px;padding-bottom:10px;">';
+        str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">' + keys[i] + '</legend>';
+        str += '<div class="col-lg-12 col-sm-12 col-12">';
+        str += '<div class="input-group">';
+        str += '<label class="input-group-btn">';
+        str += '<span class="btn btn-info">';
+        str += 'Imagen&hellip; <input type="file" style="display: none;" multiple id="img_' + keys[i] + '" onchange="cambioFile(this)">';
+        str += '</span></label><input type="text" class="form-control" readonly></div></div><br>';
         str += '<div class="form-group">';
-        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="detalle_' + keys[i]+'" style="padding-top:10px;padding-left:10px;">Detalle:</label>';
+        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="detalle_' + keys[i] + '" style="padding-top:10px;padding-left:10px;">Detalle:</label>';
         str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-        str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_' + keys[i] + '"' + (jQuery.isEmptyObject(arrayCheck) ? (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"]))?"disabled >":">") : "disabled >"+arrayCheck[keys[i]]["descripcion"])+'</textarea>';
+        str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_' + keys[i] + '"' + (jQuery.isEmptyObject(arrayCheck) ? (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">") : "disabled >" + arrayCheck["activos"][keys[i]]["descripcion"]) + '</textarea>';
         str += '</div></div><br><br><br><br>';
-        if (!jQuery.isEmptyObject(arrayCheck)) detalle = arrayCheck[keys[i]]["Detalle"];
+        if (!jQuery.isEmptyObject(arrayCheck)) detalle = arrayCheck["activos"][keys[i]]["Detalle"];
         for (var j = 0; j < activos[keys[i]]; j++) {
             str += '<div class="form-group">';
-            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + keys[i]+(j+1) +'" style="padding-top:10px;padding-left:10px;">' + keys[i]+' '+(j+1)+':</label>';
+            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + keys[i] + (j + 1) + '" style="padding-top:10px;padding-left:10px;">' + keys[i] + ' ' + (j + 1) + ':</label>';
             str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-            str += '<select class="form-control checkSelect" id="' + keys[i] + (j + 1) + '" ' + ((jQuery.isEmptyObject(arrayCheck) && !((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])))?"":"disabled")+'>';
+            str += '<select class="form-control checkSelect" id="' + keys[i] + (j + 1) + '" ' + ((jQuery.isEmptyObject(arrayCheck) && !((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"]))) ? "" : "disabled") + '>';
             str += '<option value="0">--SELECCIONAR--</option>';
-            str += '<option value="funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "funcional")?"selected":""))+'>funcional</option>';
-            str += '<option value="no_funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "no_funcional") ? "selected" : "")) +'>no funcional</option>';
+            str += '<option value="funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "funcional") ? "selected" : "")) + '>funcional</option>';
+            str += '<option value="no_funcional" ' + (jQuery.isEmptyObject(arrayCheck) ? "" : ((detalle[j] == "no_funcional") ? "selected" : "")) + '>no funcional</option>';
             str += '</select></div></div><br><br>';
         }
         str += '</fieldset>';
     }
+    str += "'</fieldset>";
     $("#bodyCheck").html(str);
     document.getElementById("idReserva").innerHTML = idReserva;
     document.getElementById("iniFin").innerHTML = param;
     $("#idSala").html(idSala);
     $("#dvCheck").modal();
+}
+
+function cambioFile(elem) {
+    var extension = elem.value.substring(elem.value.length - 3, elem.value.length);
+    if (extension == "png" || extension == "jpg" || elem.value === "") {
+        elem.parentNode.parentNode.nextSibling.value = elem.value;
+    }
+    else {
+        elem.value = "";
+        alert("Debes escoger un archivo con extension png o jpg");
+    }
 }
 
 function guardarCheck() {
@@ -617,48 +652,79 @@ function guardarCheck() {
     }
 
     if (validarDet && validarSel) {
-        var checkList = {};
+        var checkList = {
+            ticket: $("#ticket").val(), detalle_sala: $("#detalle_sala").val(), activos: {}
+        };
         var idSala = $("#idSala").html() * 1;
         var activos = salasArray.find((x) => x.id == idSala)["activos"];
         var keys = Object.keys(activos);
+        var file = null;
+        var formData = new FormData();
         for (var i = 0; i < keys.length; i++) {
-            checkList[keys[i]] = {};
-            checkList[keys[i]]["descripcion"] = $("#detalle_" + keys[i]).val();
-            checkList[keys[i]]["Detalle"] = [];
+            if (document.getElementById("img_" + keys[i]).value != "") {
+                file = document.getElementById("img_" + keys[i]).files[0];
+                formData.append("file_" + i, file);
+            }
+            checkList["activos"][keys[i]] = {};
+            checkList["activos"][keys[i]]["descripcion"] = $("#detalle_" + keys[i]).val();
+            checkList["activos"][keys[i]]["img"] = "";
+            checkList["activos"][keys[i]]["Detalle"] = [];
             for (var j = 0; j < activos[keys[i]]; j++) {
-                checkList[keys[i]]["Detalle"].push($("#"+keys[i] + (j + 1)).val());
+                checkList["activos"][keys[i]]["Detalle"].push($("#" + keys[i] + (j + 1)).val());
             }
         }
         
-        var idReserva = document.getElementById("idReserva").innerHTML*1;
-        var iniFin = document.getElementById("iniFin").innerHTML*1;
-        debugger;
+        var idReserva = document.getElementById("idReserva").innerHTML * 1;
+        var iniFin = document.getElementById("iniFin").innerHTML * 1;
+
         $.ajax({
-            method: "POST",
-            url: "/MisReservas/CheckList",
-            data: { idReserva: idReserva, iniFin: iniFin , check: JSON.stringify(checkList) },
-            dataType: "text",
+            url: "api/MisReservas/Upload",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            cache: false,
+            contentType: false,
+            processData: false,
             success: function (response) {
-                if (response.length > 0) {
-                    var datos = response.split("|");
-                    if (iniFin == 0) {
-                        debugger;
-                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("class", "esfera reserva");
-                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("title", "en reserva");
-                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListInicial"] = datos[0];
-                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckInicial"] = datos[1];
-                    } else {
-                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("class", "esfera terminada");
-                        document.getElementById("tr_" + idReserva).children[4].firstChild.setAttribute("title", "terminada");
-                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListFinal"] = datos[0];
-                        salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckFinal"] = datos[1];
+                console.log(response.replace("\\\\", "\\"));//pero en el for;
+                var data = response.split("|");
+                debugger;
+                var z = 0;
+                for (var j = 0; j < keys.length; j++) {
+                    if (document.getElementById("img_" + keys[j]).value != "") {
+                        checkList["activos"][keys[j]]["img"] = data[z].replace("\\\\", "\\");
+                        z++;
                     }
-                    alert("El checklist se guardo correctamente");
-                    $("#dvCheck").modal("hide");
-                } else {
-                    alert("Error");
-                    $("#dvCheck").modal("hide");
                 }
+                console.log(checkList);
+                $.ajax({
+                    method: "POST",
+                    url: "/MisReservas/CheckList",
+                    data: { idReserva: idReserva, iniFin: iniFin, check: JSON.stringify(checkList) },
+                    dataType: "text",
+                    success: function (response) {
+                        if (response.length > 0) {
+                            var datos = response.split("|");
+                            if (iniFin == 0) {
+                                debugger;
+                                document.getElementById("tr_" + idReserva).children[((window.cookie.getCookie()["role"]=="Administrador")?5:4)].firstChild.setAttribute("class", "esfera reserva");
+                                document.getElementById("tr_" + idReserva).children[((window.cookie.getCookie()["role"] == "Administrador") ? 5 : 4)].firstChild.setAttribute("title", "en reserva");
+                                salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListInicial"] = datos[0];
+                                salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckInicial"] = datos[1];
+                            } else {
+                                document.getElementById("tr_" + idReserva).children[((window.cookie.getCookie()["role"] == "Administrador") ? 5 : 4)].firstChild.setAttribute("class", "esfera terminada");
+                                document.getElementById("tr_" + idReserva).children[((window.cookie.getCookie()["role"] == "Administrador") ? 5 : 4)].firstChild.setAttribute("title", "terminada");
+                                salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListFinal"] = datos[0];
+                                salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckFinal"] = datos[1];
+                            }
+                            alert("El checklist se guardo correctamente");
+                            $("#dvCheck").modal("hide");
+                        } else {
+                            alert("Error");
+                            $("#dvCheck").modal("hide");
+                        }
+                    }
+                });
             }
         });
     } else {
@@ -749,7 +815,7 @@ function changeHinicio(elem) {
 }
 
 restrictHour = [];
-function mostrarReservas(idSala,nombreAdmin) {
+function mostrarReservas(idSala, nombreAdmin) {
     $("#miSalaM").html($("#sala option[value='" + idSala + "']").text());
     $("#miAdmin").html(nombreAdmin);
     var data = {};
@@ -786,7 +852,7 @@ function mostrarReservas(idSala,nombreAdmin) {
                                 dow: mbh.dow
                             }]
                         });
-                        if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c", editable: ((window.cookie.getCookie()["role"] == "Administrador" && data[i].fhinicio>getcurrentDate()) ? true : false) };
+                        if (data[i].idCreator == window.cookie.getCookie()["userId"] * 1) visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, color: "#5cb85c", editable: ((window.cookie.getCookie()["role"] == "Administrador" && data[i].fhinicio > getcurrentDate()) ? true : false) };
                         else visualEvent = { id: data[i].idReserva, title: "Titulo: " + data[i].descripcion + "\n Solicitante: " + data[i].nombreCompletoCreator, start: data[i].fhinicio, end: data[i].fhfin, editable: ((window.cookie.getCookie()["role"] == "Administrador" && data[i].fhinicio > getcurrentDate()) ? true : false) };
                         if (window.cookie.getCookie()["role"] == "Administrador") myevents.push(visualEvent);
                         $('#calendar').fullCalendar('renderEvent', visualEvent, true);
@@ -804,7 +870,7 @@ function createTable(cadena) {
     my += '<thead class="blue-grey lighten-4">';
     my += '<tr>';
     my += '<th align="center">Nro</th>';
-    if (window.cookie.getCookie()["role"] == "Administrador" || window.cookie.getCookie()["role"] == "Admin") my+='<th align="center">Usuario</th>'
+    if (window.cookie.getCookie()["role"] == "Administrador" || window.cookie.getCookie()["role"] == "Admin") my += '<th align="center">Usuario</th>'
     my += '<th align="center">Fecha creación</th>';
     my += '<th align="center">Fecha inicio</th>';
     my += '<th align="center">Fecha fin</th>';

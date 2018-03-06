@@ -161,7 +161,10 @@
 
         o.volverAconsultar = 0;
         o.id("inicioButton").onclick = function () {
-            if (o.id("paisR").value != "0" && o.id("sedeR").value != "0" && o.id("tipoR").value != "0" && o.id("torreR").value != "0" && o.id("pisoR").value != "0" && o.id("salaR").value != "0") {
+            var esCapa = true;
+            if (o.id("tipoR").value == "CAPACITACION") esCapa = (o.id("campania").value != "0");
+
+            if (o.id("paisR").value != "0" && o.id("sedeR").value != "0" && o.id("tipoR").value != "0" && o.id("torreR").value != "0" && o.id("pisoR").value != "0" && o.id("salaR").value != "0" && esCapa) {
                 var data = {};
                 data.idSala = $("#salaR").val()*1;
                 data.fhinicio = o.getcurrentDate();
@@ -285,6 +288,9 @@
                 str += "<option value='" + i + "'>" + i + "</option>";
             }
             $("#torreR").html(str);
+            if (o.id("tipoR").value != "0" && o.id("sedeR").value != "0") {
+                o.listarCampañasxSede();
+            }
         };
 
         o.id("tipoR").onchange = function () {
@@ -294,10 +300,38 @@
             o.id("salaR").innerHTML = "<option value='0'>--SELECCIONAR--</option>";
             if (this.value == "CAPACITACION") {
                 o.id("divCampania").style.display = "block";
-                //listarCampañasxSede();
+                if (o.id("tipoR").value != "0" && o.id("sedeR").value != "0") {
+                    o.listarCampañasxSede();
+                }
             } else {
                 o.id("divCampania").style.display = "none";
             } 
+        }
+
+        o.listarCampañasxSede = function () {
+            var data = {};
+            data.idSede = o.id("sedeR").value;
+            $(".loader").toggle(true);
+            $.ajax({
+                method: "POST",
+                url: "/Campanias/listarCampanias",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                dataType: "text",
+                success: function (response) {
+                    $(".loader").toggle(false);
+                    var str = "<option value='0'>--SELECCIONAR--</option>";
+                    if (response.length > 0) {
+                        var campanias = response.split("#");
+                        var campania = null;
+                        for (var i = 0; i < campanias.length; i++) {
+                            campania = campanias[i].split("|");
+                            str += "<option value='"+campania[0]+"'>"+campania[1]+"</option>";
+                        }
+                    }
+                    o.id("campania").innerHTML = str;
+                }
+            });
         }
 
         o.id("torreR").onchange = function () {
@@ -519,6 +553,8 @@
 
                         o.nuevasReservas.push({//se guardan las posibles nuevas reservas
                             idSala: (o.id("salaR").value * 1),
+                            idCampania: (o.id("campania").value * 1),
+                            nombreCampania: (o.id("campania").value == "0") ? "" : o.id("campania").options[o.id("campania").selectedIndex].text,
                             descripcion: descripcion,
                             fhinicio: o.myevents[j].start,
                             fhfin: o.myevents[j].end,
@@ -586,6 +622,12 @@
                 o.id("liResumen").parentNode.removeAttribute("class");
                 o.id("liResumen").click();
                 o.id("liResumen").style.color = "#398CD3";
+                if (o.id("campania").value != "0") {
+                    o.id("campaniaSelect").value = o.id("campania").options[o.id("campania").selectedIndex].text;
+                    o.id("resultCampania").style.display = "block";
+                } else {
+                    o.id("resultCampania").style.display = "none";
+                }
             } else {
                 alert("debes hacer una reservación para continuar!");
             }

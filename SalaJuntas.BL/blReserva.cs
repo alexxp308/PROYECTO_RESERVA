@@ -169,6 +169,7 @@ namespace SalaJuntas.BL
             mensaje+= "<tr><td style='font-weight:bold;'>Pais:</td><td>" + param[4] + "</td><td style='font-weight:bold;'>Solicitante:</td><td>" + lelReserva[0].nombreCompletoCreator + "</td></tr>";
             mensaje += "<tr><td style='font-weight:bold;'>Sede:</td><td>" + param[3] + "</td><td style='font-weight:bold;'>Sala de reserva:</td><td>" + param[0]+" - "+ param[1] + "</td></tr>";
             mensaje += "<tr><td style='font-weight:bold;'>Administrador \n del centro:</td><td>" + lelReserva[0].nombreCompletoCharge + "</td><td style='font-weight:bold;'>Ubicación:</td><td>" + param[2] + "</td></tr>";
+            if(lelReserva[0].nombreCampania!="") mensaje += "<tr><td style='font-weight:bold;'>Campaña:</td><td>" + lelReserva[0].nombreCampania + "</td><td style='font-weight:bold;'></td><td></td></tr>";
             mensaje += "</table>";
             mensaje += "************************************************************************************";
             mensaje += "<p style='font-size:20px;font-weight:bold;'>Activos:</p>";

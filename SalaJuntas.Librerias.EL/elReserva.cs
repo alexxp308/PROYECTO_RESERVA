@@ -11,6 +11,8 @@ namespace SalaJuntas.Librerias.EL
         public int idReserva { get; set; }
         public int estadoReserva { get; set; }
         public int idSala { get; set; }
+        public int idCampania { get; set; }
+        public string nombreCampania { get; set; }
         public string descripcion { get; set; }
         public string fhCreacion { get; set; }
         public string fhinicio { get; set; }

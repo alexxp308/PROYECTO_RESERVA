@@ -11,5 +11,6 @@ namespace WebApplication1.Librerias.BL
         public static readonly string CorreoUserName = ConfigurationManager.AppSettings["userNameCorreoGlobal"];
         public static readonly string CorreoPassword = ConfigurationManager.AppSettings["passwordCorreoGlobal"];
         public static readonly string smtp_Host = ConfigurationManager.AppSettings["smtp_Host"];
+        public static readonly string imgPath = ConfigurationManager.AppSettings["config:img"];
     }
 }

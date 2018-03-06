@@ -482,6 +482,7 @@ exec USP_OBTENER_RESERVAXSALA 1,'2018-03-11T23:59:00','2018-04-08T23:59:00'
 
 alter procedure USP_GUARDAR_RESERVA(
 	@idSala int,
+	@idCampania int,
 	@descripcion varchar(200),
 	@fhinicio char(19),
 	@fhfin char(19),
@@ -494,9 +495,9 @@ alter procedure USP_GUARDAR_RESERVA(
 )
 AS
 BEGIN
-	INSERT INTO RESERVA(estadoReserva,idSala,descripcion,fhCreacion,fhinicio,fhfin,idCreator,UserNameCreator,nombreCompletoCreator,
+	INSERT INTO RESERVA(estadoReserva,idSala,idCampania,descripcion,fhCreacion,fhinicio,fhfin,idCreator,UserNameCreator,nombreCompletoCreator,
 	idCharge,UserNameCharge,nombreCompletoCharge,checklistInicial,fhCheckInicial,checklistFinal,fhCheckFinal)
-	VALUES (1,@idSala,@descripcion,CONVERT(nvarchar(16), getdate(), 120),@fhinicio,@fhfin,@idCreator,@UserNameCreator,@nombreCompletoCreator,
+	VALUES (1,@idSala,@idCampania,@descripcion,CONVERT(nvarchar(16), getdate(), 120),@fhinicio,@fhfin,@idCreator,@UserNameCreator,@nombreCompletoCreator,
 	@idCharge,@UserNameCharge,@nombreCompletoCharge,'','','','');
 END
 
@@ -529,14 +530,14 @@ BEGIN
 		begin
 			if(@rol='Administrador')
 			begin
-				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
 				where a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
 			end
 			else
 			begin
-				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
 				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
@@ -546,14 +547,14 @@ BEGIN
 		begin
 			if(@rol='Administrador')
 			begin
-				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
 				where a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
 			end
 			else
 			begin
-				select a.idReserva,a.estadoReserva,a.idSala,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
+				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
 				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
@@ -679,3 +680,5 @@ AS
 BEGIN
 	SELECT * FROM CAMPANIA WHERE idSede = @idSede;
 END
+
+select * from campaña
