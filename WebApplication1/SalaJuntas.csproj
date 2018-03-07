@@ -153,6 +153,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MisReservasController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Controllers\ReservaController.cs" />
     <Compile Include="Controllers\SalaJuntasController.cs" />
@@ -231,6 +232,7 @@
     <Content Include="Scripts\ng\Login.js" />
     <Content Include="Scripts\ng\misReservas.js" />
     <Content Include="Scripts\ng\procesoReserva.js" />
+    <Content Include="Scripts\ng\Reportes.js" />
     <Content Include="Scripts\ng\SalaJuntas.js" />
     <Content Include="Scripts\ng\Sedes.js" />
     <Content Include="Scripts\ng\usuarios.js" />
@@ -261,6 +263,7 @@
     <Content Include="Views\MisReservas\MisReservas.cshtml" />
     <Content Include="Views\Shared\_Scripts.cshtml" />
     <Content Include="Views\Campanias\Campanias.cshtml" />
+    <Content Include="Views\Reportes\Reportes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

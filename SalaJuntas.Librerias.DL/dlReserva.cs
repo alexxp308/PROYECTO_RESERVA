@@ -125,9 +125,9 @@ namespace SalaJuntas.Librerias.DL
             return result;
         }
 
-        public int actualizarReserva(List<elReserva> lelreserva, SqlConnection con)
+        public string actualizarReserva(List<elReserva> lelreserva, SqlConnection con)
         {
-            int result = 0;
+            string result = "";
             SqlCommand cmd = null;
             for (int i = 0; i < lelreserva.Count; i++)
             {
@@ -138,10 +138,41 @@ namespace SalaJuntas.Librerias.DL
                 cmd.Parameters.AddWithValue("@descripcion", lelreserva[i].descripcion);
                 cmd.Parameters.AddWithValue("@fhinicio", lelreserva[i].fhinicio);
                 cmd.Parameters.AddWithValue("@fhfin", lelreserva[i].fhfin);
-                result += cmd.ExecuteNonQuery();
+                SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
+                if (drd != null)
+                {
+                    while (drd.Read())
+                    {
+                        result = drd.GetString(0) + "|" + drd.GetString(1) + "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6) + "|" + drd.GetString(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9) + "|" + drd.GetString(10) + "|" + drd.GetString(11) + "#";
+                    }
+                    drd.Close();
+                }
             }
-            return result;
+            return result.Substring(0, result.Length - 1);
         }
+
+        /*public string obtenerCorreosXidReserva(List<elReserva> lelreserva, SqlConnection con)
+        {
+            string result = "";
+            SqlCommand cmd = null;
+            for (int i = 0; i < lelreserva.Count; i++)
+            {
+                cmd = new SqlCommand("USP_OBTENER_CORREOSXID", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1800;
+                cmd.Parameters.AddWithValue("@idReserva", lelreserva[i].idReserva);
+                SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
+                if (drd != null)
+                {
+                    while (drd.Read())
+                    {
+                        result = drd.GetString(0) + "|" + drd.GetString(1) + "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6) + "|" + drd.GetString(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9) + "|" + drd.GetString(10) + "|" + drd.GetString(11) + "#";
+                    }
+                    drd.Close();
+                }
+            }
+            return result.Substring(0,result.Length-1);
+        }*/
 
         public string obtenerCorreos(int idSala,int idCreator, SqlConnection con)
         {

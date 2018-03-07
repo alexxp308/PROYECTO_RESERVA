@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "Reportes";
+}
+<br />
+<br />
+<div class="panel panel-primary">
+    <div class="panel-heading" style="padding-bottom:0px;"><h4>REPORTES</h4></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tipo" style="padding-top:10px;padding-left:10px;">Tipo:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="tipo">
+                        <option value="0">--SELECCIONAR--</option>
+                        <option value="DETALLADO">DETALLADO</option>
+                        <option value="RESUMEN">RESUMEN</option>
+                        <option value="OCUPACION">HORAS DE OCUPACION</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="pais" style="padding-top:10px;padding-left:10px;">Pais:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="pais" disabled>
+                        <option value="0">--SELECCIONAR--</option>
+                        <option value="PERU">PERU</option>
+                        <option value="MEXICO">MEXICO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sede" style="padding-top:10px;padding-left:10px;">Sede:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="sede" onchange="listarSalas(this);">
+                        <option value="0">--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sala" style="padding-top:10px;padding-left:10px;">Sala:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="sala">
+                        <option value="0">--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="campaña" style="padding-top:10px;padding-left:10px;">Campaña:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <select class="form-control" id="campaña">
+                        <option value="0">--SELECCIONAR--</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sala" style="padding-top:10px;padding-left:10px;">Fecha Inicial:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="fechaI" max="2040-02-20" style="cursor:pointer;">
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sala" style="padding-top:10px;padding-left:10px;">Fecha final:</label>
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="fechaF" max="2040-02-20" style="cursor:pointer;">
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="download();"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>
+    </div>
+</div>
+@Scripts.Render("~/scripts/Reportes")

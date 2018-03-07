@@ -40,9 +40,9 @@ namespace WebApplication1.API
                 ext = Path.GetExtension(path + "\\" + file);
                 newName = path + "\\" + (flName.Substring(0, flName.Length - 4) + "_" + DateTime.Now.ToString("yyyy_MM_ddTHH_mm_ss") + ext);
                 fl.SaveAs(newName);
-                result += newName + "|";
+                result += (flName.Substring(0, flName.Length - 4) + "_" + DateTime.Now.ToString("yyyy_MM_ddTHH_mm_ss") + ext) + "|";
             }
-            return result.Substring(0,result.Length-1);
+            return (result=="")?"":result.Substring(0,result.Length-1);
         }
     }
 }

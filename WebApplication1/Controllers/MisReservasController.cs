@@ -63,9 +63,9 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,User,Administrador")]
-        public int actualizarReserva(List<elReserva> lelReserva)
+        public string actualizarReserva(List<elReserva> lelReserva)
         {
-            int result = 0;
+            string result = "";
             blReserva blReserva = new blReserva();
             result = blReserva.actualizarReserva(lelReserva);
             return result;

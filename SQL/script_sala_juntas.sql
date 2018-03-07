@@ -136,6 +136,41 @@ begin
 select top 1 a.nombreSala,a.tipo,a.ubicacion,b.nombreSede,b.PAIS,a.activos,(SELECT Email from UserProfile WHERE UserId=@idCreator) correosSede
 from SALA a,Sede b WHERE idSala=@idSala and b.idSede=a.idSede
 end
+
+alter procedure USP_OBTENER_CORREOSXID
+(
+	@idReserva int
+)
+as
+begin
+	select a.fhinicio,a.fhfin,a.nombreCompletoCreator,a.nombreCompletoCharge,
+b.nombreSala,b.tipo,b.ubicacion,b.activos,
+c.nombreSede,c.PAIS,d.email,a.descripcion
+from RESERVA a,SALA b,Sede c,Userprofile d
+where a.idReserva=@idReserva and a.idSala=b.idSala and b.idSede=c.idSede and a.idCreator=d.UserId
+end
+
+exec USP_OBTENER_CORREOSXID 2
+idReserva int primary key identity(1, 1),
+	estadoReserva int, --0:cancelada, 1: en espera, 2: en reserva, 3: finalizada
+	idSala int,
+	idCampania int,
+	descripcion varchar(200),
+	fhCreacion char(16), -- hora de creacion de la reserva
+	fhinicio char(19),
+	fhfin char(19),
+	idCreator int,
+	UserNameCreator varchar(50),
+	nombreCompletoCreator varchar(100),
+	idCharge int,
+	UserNameCharge varchar(50),
+	nombreCompletoCharge varchar(100),
+	checklistInicial nvarchar(max),
+	fhCheckInicial char(16),
+	checklistFinal nvarchar(max),
+	fhCheckFinal char(16),
+
+exec USP_OBTENER_CORREOSXID 1
 -- (SELECT STUFF((SELECT distinct ','+Email FROM UserProfile where idSede=(select idSede from SALA where idSala=@idSala) FOR XML PATH('')),1,1, ''))
 
 exec USP_OBTENER_CORREOS 1,1
@@ -475,11 +510,11 @@ alter procedure USP_OBTENER_RESERVAXSALA(
 )
 AS
 BEGIN
-	select * from RESERVA where idSala = @idSala and fhinicio>@fhinicio and fhfin<@fhfin;
+	select * from RESERVA where idSala = @idSala and fhinicio>SUBSTRING(@fhinicio,1,11)+'00:00:00' and fhfin<@fhfin;
 END
 
 exec USP_OBTENER_RESERVAXSALA 1,'2018-03-11T23:59:00','2018-04-08T23:59:00'
-
+select SUBSTRING('2018-03-11T23:59:00',1,11)+'00:00:00'
 alter procedure USP_GUARDAR_RESERVA(
 	@idSala int,
 	@idCampania int,
@@ -606,11 +641,20 @@ alter PROCEDURE USP_GUARDAR_CHECKLIST
 	@checkList nvarchar(max)
 )
 AS
-BEGIN
+BEGIN 
 	if(@iniFin=0)
 	begin
+		declare @EcheckIni char(19) = (select fhCheckInicial from RESERVA where idReserva=@idReserva);
+		if(@EcheckIni!='')
+		begin
+		update RESERVA set checklistInicial=@checkList,fhCheckInicial= CONVERT(nvarchar(16), getdate(), 120) where idReserva=@idReserva
+		select checklistInicial,fhCheckInicial from RESERVA where idReserva=@idReserva;
+		end
+		else
+		begin
 		update RESERVA set checklistInicial=@checkList,fhCheckInicial= CONVERT(nvarchar(16), getdate(), 120),estadoReserva=2 where idReserva=@idReserva
 		select checklistInicial,fhCheckInicial from RESERVA where idReserva=@idReserva;
+		end
 	end
 	else
 	begin
@@ -621,7 +665,7 @@ END
 
 exec USP_GUARDAR_CHECKLIST 4,0,'hola'
 
-create procedure USP_ACTUALIZAR_RESERVA
+alter procedure USP_ACTUALIZAR_RESERVA
 (
 	@idReserva int,
 	@descripcion varchar(200),
@@ -630,7 +674,12 @@ create procedure USP_ACTUALIZAR_RESERVA
 )
 as
 begin
-	update RESERVA SET descripcion = @descripcion,fhinicio=@fhinicio,fhfin=@fhfin where idReserva=@idReserva
+	update RESERVA SET descripcion = @descripcion,fhinicio=@fhinicio,fhfin=@fhfin where idReserva=@idReserva;
+	select a.fhinicio,a.fhfin,a.nombreCompletoCreator,a.nombreCompletoCharge,
+	b.nombreSala,b.tipo,b.ubicacion,b.activos,
+	c.nombreSede,c.PAIS,d.email,a.descripcion
+	from RESERVA a,SALA b,Sede c,Userprofile d
+	where a.idReserva=@idReserva and a.idSala=b.idSala and b.idSede=c.idSede and a.idCreator=d.UserId
 end
 
 create table CAMPANIA(
@@ -681,4 +730,4 @@ BEGIN
 	SELECT * FROM CAMPANIA WHERE idSede = @idSede;
 END
 
-select * from campaña
+select * from RESERVA

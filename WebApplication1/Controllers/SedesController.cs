@@ -8,7 +8,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-	public class SedesController : Controller
+    [Authorize]
+    public class SedesController : Controller
 	{
 		// GET: Sedes
 		[Authorize(Roles = "Admin,Administrador")]

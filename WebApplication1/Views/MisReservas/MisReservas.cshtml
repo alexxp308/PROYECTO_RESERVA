@@ -82,7 +82,7 @@
     <div class="modal-dialog" style="width:60%;">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#428bca;">
-                <button type="button" class="close" aria-hidden="true" @Html.Raw((User.IsInRole("Administrador") ? "onclick='cerrarModal()'" : "data-dismiss='modal'")) >
+                <button type="button" class="close" aria-hidden="true" @Html.Raw((User.IsInRole("Administrador") ? "onclick='cerrarModal()'" : "data-dismiss='modal'"))>
                     ×
                 </button>
                 <h4 class="modal-title" style="color:white;">Reservas:<span id="miSalaM"></span>&nbsp;-&nbsp;Administrador:<span id="miAdmin"></span></h4>
@@ -175,7 +175,6 @@
                             <input type="text" class="form-control" id="creadorR" disabled>
                         </div>
                     </div>
-                    <!--<input type="hidden" id="creadoPorR"/> usar cuando tengas el codigo de cookies!!!!!!!!!!!!!!!!!!-->
                 </fieldset>
             </div>
             <div class="modal-footer" style="margin-top:0px;padding-top:5px;padding-bottom:5px;">
@@ -222,7 +221,7 @@
     <div class="modal-dialog" style="width:40%;">
         <div class="modal-content">
             <div class="modal-header" style="background-color:#428bca;">
-                <button type="button" class="close" aria-hidden="true" onclick="cerrarModalUpdate();" >
+                <button type="button" class="close" aria-hidden="true" onclick="cerrarModalUpdate();">
                     ×
                 </button>
                 <h4 class="modal-title" style="color:white;">Reservas actualizadas:</h4>

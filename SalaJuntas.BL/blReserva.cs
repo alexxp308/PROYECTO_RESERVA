@@ -78,16 +78,25 @@ namespace SalaJuntas.BL
         }
 
 
-        public int actualizarReserva(List<elReserva> lelReserva)
+        public string actualizarReserva(List<elReserva> lelReserva)
         {
             int result = 0;
+            int result2 = 0;
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 try
                 {
                     con.Open();
+                    string correos = "";
                     dlReserva odlReserva = new dlReserva();
-                    result = odlReserva.actualizarReserva(lelReserva, con);
+                    correos = odlReserva.actualizarReserva(lelReserva, con);
+                    //correos = odlReserva.obtenerCorreosXidReserva(lelReserva, con);
+                    string[] correo = correos.Split('#');
+                    result = correo.Length;
+                    for (int j = 0; j < result; j++)
+                    {
+                        result2+=EnviarVariosCorreo(correo[j]);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -95,7 +104,7 @@ namespace SalaJuntas.BL
                     Log.Error(logPath, "blReserva_actualizarReserva", url, ex);
                 }
             }
-            return result;
+            return result+"|"+result2;
         }
 
         public int eliminarReserva(int idReserva)
@@ -162,7 +171,7 @@ namespace SalaJuntas.BL
 
         public int EnviarCorreo(List<elReserva> lelReserva, string correos)
         {
-            string[] param = correos.Split('|');
+            string[] param = correos.Split('#');
             int result = 0;
             string mensaje = "<div style='border:1px solid black;width:50%;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
             mensaje += "<table>";
@@ -198,6 +207,52 @@ namespace SalaJuntas.BL
             Correo.From = new MailAddress(CorreoUserName);
             Correo.To.Add(param[6]);
             Correo.Subject = "RESERVA DE SALAS";//CAMBIAR cuando sea actualizacion o guardado!
+            Correo.Body = mensaje;
+            Correo.IsBodyHtml = true;
+            Correo.Priority = System.Net.Mail.MailPriority.High;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = smtp_Host;
+            smtp.Credentials = new System.Net.NetworkCredential(CorreoUserName, CorreoPassword);
+            smtp.Timeout = 100000;
+            smtp.Send(Correo);
+            result = 1;
+            return result;
+        }
+
+        public int EnviarVariosCorreo(string correo)
+        {
+            string[] param = correo.Split('|');
+            int result = 0;
+            string mensaje = "<div style='border:1px solid black;width:50%;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS - ACTUALIZACION :.</p>";
+            mensaje += "<table>";
+            mensaje += "<tr><td style='font-weight:bold;'>Pais:</td><td>" + param[9] + "</td><td style='font-weight:bold;'>Solicitante:</td><td>" + param[2] + "</td></tr>";
+            mensaje += "<tr><td style='font-weight:bold;'>Sede:</td><td>" + param[8] + "</td><td style='font-weight:bold;'>Sala de reserva:</td><td>" + param[4] + " - " + param[5] + "</td></tr>";
+            mensaje += "<tr><td style='font-weight:bold;'>Administrador \n del centro:</td><td>" + param[3] + "</td><td style='font-weight:bold;'>Ubicación:</td><td>" + param[2] + "</td></tr>";
+            mensaje += "</table>";
+            mensaje += "************************************************************************************";
+            mensaje += "<p style='font-size:20px;font-weight:bold;'>Activos:</p>";
+            string Jsonactivos = param[7].Replace("{", "").Replace("}", "").Replace("\"", "");
+            string[] keyvalue = Jsonactivos.Split(',');
+            string[] activos = null;
+            string msg = "";
+            for (int j = 0; j < keyvalue.Length; j++)
+            {
+                activos = keyvalue[j].Split(':');
+                msg += "<tr><td style='border: 1px solid black;text-align:left;'>" + activos[0] + "</td><td style='border: 1px solid black;text-align:center;'>" + activos[1] + "</td></tr>";
+            }
+            mensaje += "<table style='border: 1px solid black;border-collapse: collapse;'><thead><tr><th style='border: 1px solid black;'>Activo</th><th style='border: 1px solid black;'>Cantidad</th></tr><thead><tbody>" + msg + "</tbody></table>";
+            mensaje += "************************************************************************************";
+                mensaje += "<p style='font-weight:bold;'>Reserva</p>";
+                mensaje += "<p><span style='font-weight:bold;'>Descripción: </span>" + param[11] + "</p>";
+                mensaje += "<p><span style='font-weight:bold;'>Fecha y hora inicio: </span>" + param[0].Replace("T", " ") + "</p>";
+                mensaje += "<p><span style='font-weight:bold;'>Fecha y hora fin: </span>" + param[1].Replace("T", " ") + "</p><br>";
+
+            mensaje += "<p style='font-size:10px;font-style:italic;'>Este correo se envía automáticamente después de la validación, no responda a este correo.<p></div>";
+
+            MailMessage Correo = new MailMessage();
+            Correo.From = new MailAddress(CorreoUserName);
+            Correo.To.Add(param[10]);
+            Correo.Subject = "ACTUALIZACION RESERVA DE SALAS";//CAMBIAR cuando sea actualizacion o guardado!
             Correo.Body = mensaje;
             Correo.IsBodyHtml = true;
             Correo.Priority = System.Net.Mail.MailPriority.High;

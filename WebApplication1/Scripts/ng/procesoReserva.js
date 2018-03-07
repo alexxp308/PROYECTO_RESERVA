@@ -77,7 +77,7 @@
                 var elInicio = this.value;
                 var valInicio = elInicio.split(":")[0] * 100 + elInicio.split(":")[1] * 1;
                 for (var z = 0; z < 24; z++) {
-                    if (z * 100 > valInicio && z < o.restrictHour[1]) {
+                    if (z * 100 > valInicio && z <= o.restrictHour[1]) {
                         str += "<option value='" + ((z < 10) ? "0" + z : z) + ":00'>" + ((z < 10) ? "0" + z : z) + ":00</option>";
                     }
 
