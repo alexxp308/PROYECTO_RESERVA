@@ -94,32 +94,49 @@ alter PROCEDURE USP_OBTENER_USUARIO
 @iduser int
 )
 as
-begin
+BEGIN
 declare @sede int = (select idSede from UserProfile where UserId=@iduser)
+declare @sql nvarchar(max);
+declare @cont int;
 if(@sede!=0)
 begin
-	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,(select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
-and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser) RESERVA_PROXIMA
-	from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
+	set @cont = (select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+	and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser);
+	if(@cont>0)
+	begin
+		select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+		a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,s.nombreSala ,substring(r.fhinicio,12,5) fhinicio
+		from UserProfile a,sede b,UserProfile adm, RESERVA r,SALA s
+		where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
+		and r.idSala = s.idSala and a.idSede = s.idSede and r.idCreator = @iduser and 
+		fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+		and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T')
+	end
+	else
+	begin
+		select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
+		a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,'0' nombreSala,'0' fhinicio
+		from UserProfile a,sede b,UserProfile adm where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
+	end
 end
 else
 begin
 	select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS,(select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
-and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser) RESERVA_PROXIMA
+	a.Email,'TODOS' nombreSede ,a.firstTime,a.NombreCompleto,'TODOS' PAIS,'0','0'
 	from UserProfile a where a.UserId = @iduser
 end
-end
+END
+
+exec USP_OBTENER_USUARIO 7
 
 select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
 and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=4
 select replace(CONVERT(nvarchar(16), DATEADD([MINUTE],-10,GETDATE()), 120)+':00',' ','T')
 
-select *  from UserProfile
-exec USP_OBTENER_USUARIO 4
 
-(select idSede from UserProfile where UserId=7)
+
+select *  from UserProfile
+
 
 
 select * from UserProfile
@@ -731,3 +748,21 @@ BEGIN
 END
 
 select * from RESERVA
+
+CREATE PROCEDURE USP_REPORTE_DETALLADO
+(
+@sedeId int,
+@salaId int,
+@fechaI char(16),
+@fechaF char(16)
+)
+AS
+BEGIN
+ SELECT a.PAIS,a.nombreSede,b.nombreSala,b.tipo,b.activos,c.UserNameCreator,
+ c.idCampania,c.fhCreacion,c.fhinicio,c.fhfin,c.estadoReserva,c.checklistInicial,c.checklistFinal 
+ FROM Sede a,SALA b,RESERVA c
+ WHERE c.idSala=b.idSala and b.idSede = a.idSede and b.idSede = @sedeId and
+  c.fhCreacion between @fechaI and @fechaF
+END
+
+exec USP_REPORTE_DETALLADO 1,0,'2018-03-07 00:00','2018-03-08 23:59'

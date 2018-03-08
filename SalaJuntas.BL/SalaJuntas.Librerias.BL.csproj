@@ -46,6 +46,7 @@
     <Compile Include="blCampania.cs" />
     <Compile Include="blGeneral.cs" />
     <Compile Include="blLogin.cs" />
+    <Compile Include="blReporte.cs" />
     <Compile Include="blReserva.cs" />
     <Compile Include="blSala.cs" />
     <Compile Include="blSede.cs" />

@@ -74,4 +74,46 @@ function listarSalas(elem)
             $("#sala").html(str);
         }
     });
-}   
+}
+
+function cambiarFecha(elem)
+{
+    var fechaFin = document.getElementById("fechaF");
+    if (elem.value != "")
+    {
+        if ((elem.value.substring(8, 10) * 1) > (fechaFin.value.substring(8, 10) * 1)) fechaFin.value = "";
+        fechaFin.setAttribute("min", elem.value);
+        fechaFin.removeAttribute("disabled");
+    } else
+    {
+        fechaFin.removeAttribute("min");
+        fechaFin.setAttribute("disabled", "disabled");
+    }
+}
+
+function traerReporte()
+{
+    if ($("#tipo").val() != "0" && $("#fechaI").val() != "" && $("#fechaF").val() != "" && $("#sede").val() != "0" && $("#pais").val() != "0")
+    {
+        if ($("#tipo").val() == "DETALLADO")
+        {
+            $.ajax({
+                method: "POST",
+                url: "/Reportes/reporteDetallado",
+                data: {sedeId: $("#sede").val()*1,salaId:$("#sala").val()*1,fechaI: $("#fechaI").val(), fechaF: $("#fechaF").val()},
+                dataType: "json",
+                success: function (response)
+                {
+                    alert(response);
+                }
+            });
+        }
+        else
+        {
+            alert("faltan estos reportes");
+        }
+    } else
+    {
+        alert("falta completar campos");
+    }
+}

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dlCampania.cs" />
+    <Compile Include="dlReporte.cs" />
     <Compile Include="dlUsuarios.cs" />
     <Compile Include="dlActivo.cs" />
     <Compile Include="dlLogin.cs" />

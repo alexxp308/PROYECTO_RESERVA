@@ -20,29 +20,31 @@ function obtenerDatos() {
                 $("#rol-profile").html(data[3]);
                 $("#administrador-profile").html(data[8]);
                 $("#pais-profile").html(data[9]);
-                var reservaProxima = data[10] * 1;
+                var nombreSala = data[10];
+                var fhinicio = data[11];
                 if (data[7] == "True") {
                     document.getElementById("obli").style.display = "block";
                     document.getElementById("cancelardvp").setAttribute("disabled", "disabled");
                     $("#dvPassword").modal("show");
                 }
-                if (reservaProxima == 1) {
-                    mostrarAlerta();
+                if (nombreSala != "0") {
+                    mostrarAlerta(nombreSala,fhinicio);
                 }
             }
         }
     });
 }
 
-function mostrarAlerta() {
+function mostrarAlerta(nombreSala, fhinicio) {
     var div = document.getElementById("divAlert");
     div.style.opacity = "0.00";
+    document.getElementById("roomName").innerHTML = nombreSala;
+    document.getElementById("hourReservation").innerHTML = fhinicio;
     var my = setInterval(function () {
         if (div.style.opacity == "1") {
             clearInterval(my);
         } else {
             div.style.opacity = div.style.opacity * 1 + 0.05;
-            console.log(div.style.opacity);
         }
     }, 50)
 }
