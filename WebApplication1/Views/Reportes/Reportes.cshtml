@@ -70,7 +70,10 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" onclick="traerReporte();"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>
+        <a onclick="traerReporte(this);" href="#">
+            <button class="btn btn-primary"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>
+        </a>
+        <!--<button class="btn btn-primary" onclick="traerReporte();"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>-->
     </div>
 </div>
 @Scripts.Render("~/scripts/Reportes")

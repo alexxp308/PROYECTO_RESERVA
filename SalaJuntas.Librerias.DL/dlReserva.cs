@@ -120,6 +120,8 @@ namespace SalaJuntas.Librerias.DL
                 cmd.Parameters.AddWithValue("@idCharge", lelreserva[i].idCharge);
                 cmd.Parameters.AddWithValue("@UserNameCharge", lelreserva[i].UserNameCharge);
                 cmd.Parameters.AddWithValue("@nombreCompletoCharge", lelreserva[i].nombreCompletoCharge);
+                cmd.Parameters.AddWithValue("@checkListInicial", lelreserva[i].checkListInicial);
+                cmd.Parameters.AddWithValue("@checkListFinal", lelreserva[i].checkListFinal);
                 result += cmd.ExecuteNonQuery();
             }
             return result;

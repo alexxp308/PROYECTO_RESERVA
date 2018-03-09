@@ -25,7 +25,7 @@ namespace SalaJuntas.Librerias.DL
             {
                 while (drd.Read())
                 {
-                    result += drd.GetString(0) + "|" + drd.GetString(1); //+ "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetInt32(6) + "|" + drd.GetString(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9) + "|" + drd.GetInt32(10) + "|" + drd.GetString(11) + "|" + drd.GetString(12) + "#";
+                    result += drd.GetString(0) + "|" + drd.GetString(1)+ "|" + drd.GetString(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetInt32(6) + "|" + drd.GetString(7) + "|" + drd.GetString(8) + "|" + drd.GetString(9) + "|" + drd.GetInt32(10) + "|" + drd.GetString(11) + "|" + drd.GetString(12) + "|" + drd.GetString(13) + "|" + drd.GetInt32(14) + "#";
                 }
                 drd.Close();
             }

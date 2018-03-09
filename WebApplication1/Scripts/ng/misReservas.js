@@ -295,7 +295,7 @@ function showDetailEvent(inicio, fin, title, id) {
 
 function updateEvent() {
     if ($("#tituloR").val() != "" && $("#dinicioR").val() != "" && $("#dfinR").val() != "" && $("#hinicioR").val() != "0" && $("#hfinR").val() != "0") {
-        debugger;
+        //debugger;
         var elevent = {};
         elevent.start = $("#dinicioR").val() + "T" + $("#hinicioR").val();
         elevent.end = $("#dfinR").val() + "T" + $("#hfinR").val();
@@ -509,11 +509,12 @@ function realizarCheckList(idReserva, idSala, param) {
     var reserva = salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva);
     if (param == 0) { //deberia mostrarse el checklist cuando ya acabo la reserva? o antes de que empieze?
         $("#checkList").html("Checklist inicial");
-        checkList = reserva["checkListInicial"];
-        if (checkList != "") {
+        fechaCheck = reserva["fhCheckInicial"];
+        console.log(fechaCheck);
+        if (fechaCheck != "") {
             $("#checkRealizado").html(" - " + reserva["fhCheckInicial"]);
             if(window.cookie.getCookie()["role"] != "Administrador") $("#miCheck").attr("disabled", "disabled");
-            arrayCheck = JSON.parse(checkList);
+            arrayCheck = JSON.parse(reserva["checkListInicial"]);
         } else {
             if (actual < reserva["fhinicio"]) {
                 $("#miCheck").attr("disabled", "disabled");
@@ -528,23 +529,26 @@ function realizarCheckList(idReserva, idSala, param) {
     }
     else {
         $("#checkList").html("Checklist final");
-        checkList = reserva["checkListFinal"];
-        if (checkList != "") {
+        fechaCheck = reserva["fhCheckFinal"];
+        if (fechaCheck != "") {
             $("#checkRealizado").html("- " + reserva["fhCheckFinal"]);
             if (window.cookie.getCookie()["role"] != "Administrador") $("#miCheck").attr("disabled", "disabled");
-            arrayCheck = JSON.parse(checkList);
+            arrayCheck = JSON.parse(reserva["checkListFinal"]);
         } else {
-            if (reserva["checkListInicial"] == "" && window.cookie.getCookie()["role"] != "Administrador") {
+            if (reserva["fhCheckInicial"] == "" && window.cookie.getCookie()["role"] != "Administrador") {
                 alert("Debe realizar primero el Checklist inicial");
                 return;
             }
             if (actual > reserva["fhfin"] && window.cookie.getCookie()["role"] != "Administrador") {
                 alert("ya termino la reserva y ya no puede realizar el checkList final");
                 return;
-            } /*else if (actual > reserva["fhfin"]) {
+            }
+            if (actual < reserva["fhinicio"])
+            {
                 $("#miCheck").attr("disabled", "disabled");
-                $("#advertencia").html(" -- Ya termino tu reserva");
-            }*/
+                $("#advertencia").html(" -- Aun no comienza su reserva");
+            }
+        
         }
     }
     var isAdmin = (window.cookie.getCookie()["role"] == "Administrador");
@@ -718,7 +722,7 @@ function guardarCheck() {
                 checkList["activos"][keys[i]]["Detalle"].push($("#" + keys[i] + (j + 1)).val());
             }
         }
-        debugger;
+        //debugger;
         $.ajax({
             url: "api/MisReservas/Upload",
             type: "POST",

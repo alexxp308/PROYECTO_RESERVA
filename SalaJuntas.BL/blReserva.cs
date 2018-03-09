@@ -171,7 +171,7 @@ namespace SalaJuntas.BL
 
         public int EnviarCorreo(List<elReserva> lelReserva, string correos)
         {
-            string[] param = correos.Split('#');
+            string[] param = correos.Split('|');
             int result = 0;
             string mensaje = "<div style='border:1px solid black;width:50%;'><br><p style='font-size:20px;font-weight:bold;'>.: RESERVA DE SALAS :.</p>";
             mensaje += "<table>";

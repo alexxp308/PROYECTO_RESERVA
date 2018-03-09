@@ -543,14 +543,16 @@ alter procedure USP_GUARDAR_RESERVA(
 	@nombreCompletoCreator varchar(100),
 	@idCharge int,
 	@UserNameCharge varchar(50),
-	@nombreCompletoCharge varchar(100)
+	@nombreCompletoCharge varchar(100),
+	@checkListInicial nvarchar(max),
+	@checkListFinal nvarchar(max)
 )
 AS
 BEGIN
 	INSERT INTO RESERVA(estadoReserva,idSala,idCampania,descripcion,fhCreacion,fhinicio,fhfin,idCreator,UserNameCreator,nombreCompletoCreator,
 	idCharge,UserNameCharge,nombreCompletoCharge,checklistInicial,fhCheckInicial,checklistFinal,fhCheckFinal)
 	VALUES (1,@idSala,@idCampania,@descripcion,CONVERT(nvarchar(16), getdate(), 120),@fhinicio,@fhfin,@idCreator,@UserNameCreator,@nombreCompletoCreator,
-	@idCharge,@UserNameCharge,@nombreCompletoCharge,'','','','');
+	@idCharge,@UserNameCharge,@nombreCompletoCharge,@checkListInicial,'',@checkListFinal,'');
 END
 
 exec USP_GUARDAR_RESERVA 2,'prueba2','2018-03-02T12:00:00','2018-03-02T14:30:00',2,'user','usuario',
@@ -649,7 +651,7 @@ begin
 end
 
 exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
-select * from UserProfile
+select * from RESERVA
 
 alter PROCEDURE USP_GUARDAR_CHECKLIST
 (
@@ -749,7 +751,7 @@ END
 
 select * from RESERVA
 
-CREATE PROCEDURE USP_REPORTE_DETALLADO
+ALTER PROCEDURE USP_REPORTE_DETALLADO
 (
 @sedeId int,
 @salaId int,
@@ -758,11 +760,13 @@ CREATE PROCEDURE USP_REPORTE_DETALLADO
 )
 AS
 BEGIN
- SELECT a.PAIS,a.nombreSede,b.nombreSala,b.tipo,b.activos,c.UserNameCreator,
- c.idCampania,c.fhCreacion,c.fhinicio,c.fhfin,c.estadoReserva,c.checklistInicial,c.checklistFinal 
+ SELECT a.PAIS,a.nombreSede,b.nombreSala,b.tipo,b.activos,c.nombreCompletoCreator,
+ c.idCampania,c.fhCreacion,c.fhinicio,c.fhfin,c.estadoReserva,c.checklistInicial,c.checklistFinal,c.nombreCompletoCharge,c.idSala 
  FROM Sede a,SALA b,RESERVA c
- WHERE c.idSala=b.idSala and b.idSede = a.idSede and b.idSede = @sedeId and
+ WHERE c.idSala=b.idSala and b.idSede = a.idSede and b.idSede = @sedeId and c.idSala=@salaId and
   c.fhCreacion between @fechaI and @fechaF
 END
 
-exec USP_REPORTE_DETALLADO 1,0,'2018-03-07 00:00','2018-03-08 23:59'
+exec USP_REPORTE_DETALLADO 1,2,'2018-03-07 00:00','2018-03-09 23:59'
+select * from UserProfile
+exec USP_OBTENER_RESERVASXUSUARIO 0,3,1,9
