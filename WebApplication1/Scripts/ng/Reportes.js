@@ -33,7 +33,7 @@ function obtenerCampañas()
             for (var i = 0; i < campanias.length; i++)
             {
                 campania = campanias[i].split("|");
-                misCampanias.push({ id: campania[0]*1, nombre: campania[1] });
+                misCampanias.push({ id: campania[0] * 1, nombre: campania[1] });
             }
         }
     });
@@ -66,7 +66,7 @@ function listarSedes(pais, rol, sedep)
         }
     });
 }
-
+var misSalas = [];
 function listarSalas(elem)
 {
     $.ajax({
@@ -85,10 +85,35 @@ function listarSalas(elem)
                 sala = salas[i].split("|");
                 descrpt = "Tipo: " + sala[2] + "; " + sala[5];
                 str += "<optgroup label='" + descrpt + "'><option value='" + sala[0] + "'>" + sala[1] + "</option></optgroup>";
+                misSalas.push({
+                    idSala: sala[0] * 1,
+                    nombreSala: sala[1],
+                    tipo: sala[2],
+                    horario: sala[3]
+                });
             }
             $("#sala").html(str);
         }
     });
+}
+
+function cambiarReporte(elem)
+{
+    var ini = document.getElementById("fechaI");
+    var fin = document.getElementById("fechaF");
+    if (elem.value == "OCUPACION")
+    {
+        ini.value = "";
+        fin.value = "";
+        ini.setAttribute("max", atributosFecha());
+        fin.removeAttribute("max", atributosFecha());
+        document.getElementById("divsala").style.visibility = "hidden";
+    } else
+    {
+        ini.setAttribute("max", "2040-02-20");
+        fin.removeAttribute("max", "2040-02-20");
+        document.getElementById("divsala").style.visibility = "show";
+    }
 }
 
 function cambiarFecha(elem)
@@ -138,6 +163,17 @@ function DarNombreEstado(idEstado)
     return result;
 }
 
+function atributosFecha()
+{
+    var midate = new Date();
+    var dd = midate.getDate();
+    var mm = midate.getMonth() + 1;
+    var yyyy = midate.getFullYear();
+    dd = (dd < 10) ? '0' + dd : dd;
+    mm = (mm < 10) ? '0' + mm : mm;
+    return yyyy + '-' + mm + '-' + dd;
+}
+
 function getcurrentDate()
 {
     var midate = new Date();
@@ -152,10 +188,10 @@ function getcurrentDate()
     hh = (hh < 10) ? '0' + hh : hh;
     min = (min < 10) ? '0' + min : min;
     ss = (ss < 10) ? '0' + ss : ss;
-    return yyyy + '_' + mm + '_' + dd + "T" + hh + "_" + min+"_"+ss;
+    return yyyy + '_' + mm + '_' + dd + "T" + hh + "_" + min + "_" + ss;
 }
 
-function contarDetalles(array,param)
+function contarDetalles(array, param)
 {
     var cont = 0;
     for (var n = 0; n < array.length; n++)
@@ -165,8 +201,9 @@ function contarDetalles(array,param)
             if (array[n] == "funcional")
             {
                 cont++;
-            } 
-            else if (array[n] == "") {
+            }
+            else if (array[n] == "")
+            {
                 return "NO SE HIZO";
             }
         } else
@@ -184,11 +221,29 @@ function contarDetalles(array,param)
     return cont;
 }
 
-function traerReporte(elem)
+function diferenciaDias(ini,fin)
 {
-    if ($("#tipo").val() != "0" && $("#fechaI").val() != "" && $("#fechaF").val() != "" && $("#sede").val() != "0" && $("#pais").val() != "0" && $("#sala").val()!="0")
+    var dateI = new Date(ini).getTime();
+    var dateF = new Date(fin).getTime();
+    var diff = dateF - dateI;
+    return diff / (1000 * 60 * 60 * 24);
+}
+
+function horasTotales(horario, dias)
+{
+    var dh = horario.split(";")[1];
+    var hi = dh.split("-")[0].split(":")[0] * 1;
+    var hf = dh.split("-")[1].split(":")[0] * 1;
+
+    return (hf - hi) * dias;
+}
+
+function traerReporte()
+{
+
+    if ($("#tipo").val() == "DETALLADO")
     {
-        if ($("#tipo").val() == "DETALLADO")
+        if ($("#tipo").val() != "0" && $("#fechaI").val() != "" && $("#fechaF").val() != "" && $("#sede").val() != "0" && $("#pais").val() != "0" && $("#sala").val() != "0")
         {
             var reservasXsala = {};
             $.ajax({
@@ -198,8 +253,8 @@ function traerReporte(elem)
                 dataType: "text",
                 success: function (response)
                 {
-                    elem.download = "";
-                    elem.href = "#";
+                    //elem.download = "";
+                    //elem.href = "#";
                     var datos = response.split("#");
                     var dato = datos[0].split("|");
                     reservasXsala = {
@@ -228,21 +283,21 @@ function traerReporte(elem)
                     }
                     var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
                     var styleSubCabecera = "style='background:#FFB900;border:1px solid #000000;text-align:center'";
-                    var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'"
+                    var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'";
                     var keys = Object.keys(reservasXsala["activos"]);
                     var table = "<table>";
-                    table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DETALLADO DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=" +keys.length+" style='text-align:center;font-weight:bold;'>CANTIDAD DE ACTIVOS</td></tr></table>";
+                    table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DETALLADO DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=" + keys.length + " style='text-align:center;font-weight:bold;'>CANTIDAD DE ACTIVOS</td></tr></table>";
                     table += "<table>";
-                    table += "<tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera +">TIPO</td><td></td>";
+                    table += "<tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera + ">TIPO</td><td></td>";
                     for (var i = 0; i < keys.length; i++)
                     {
-                        table += "<td " + styleCabecera+">" + keys[i] + "</td>";
+                        table += "<td " + styleCabecera + ">" + keys[i] + "</td>";
                     }
                     table += "</tr>"
-                    table += "<tr><td></td><td " + celdaComun + ">" + reservasXsala["pais"] + "</td><td " + celdaComun + ">" + reservasXsala["sede"] + "</td><td " + celdaComun + ">" + reservasXsala["sala"] + "</td><td " + celdaComun +">" + reservasXsala["tipo"] + "</td><td></td>";
+                    table += "<tr><td></td><td " + celdaComun + ">" + reservasXsala["pais"] + "</td><td " + celdaComun + ">" + reservasXsala["sede"] + "</td><td " + celdaComun + ">" + reservasXsala["sala"] + "</td><td " + celdaComun + ">" + reservasXsala["tipo"] + "</td><td></td>";
                     for (var i = 0; i < keys.length; i++)
                     {
-                        table += "<td " + celdaComun+">" + reservasXsala["activos"][keys[i]] + "</td>";
+                        table += "<td " + celdaComun + ">" + reservasXsala["activos"][keys[i]] + "</td>";
                     }
                     table += "</tr><tr></tr>"
                     table += "</table>"
@@ -256,23 +311,23 @@ function traerReporte(elem)
                     for (var j = 0; j < misReservas.length; j++)
                     {
                         table += "<tr>";
-                        table += "<td rowspan='" + (keys.length+1) +"'></td>";
-                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun+">" + misReservas[j]["nombreUsuario"]+"</td>";
-                        table += ((reservasXsala["tipo"] == "CAPACITACION") ? "<td rowspan='" + (keys.length + 1) + "'>" + misReservas[j]["campania"] + "</td>":"");
-                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun +">" + misReservas[j]["fechaCreacion"] + "</td>";
-                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun +">" + misReservas[j]["fechaInicio"] + "</td>";
-                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun +">" + misReservas[j]["fechaFin"] + "</td>";
-                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun +">" + misReservas[j]["estadoReserva"] + "</td>";
-                        table += "<td " + styleSubCabecera +">Activos</td>";
+                        table += "<td rowspan='" + (keys.length + 1) + "'></td>";
+                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun + ">" + misReservas[j]["nombreUsuario"] + "</td>";
+                        table += ((reservasXsala["tipo"] == "CAPACITACION") ? "<td rowspan='" + (keys.length + 1) + "'>" + misReservas[j]["campania"] + "</td>" : "");
+                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun + ">" + misReservas[j]["fechaCreacion"] + "</td>";
+                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun + ">" + misReservas[j]["fechaInicio"] + "</td>";
+                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun + ">" + misReservas[j]["fechaFin"] + "</td>";
+                        table += "<td rowspan='" + (keys.length + 1) + "' " + celdaComun + ">" + misReservas[j]["estadoReserva"] + "</td>";
+                        table += "<td " + styleSubCabecera + ">Activos</td>";
                         table += "<td " + styleSubCabecera + ">Buen estado</td>";
                         table += "<td " + styleSubCabecera + ">Mal estado</td>";
-                        table += "<td " + styleSubCabecera +">Descripción</td>";
-                        table += "<td " + styleSubCabecera +">Evidencia</td>";
-                        table += "<td " + styleSubCabecera +">Activos</td>";
+                        table += "<td " + styleSubCabecera + ">Descripción</td>";
+                        table += "<td " + styleSubCabecera + ">Evidencia</td>";
+                        table += "<td " + styleSubCabecera + ">Activos</td>";
                         table += "<td " + styleSubCabecera + ">Buen estado</td>";
                         table += "<td " + styleSubCabecera + ">Mal estado</td>";
-                        table += "<td " + styleSubCabecera +">Descripción</td>";
-                        table += "<td " + styleSubCabecera +">Evidencia</td>";
+                        table += "<td " + styleSubCabecera + ">Descripción</td>";
+                        table += "<td " + styleSubCabecera + ">Evidencia</td>";
                         table += "</tr>";
                         checkIni = misReservas[j]["chechListInicial"]["activos"];
                         checkFin = misReservas[j]["chechListFinal"]["activos"];
@@ -280,39 +335,91 @@ function traerReporte(elem)
                         for (var z = 0; z < keysIni.length; z++)
                         {
                             table += "<tr>";
-                            table += "<td " + celdaComun +">" + keysIni[z] + "</td>";
+                            table += "<td " + celdaComun + ">" + keysIni[z] + "</td>";
                             table += "<td " + celdaComun + ">" + contarDetalles(checkIni[keysIni[z]]["Detalle"], 0) + "</td>";
-                            table += "<td " + celdaComun +">" + contarDetalles(checkIni[keysIni[z]]["Detalle"],1) + "</td>";
-                            table += "<td " + celdaComun +">" + checkIni[keysIni[z]]["descripcion"] + "</td>";
-                            table += "<td " + celdaComun +">" + ((checkIni[keysIni[z]]["img"] == "") ? "NO" : "SI") + "</td>";
+                            table += "<td " + celdaComun + ">" + contarDetalles(checkIni[keysIni[z]]["Detalle"], 1) + "</td>";
+                            table += "<td " + celdaComun + ">" + checkIni[keysIni[z]]["descripcion"] + "</td>";
+                            table += "<td " + celdaComun + ">" + ((checkIni[keysIni[z]]["img"] == "") ? "NO" : "SI") + "</td>";
 
-                            table += "<td " + celdaComun +">" + keysIni[z] + "</td>";
-                            table += "<td " + celdaComun +">" + contarDetalles(checkFin[keysIni[z]]["Detalle"], 0) + "</td>";
-                            table += "<td " + celdaComun +">" + contarDetalles(checkFin[keysIni[z]]["Detalle"], 1) + "</td>";
-                            table += "<td " + celdaComun +">" + checkFin[keysIni[z]]["descripcion"] + "</td>";
-                            table += "<td " + celdaComun +">" + ((checkFin[keysIni[z]]["img"] == "") ? "NO" : "SI") + "</td>";
+                            table += "<td " + celdaComun + ">" + keysIni[z] + "</td>";
+                            table += "<td " + celdaComun + ">" + contarDetalles(checkFin[keysIni[z]]["Detalle"], 0) + "</td>";
+                            table += "<td " + celdaComun + ">" + contarDetalles(checkFin[keysIni[z]]["Detalle"], 1) + "</td>";
+                            table += "<td " + celdaComun + ">" + checkFin[keysIni[z]]["descripcion"] + "</td>";
+                            table += "<td " + celdaComun + ">" + ((checkFin[keysIni[z]]["img"] == "") ? "NO" : "SI") + "</td>";
 
                             table += "</tr>";
                         }
                     }
                     table += "</table>";
-                    
+
                     var nombreExcel = "Reporte_Detallado_" + $("#sala option:selected").text() + "_" + getcurrentDate() + ".xls";
-                    generarExcel(table, nombreExcel, $("#sala option:selected").text(), elem);
+                    generarExcel(table, nombreExcel, $("#sala option:selected").text());
                 }
             });
-        }
-        else
+        } else
         {
-            alert("faltan estos reportes");
+            alert("faltan completar campos");
+        }
+    }
+    else if ($("#tipo").val() == "OCUPACION")
+    {
+        if ($("#tipo").val() != "0" && $("#fechaI").val() != "" && $("#fechaF").val() != "" && $("#sede").val() != "0" && $("#pais").val() != "0")
+        {
+            $.ajax({
+                method: "POST",
+                url: "/Reportes/reporteOcupacion",
+                data: { sedeId: $("#sede").val() * 1, fechaI: $("#fechaI").val(), fechaF: $("#fechaF").val() },
+                dataType: "text",
+                success: function (response)
+                {
+                    var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val());
+                    console.log(cantDias);
+                    var datos = response.split("#");
+                    var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
+                    var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'";
+                    var table = "<table>";
+                    table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DE OCUPACIÓN DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr>";
+                    table += "</table>";
+                    table += "<table>";
+                    table += "<tr></tr><tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td></tr>";
+                    table += "<tr><td></td><td " + celdaComun + ">" + $("#pais option:selected").text() + "</td><td " + celdaComun + ">" + $("#sede option:selected").text() + "</td></tr><tr></tr>";
+                    table += "</table>";
+                    table += "<table>";
+                    table += "<tr><td></td><td " + styleCabecera + ">TIPO</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera + ">HORARIO</td><td " + styleCabecera + ">HORAS TOTALES</td><td " + styleCabecera + ">HORAS RESERVADAS</td><td " + styleCabecera + ">OCUPACIÓN (%)</td></tr>";
+                    var lasala = null;
+                    var data = null;
+                    for (var i = 0; i < datos.length; i++)
+                    {
+                        data = datos[i].split("|");
+                        lasala = misSalas.find((x) => x.idSala == (data[0] * 1));
+                        table += "<tr>";
+                        table += "<td></td>";
+                        table += "<td " + celdaComun + ">" + lasala["tipo"] + "</td>";
+                        table += "<td " + celdaComun + ">" + lasala["nombreSala"] + "</td>";
+                        table += "<td " + celdaComun + ">" + lasala["horario"] + "</td>";
+                        table += "<td " + celdaComun + ">" + horasTotales(lasala["horario"], cantDias) + "</td>";
+                        table += "<td " + celdaComun + ">" + (data[1] / 60) + "</td>";
+                        table += "<td " + celdaComun + ">" + (data[1] / 60) + "</td>";
+                        table += "</tr>";
+                    }
+
+                    table += "</table>";
+
+                    var nombreExcel = "Reporte_OCUPACION_" + $("#sede option:selected").text() + "_" + getcurrentDate() + ".xls";
+                    generarExcel(table, nombreExcel, $("#sede option:selected").text());
+                }
+            });
+        } else
+        {
+            alert("faltan completar campos");
         }
     } else
     {
-        alert("falta completar campos");
+        alert("Debes escoger un tipo de reporte");
     }
 }
 //xmlns="http://www.w3.org/TR/REC-html40"
-function generarExcel(excelData, nombre,hoja,elem)
+function generarExcel(excelData, nombre, hoja)
 {
     var excel = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>';
     excel += hoja;
@@ -326,7 +433,14 @@ function generarExcel(excelData, nombre,hoja,elem)
         window.navigator.msSaveBlob(blob, nombre);
     } else
     {
-        elem.download = nombre;
-        elem.href = window.URL.createObjectURL(blob);
+        debugger;
+        var referencia = document.getElementById("referencia");
+        referencia.download = nombre;
+        referencia.href = window.URL.createObjectURL(blob);
+        referencia.click();
+
+        //elem.download = nombre;
+        //elem.href = window.URL.createObjectURL(blob);
+        //elem.click();
     }
 }

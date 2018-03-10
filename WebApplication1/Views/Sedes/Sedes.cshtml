@@ -31,91 +31,100 @@
 				</button>
 				<h4 class="modal-title" style="color:white;">REGISTRO DE NUEVA SEDE</h4>
 			</div>
-			<div class="modal-body">
-				<br />
-				<div class="form-group">
-					<div class="col-sm-12 col-md-1 col-lg-1"></div>
-					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="nombreS" style="padding-top:10px;padding-left:10px;">Nombre de la sede:</label>
-					<div class="col-sm-12 col-md-6 col-lg-6">
-						<input type="text" placeholder="nombre de la sala" id="nombreS" class="form-control" />
-					</div>
-				</div>
-				<br />
-				<br />
-				<div class="form-group">
-					<div class="col-sm-12 col-md-1 col-lg-1"></div>
-					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="paisS" style="padding-top:10px;padding-left:10px;">País:</label>
-					<div class="col-sm-12 col-md-6 col-lg-6">
-						<select class="form-control" id="paisS">
-							<option value="0">Seleccionar</option>
-							<option value="PERU">Perú</option>
-							<option value="MEXICO">México</option>
-						</select>
-					</div>
-				</div>
-				<br />
-				<br />
-				<div class="form-group">
-					<div class="col-sm-12 col-md-1 col-lg-1"></div>
-					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="ActivosS" style="padding-top:10px;padding-left:10px;">Activos:</label>
-					<div class="col-sm-12 col-md-6 col-lg-6">
-						<div class="input-group">
-							<select class="form-control" id="activosS">
-								<option value="0">--SELECCIONAR--</option>
-							</select>
-							<div class="input-group-btn">
-								<button class="btn btn-contact btn-info" title="Añadir" type="button" onclick="agregarActivo();">
-									<span class="glyphicon glyphicon-plus"></span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<br />
-				<br />
-				<div class="row">
-					<div class="col-sm-12 col-md-3 col-lg-3"></div>
-					<div class="col-sm-12 col-md-6 col-lg-6" id="misActivos" style="display:none;">
-						<fieldset class="border:solid 1px;padding:10px;">
-							<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Activos:</legend>
-							<table class="table">
-								<thead class="blue-grey lighten-4">
-									<tr>
-										<th>#</th>
-										<th>Activo</th>
-										<th>Accion</th>
-									</tr>
-								</thead>
-								<tbody id="tActivos"></tbody>
-							</table>
-						</fieldset>
-						<br />
-						<br />
-					</div>
-					<div class="col-sm-12 col-md-3 col-lg-3"></div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-12 col-md-1 col-lg-1"></div>
-					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="torresS" style="padding-top:10px;padding-left:10px;">Numero de torres:</label>
-					<div class="col-sm-12 col-md-6 col-lg-6">
-						<div class="input-group">
-							<input type="number" placeholder="# de torres de la sede" id="torresS" class="form-control" />
-							<div class="input-group-btn">
-								<button class="btn btn-contact btn-info" title="Guardar torres" type="button" onclick="guardarTorres();">
-									<span class="glyphicon glyphicon-floppy-disk"></span>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<br />
-				<br />
-				<div class="row">
-					<div class="col-sm-12 col-md-2 col-lg-2"></div>
-					<div class="col-sm-12 col-md-8 col-lg-8" id="misTorres"></div>
-					<div class="col-sm-12 col-md-2 col-lg-2"></div>
-				</div>
-			</div>
+            <div class="modal-body">
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="nombreS" style="padding-top:10px;padding-left:10px;">Nombre de la sede:</label>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <input type="text" placeholder="nombre de la sala" id="nombreS" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="paisS" style="padding-top:10px;padding-left:10px;">País:</label>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <select class="form-control" id="paisS">
+                            <option value="0">Seleccionar</option>
+                            <option value="PERU">Perú</option>
+                            <option value="MEXICO">México</option>
+                        </select>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="service" style="padding-top:10px;padding-left:10px;">Service desk:</label>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <input type="text" placeholder="link del Service desk" id="service" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="ActivosS" style="padding-top:10px;padding-left:10px;">Activos:</label>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="input-group">
+                            <select class="form-control" id="activosS">
+                                <option value="0">--SELECCIONAR--</option>
+                            </select>
+                            <div class="input-group-btn">
+                                <button class="btn btn-contact btn-info" title="Añadir" type="button" onclick="agregarActivo();">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-md-3 col-lg-3"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-6" id="misActivos" style="display:none;">
+                        <fieldset class="border:solid 1px;padding:10px;">
+                            <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Activos:</legend>
+                            <table class="table">
+                                <thead class="blue-grey lighten-4">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Activo</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tActivos"></tbody>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="col-sm-12 col-md-3 col-lg-3"></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="torresS" style="padding-top:10px;padding-left:10px;">Numero de torres:</label>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="input-group">
+                            <input type="number" placeholder="# de torres de la sede" id="torresS" class="form-control" />
+                            <div class="input-group-btn">
+                                <button class="btn btn-contact btn-info" title="Guardar torres" type="button" onclick="guardarTorres();">
+                                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-sm-12 col-md-2 col-lg-2"></div>
+                    <div class="col-sm-12 col-md-8 col-lg-8" id="misTorres"></div>
+                    <div class="col-sm-12 col-md-2 col-lg-2"></div>
+                </div>
+            </div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
 				<input type="button" class="btn btn-primary" onclick="guardarSede();" value="Guardar" />

@@ -329,6 +329,7 @@ function isOverlapping(event) {
     return false;
 }
 
+var misSedes = [];
 function listarSedes(pais, rol, sedep) {
     $.ajax({
         method: "POST",
@@ -343,6 +344,7 @@ function listarSedes(pais, rol, sedep) {
             for (var i = 0; i < sedes.length; i++) {
                 sede = sedes[i].split("|");
                 str += "<option value='" + sede[0] + "' " + ((!isRol && (sedep == sede[1])) ? 'selected' : '') + " >" + sede[1] + "</option>";
+                misSedes.push({ idSede: sede[0] * 1, service: sede[5] });
             }
             $("#sede").html(str);
             if (!isRol) {
@@ -553,6 +555,7 @@ function realizarCheckList(idReserva, idSala, param) {
     }
     var isAdmin = (window.cookie.getCookie()["role"] == "Administrador");
     var str = "";
+    var miLink = misSedes.find((x) => x.idSede == (document.getElementById("sede").value*1))["service"];
     if (jQuery.isEmptyObject(arrayCheck))
     {
         var activos = salasArray.find((x) => x.id == idSala)["activos"];
@@ -564,7 +567,7 @@ function realizarCheckList(idReserva, idSala, param) {
         str += '<div class="col-sm-12 col-md-9 col-lg-9">';
         str += '<div class="input-group">';
         str += '<input type="text" class="form-control" id="ticket" ' + ((isAdmin)?">": (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">"));
-        str += '<span class="input-group-addon" id="basic-addon1" style="cursor:pointer;background:#39b3d7;"><a style="color:#fff">Ir a ServiceDesk</a></span>';
+        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#39b3d7;'><a onclick='redirect(\""+miLink+"\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
         str += '</div></div></div><br><br>';
         str += '<div class="form-group">';
         str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
@@ -612,7 +615,7 @@ function realizarCheckList(idReserva, idSala, param) {
         str += '<div class="col-sm-12 col-md-9 col-lg-9">';
         str += '<div class="input-group">';
         str += '<input type="text" class="form-control" id="ticket" value="'+arrayCheck["ticket"]+'" disabled>';
-        str += '<span class="input-group-addon" id="basic-addon1" style="cursor:pointer;background:#39b3d7;"><a style="color:#fff">Ir a ServiceDesk</a></span>';
+        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#39b3d7;'><a onclick='redirect(\"" + miLink + "\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
         str += '</div></div></div><br><br>';
         str += '<div class="form-group">';
         str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
@@ -628,7 +631,14 @@ function realizarCheckList(idReserva, idSala, param) {
         {
             str += '<fieldset style="padding-left:25px;padding-right:25px;padding-top:10px;padding-bottom:10px;text-align:center;">';
             str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">' + checkKey[i] + '</legend>';
-            (arrayCheck["activos"][checkKey[i]]["img"] == "") ? "" : (str += '<img id="myImg_' + checkKey[i] + '" src="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" width="150" height="150" style="margin-bottom:10px;" path="' + arrayCheck["activos"][checkKey[i]]["img"] +'">');
+            if (arrayCheck["activos"][checkKey[i]]["img"] != "")
+            {
+                str += '<img id="myImg_' + checkKey[i] + '" src="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" width="150" height="150" style="margin-bottom:10px;" path="' + arrayCheck["activos"][checkKey[i]]["img"] + '"><br>';
+                str += '<a href="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" download>';
+                str += '<button class="btn btn-primary" style="margin-bottom:8px;"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar Imagen</button>';
+                str += '</a><br>';
+            }
+
             if (window.cookie.getCookie()["role"] == "Administrador") {
                 str += '<div class="col-lg-12 col-sm-12 col-12">';
                 str += '<div class="input-group">';
@@ -663,6 +673,11 @@ function realizarCheckList(idReserva, idSala, param) {
     document.getElementById("iniFin").innerHTML = param;
     $("#idSala").html(idSala);
     $("#dvCheck").modal();
+}
+
+function redirect(link)
+{
+    window.open("http://www."+link, "_blank");
 }
 
 function cambioFile(elem) {

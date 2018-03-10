@@ -11,7 +11,7 @@
             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                 <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tipo" style="padding-top:10px;padding-left:10px;">Tipo:</label>
                 <div class="col-sm-12 col-md-8 col-lg-8">
-                    <select class="form-control" id="tipo">
+                    <select class="form-control" id="tipo" onchange="cambiarReporte(this)">
                         <option value="0">--SELECCIONAR--</option>
                         <option value="DETALLADO">DETALLADO</option>
                         <option value="RESUMEN">RESUMEN</option>
@@ -39,7 +39,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+            <div class="form-group col-sm-12 col-md-4 col-lg-4" id="divsala">
                 <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="sala" style="padding-top:10px;padding-left:10px;">Sala:</label>
                 <div class="col-sm-12 col-md-8 col-lg-8">
                     <select class="form-control" id="sala">
@@ -73,6 +73,7 @@
         <a onclick="traerReporte(this);" href="#">
             <button class="btn btn-primary"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>
         </a>
+        <a style="display:none;" id="referencia">click me!</a>
         <!--<button class="btn btn-primary" onclick="traerReporte();"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar</button>-->
     </div>
 </div>

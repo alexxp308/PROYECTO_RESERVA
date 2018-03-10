@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
 		{
 			string result = "";
 			blSede oblSede = new blSede();
-			result = oblSede.guardarSede(sede.nombreSede, sede.paisSede,sede.torres,sede.pisos,sede.activos);
+			result = oblSede.guardarSede(sede.nombreSede, sede.paisSede,sede.torres,sede.pisos,sede.activos,sede.service);
 			return result;
 		}
 
@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
 		{
 			string result = "";
 			blSede oblSede = new blSede();
-			result = oblSede.Actualizar(sede.idSede, sede.nombreSede, sede.paisSede, sede.torres, sede.pisos,sede.activos);
+			result = oblSede.Actualizar(sede.idSede, sede.nombreSede, sede.paisSede, sede.torres, sede.pisos,sede.activos,sede.service);
 			return result;
 		}
 

@@ -25,5 +25,15 @@ namespace WebApplication1.Controllers
             result = oblReporte.reporteDetallado(sedeId, salaId, fechaI, fechaF);
             return result;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,User,Administrador")]
+        public string reporteOcupacion(int sedeId, string fechaI, string fechaF)
+        {
+            string result = "";
+            blReporte oblReporte = new blReporte();
+            result = oblReporte.reporteOcupacion(sedeId, fechaI, fechaF);
+            return result;
+        }
     }
 }

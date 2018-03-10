@@ -13,5 +13,6 @@ namespace WebApplication1.Models
 		public int torres { get; set; }
 		public string pisos { get; set; }
         public string activos { get; set; }
+        public string service { get; set; }
 	}
 }

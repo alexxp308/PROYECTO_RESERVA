@@ -1,0 +1,7 @@
+Nombre:		blReporte_reporteOcupacion
+URL:		http://localhost:58901/Reportes/reporteOcupacion
+Mensaje:	No se puede convertir un objeto de tipo 'System.Int32' al tipo 'System.String'.
+Detalle:	en System.Data.SqlClient.SqlBuffer.get_String()
+   en System.Data.SqlClient.SqlDataReader.GetString(Int32 i)
+   en SalaJuntas.Librerias.DL.dlReporte.reporteOcupacion(Int32 sedeId, String fechaI, String fechaF, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlReporte.cs:línea 50
+   en SalaJuntas.BL.blReporte.reporteOcupacion(Int32 sedeId, String fechaI, String fechaF) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blReporte.cs:línea 41

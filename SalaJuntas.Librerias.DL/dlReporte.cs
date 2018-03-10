@@ -32,5 +32,27 @@ namespace SalaJuntas.Librerias.DL
 
             return result.Substring(0, result.Length - 1);
         }
+
+        public string reporteOcupacion(int sedeId, string fechaI, string fechaF, SqlConnection con)
+        {
+            string result = "";
+            SqlCommand cmd = new SqlCommand("USP_REPORTE_OCUPACION", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 1800;
+            cmd.Parameters.AddWithValue("@sedeId", sedeId);
+            cmd.Parameters.AddWithValue("@fechaI", fechaI + "T00:00:00");
+            cmd.Parameters.AddWithValue("@fechaF", fechaF + "T23:59:59");
+            SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
+            if (drd != null)
+            {
+                while (drd.Read())
+                {
+                    result += drd.GetInt32(0) + "|" + drd.GetInt32(1) + "#";
+                }
+                drd.Close();
+            }
+
+            return result.Substring(0, result.Length - 1);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SalaJuntas.Librerias.DL
 {
 	public class dlSede
 	{
-		public string guardarSede(string nombre,string pais,int torres,string pisos,string activos, SqlConnection con)
+		public string guardarSede(string nombre,string pais,int torres,string pisos,string activos,string service, SqlConnection con)
 		{
 			string result = "";
 			SqlCommand cmd = new SqlCommand("USP_CREAR_SEDE", con);
@@ -21,12 +21,13 @@ namespace SalaJuntas.Librerias.DL
 			cmd.Parameters.AddWithValue("@pisos", pisos);
 			cmd.Parameters.AddWithValue("@PAIS", pais);
             cmd.Parameters.AddWithValue("@activos", activos);
+            cmd.Parameters.AddWithValue("@service", service);
             SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
 			if (drd != null)
 			{
 				while (drd.Read())
 				{
-					result = drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5);
+					result = drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6);
 				}
 				drd.Close();
 			}
@@ -45,7 +46,7 @@ namespace SalaJuntas.Librerias.DL
 			{
 				while (drd.Read())
 				{
-					result += drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + ";";
+					result += drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6) + ";";
 				}
 				drd.Close();
 			}
@@ -53,7 +54,7 @@ namespace SalaJuntas.Librerias.DL
 			return result.Substring(0,result.Length-1);
 		}
 
-		public string Actualizar(int id,string nombre,string pais,int torres,string pisos,string activos,SqlConnection con)
+		public string Actualizar(int id,string nombre,string pais,int torres,string pisos,string activos,string service,SqlConnection con)
 		{
 			string result = "";
 			SqlCommand cmd = new SqlCommand("USP_ACTUALIZAR_SEDE", con);
@@ -65,12 +66,13 @@ namespace SalaJuntas.Librerias.DL
 			cmd.Parameters.AddWithValue("@pisos", pisos);
 			cmd.Parameters.AddWithValue("@PAIS", pais);
             cmd.Parameters.AddWithValue("@activos", activos);
+            cmd.Parameters.AddWithValue("@service", service);
             SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleRow);
 			if (drd != null)
 			{
 				while (drd.Read())
 				{
-					result = drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5);
+					result = drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + drd.GetString(4) + "|" + drd.GetString(5) + "|" + drd.GetString(6);
 				}
 				drd.Close();
 			}
@@ -121,7 +123,7 @@ namespace SalaJuntas.Librerias.DL
 			{
 				while (drd.Read())
 				{
-					result += drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + string.Join(",",drd.GetString(4)) + ";";
+					result += drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2) + "|" + drd.GetString(3) + "|" + string.Join(",",drd.GetString(4)) + "|" + drd.GetString(5) + ";";
 				}
 				drd.Close();
 			}

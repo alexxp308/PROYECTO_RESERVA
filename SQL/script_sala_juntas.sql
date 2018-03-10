@@ -168,24 +168,6 @@ where a.idReserva=@idReserva and a.idSala=b.idSala and b.idSede=c.idSede and a.i
 end
 
 exec USP_OBTENER_CORREOSXID 2
-idReserva int primary key identity(1, 1),
-	estadoReserva int, --0:cancelada, 1: en espera, 2: en reserva, 3: finalizada
-	idSala int,
-	idCampania int,
-	descripcion varchar(200),
-	fhCreacion char(16), -- hora de creacion de la reserva
-	fhinicio char(19),
-	fhfin char(19),
-	idCreator int,
-	UserNameCreator varchar(50),
-	nombreCompletoCreator varchar(100),
-	idCharge int,
-	UserNameCharge varchar(50),
-	nombreCompletoCharge varchar(100),
-	checklistInicial nvarchar(max),
-	fhCheckInicial char(16),
-	checklistFinal nvarchar(max),
-	fhCheckFinal char(16),
 
 exec USP_OBTENER_CORREOSXID 1
 -- (SELECT STUFF((SELECT distinct ','+Email FROM UserProfile where idSede=(select idSede from SALA where idSala=@idSala) FOR XML PATH('')),1,1, ''))
@@ -281,6 +263,7 @@ create table Sede(
 	pisos varchar(200),
 	PAIS varchar(10),
 	activos varchar(500),
+	[service] nvarchar(100)
 )
     
 alter procedure USP_CREAR_SEDE
@@ -289,11 +272,12 @@ alter procedure USP_CREAR_SEDE
 	@torres int,
 	@pisos varchar(200),
 	@PAIS varchar(10),
-	@activos varchar(500)
+	@activos varchar(500),
+	@service nvarchar(100)
 )
 AS
 BEGIN
-	insert into Sede(nombreSede,torres,pisos,PAIS,activos) values (@nombreSede,@torres,@pisos,@PAIS,@activos);
+	insert into Sede(nombreSede,torres,pisos,PAIS,activos,[service]) values (@nombreSede,@torres,@pisos,@PAIS,@activos,@service);
 	declare @idSede int;
 	set @idSede = @@IDENTITY;
 	select * from Sede where idSede=@idSede
@@ -316,11 +300,12 @@ alter procedure USP_ACTUALIZAR_SEDE
 	@torres int,
 	@pisos varchar(200),
 	@PAIS varchar(10),
-	@activos varchar(500)
+	@activos varchar(500),
+	@service nvarchar(100)
 )
 AS
 BEGIN
-	update Sede set nombreSede = @nombreSede,torres=@torres,pisos=@pisos,PAIS=@PAIS,activos=@activos where idSede=@idSede;
+	update Sede set nombreSede = @nombreSede,torres=@torres,pisos=@pisos,PAIS=@PAIS,activos=@activos,[service]=@service where idSede=@idSede;
 	select * from Sede where idSede=@idSede;
 END
 
@@ -339,10 +324,10 @@ ALTER procedure USP_LISTAR_SEDEXPAIS
 )
 AS
 BEGIN
-	SELECT idSede,nombreSede,torres,pisos,activos from Sede where PAIS=@PAIS
+	SELECT idSede,nombreSede,torres,pisos,activos,[service] from Sede where PAIS=@PAIS
 END
 
-exec USP_LISTAR_SEDEXPAIS 'MEXICO'
+exec USP_LISTAR_SEDEXPAIS 'PERU'
 
 alter procedure USP_CREAR_SALA
 (
@@ -768,5 +753,31 @@ BEGIN
 END
 
 exec USP_REPORTE_DETALLADO 1,2,'2018-03-07 00:00','2018-03-09 23:59'
-select * from UserProfile
 exec USP_OBTENER_RESERVASXUSUARIO 0,3,1,9
+
+select * from RESERVA
+select * from sala
+
+select DATEDIFF(minute,convert(datetime,REPLACE('2018-03-13T12:30:00','T',' ')),convert(datetime,REPLACE('2018-03-13T14:30:00','T',' ')))
+
+2018-03-08T00:30:00
+c
+
+
+select idSala,SUM(DATEDIFF(minute,convert(datetime,REPLACE(fhinicio,'T',' ')),convert(datetime,REPLACE(fhfin,'T',' ')))) 
+from reserva where fhfin between '2018-03-08T00:30:00' and '2018-03-10T23:59:59'  group by idSala
+
+ALTER procedure USP_REPORTE_OCUPACION(
+@sedeId int,
+@fechaI varchar(19),
+@fechaF varchar(19)
+)
+AS
+BEGIN
+	select a.idSala,
+	SUM(DATEDIFF(minute,convert(datetime,REPLACE(a.fhinicio,'T',' ')),convert(datetime,REPLACE(a.fhfin,'T',' ')))) HORAS_RESERVADAS 
+	from reserva a,SALA b where a.idSala=b.idSala and b.idSede=@sedeId and fhfin between @fechaI and @fechaF  group by a.idSala
+END
+
+
+exec USP_REPORTE_OCUPACION 1,'2018-03-07T00:00:00','2018-03-09T23:59:59'

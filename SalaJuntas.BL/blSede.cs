@@ -9,7 +9,7 @@ namespace SalaJuntas.BL
 {
 	public class blSede:blGeneral
 	{
-		public string guardarSede(string nombre,string pais,int torres,string pisos,string activos)
+		public string guardarSede(string nombre,string pais,int torres,string pisos,string activos,string service)
 		{
 			string result = "";
 			using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -18,7 +18,7 @@ namespace SalaJuntas.BL
 				{
 					con.Open();
 					dlSede odlSede = new dlSede();
-					result = odlSede.guardarSede(nombre, pais,torres,pisos,activos,con);
+					result = odlSede.guardarSede(nombre, pais,torres,pisos,activos,service,con);
 				}
 				catch (Exception ex)
 				{
@@ -49,7 +49,7 @@ namespace SalaJuntas.BL
 			return result;
 		}
 
-		public string Actualizar(int id, string nombre, string pais, int torres, string pisos,string activos)
+		public string Actualizar(int id, string nombre, string pais, int torres, string pisos,string activos,string service)
 		{
 			string result = "";
 			using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -58,7 +58,7 @@ namespace SalaJuntas.BL
 				{
 					con.Open();
 					dlSede odlSede = new dlSede();
-					result = odlSede.Actualizar(id,nombre,pais,torres,pisos,activos,con);
+					result = odlSede.Actualizar(id,nombre,pais,torres,pisos,activos,service,con);
 				}
 				catch (Exception ex)
 				{
