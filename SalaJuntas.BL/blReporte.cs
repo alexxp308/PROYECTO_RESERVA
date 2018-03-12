@@ -48,5 +48,25 @@ namespace SalaJuntas.BL
             }
             return result;
         }
+
+        public string reporteResumen(int sedeId, string fechaI, string fechaF)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(ConnectionString))
+            {
+                try
+                {
+                    con.Open();
+                    dlReporte odlReporte = new dlReporte();
+                    result = odlReporte.reporteResumen(sedeId, fechaI, fechaF, con);
+                }
+                catch (Exception ex)
+                {
+                    string url = HttpContext.Current.Request.Url.ToString();
+                    Log.Error(logPath, "blReporte_reporteResumen", url, ex);
+                }
+            }
+            return result;
+        }
     }
 }

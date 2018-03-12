@@ -52,6 +52,7 @@ textarea {
     margin-bottom: 15px;
     position:fixed;
     right:0px;
+    z-index:1000;
 }
 .closebtn {
     margin-left: 15px;

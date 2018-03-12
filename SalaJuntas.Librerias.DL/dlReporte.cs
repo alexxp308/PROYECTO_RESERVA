@@ -54,5 +54,31 @@ namespace SalaJuntas.Librerias.DL
 
             return result.Substring(0, result.Length - 1);
         }
+
+        public string reporteResumen(int sedeId, string fechaI, string fechaF, SqlConnection con)
+        {
+            string result = "";
+            SqlCommand cmd = new SqlCommand("USP_REPORTE_RESUMEN", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandTimeout = 1800;
+            cmd.Parameters.AddWithValue("@sedeId", sedeId);
+            cmd.Parameters.AddWithValue("@fini", fechaI);
+            cmd.Parameters.AddWithValue("@ffin", fechaF);
+            SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
+            if (drd != null)
+            {
+                while (drd.Read())
+                {
+                    result += drd.GetInt32(0) + "|" + drd.GetString(1) + "|" + drd.GetString(2) + "#";
+                }
+                drd.Close();
+            }
+            else
+            {
+                return "NODATA";
+            }
+
+            return result.Substring(0, result.Length - 1);
+        }
     }
 }

@@ -756,12 +756,9 @@ exec USP_REPORTE_DETALLADO 1,2,'2018-03-07 00:00','2018-03-09 23:59'
 exec USP_OBTENER_RESERVASXUSUARIO 0,3,1,9
 
 select * from RESERVA
-select * from sala
+select * from sede
 
 select DATEDIFF(minute,convert(datetime,REPLACE('2018-03-13T12:30:00','T',' ')),convert(datetime,REPLACE('2018-03-13T14:30:00','T',' ')))
-
-2018-03-08T00:30:00
-c
 
 
 select idSala,SUM(DATEDIFF(minute,convert(datetime,REPLACE(fhinicio,'T',' ')),convert(datetime,REPLACE(fhfin,'T',' ')))) 
@@ -781,3 +778,46 @@ END
 
 
 exec USP_REPORTE_OCUPACION 1,'2018-03-07T00:00:00','2018-03-09T23:59:59'
+
+create procedure USP_REPORTE_RESUMEN( -- solo considera los estado reserva = 3
+ @fini varchar(10),
+ @ffin varchar(10),
+ @sedeId int
+)
+AS
+BEGIN
+	declare @fechaInicio datetime = convert(datetime,@fini,120);
+	declare @fechaFin datetime = convert(datetime,@ffin,120);
+	declare @contDias int = (select DATEDIFF(day,@fechaInicio,@fechaFin))+1;
+	declare @busFecha varchar(10);
+	DECLARE @Reservas TABLE (reservasId int)
+	while(@contDias>0)
+	begin
+		set @busFecha = convert(varchar(10),DATEADD(DAY,@contDias-1,@fechaInicio),120);
+		declare @sql nvarchar(max)= (select (SELECT STUFF((SELECT ' select top 1 idReserva from RESERVA where SUBSTRING(fhfin,1,10) = '''+@busFecha+''' and estadoReserva=3 and idSala='''+(convert(varchar(10),idSala)+''' order by fhfin desc;')FROM SALA where idSede=@sedeId FOR XML PATH('')),1,1, '')))
+		INSERT @Reservas exec(@sql)
+		set @contDias=@contDias-1;
+	end
+	declare @SQLF nvarchar(max) = 'select idSala,fhfin,checklistFinal from RESERVA WHERE '+(select (SELECT STUFF((SELECT (' idReserva='+ (convert(varchar(10),reservasId))+' or') FROM @Reservas FOR XML PATH('')),1,1, '')))
+	set @SQLF = SUBSTRING(@SQLF,1,LEN(@SQLF)-3)
+	EXEC(@SQLF)
+END
+
+exec USP_REPORTE_RESUMEN '2018-03-08','2018-03-09',1
+
+declare @sql1 nvarchar(max)= (select (SELECT STUFF((SELECT ' select top 1 idReserva from RESERVA where idSala='''+(convert(varchar(10),idSala)+''';')FROM SALA where idSede=1 FOR XML PATH('')),1,1, '')))
+
+DECLARE @siteId TABLE (reservasId int)
+declare @sql nvarchar(max)= 'select top 1 idReserva from RESERVA where SUBSTRING(fhfin,1,10) = ''2018-03-09'' and idSala=2 order by fhfin desc';
+INSERT @siteId exec(@sql)
+select * from @siteId
+	
+select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' and idSala=2 order by fhfin desc
+Union
+select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' and idSala=7 order by fhfin desc
+
+select (select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' and idSala=2 order by fhfin desc),
+(select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' and idSala=7 order by fhfin desc)
+
+
+select * from SALA

@@ -512,20 +512,24 @@ function realizarCheckList(idReserva, idSala, param) {
     if (param == 0) { //deberia mostrarse el checklist cuando ya acabo la reserva? o antes de que empieze?
         $("#checkList").html("Checklist inicial");
         fechaCheck = reserva["fhCheckInicial"];
-        console.log(fechaCheck);
         if (fechaCheck != "") {
             $("#checkRealizado").html(" - " + reserva["fhCheckInicial"]);
             if(window.cookie.getCookie()["role"] != "Administrador") $("#miCheck").attr("disabled", "disabled");
             arrayCheck = JSON.parse(reserva["checkListInicial"]);
         } else {
-            if (actual < reserva["fhinicio"]) {
+            if (actual < reserva["fhinicio"])
+            {
                 $("#miCheck").attr("disabled", "disabled");
-                $("#advertencia").html(" -- Aun no comienza su reserva");
-            } else if (actual > reserva["fhfin"]) {
+                $("#advertencia").html(" -- Aun no comienza la reserva");
+            } else if (actual > reserva["fhfin"] && window.cookie.getCookie()["role"] != "Administrador")
+            {
                 alert("ya termino la reserva y ya no puede realizar el checkList inicial");
                 return;
                 /*$("#miCheck").attr("disabled", "disabled");
                 $("#advertencia").html(" -- Ya termino su reserva");*/
+            } else
+            {
+                $("#advertencia").html(" -- ya termino la reserva");
             }
         }
     }

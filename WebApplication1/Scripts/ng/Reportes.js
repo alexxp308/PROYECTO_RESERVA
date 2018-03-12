@@ -89,7 +89,8 @@ function listarSalas(elem)
                     idSala: sala[0] * 1,
                     nombreSala: sala[1],
                     tipo: sala[2],
-                    horario: sala[3]
+                    horario: sala[3],
+                    activos: JSON.parse(sala[4]),
                 });
             }
             $("#sala").html(str);
@@ -101,7 +102,7 @@ function cambiarReporte(elem)
 {
     var ini = document.getElementById("fechaI");
     var fin = document.getElementById("fechaF");
-    if (elem.value == "OCUPACION")
+    if (elem.value == "OCUPACION" || elem.value == "RESUMEN")
     {
         ini.value = "";
         fin.value = "";
@@ -112,7 +113,7 @@ function cambiarReporte(elem)
     {
         ini.setAttribute("max", "2040-02-20");
         fin.removeAttribute("max", "2040-02-20");
-        document.getElementById("divsala").style.visibility = "show";
+        document.getElementById("divsala").style.visibility = "visible";
     }
 }
 
@@ -221,7 +222,7 @@ function contarDetalles(array, param)
     return cont;
 }
 
-function diferenciaDias(ini,fin)
+function diferenciaDias(ini, fin)
 {
     var dateI = new Date(ini).getTime();
     var dateF = new Date(fin).getTime();
@@ -236,6 +237,12 @@ function horasTotales(horario, dias)
     var hf = dh.split("-")[1].split(":")[0] * 1;
 
     return (hf - hi) * dias;
+}
+
+function toFixed(num, fixed)
+{
+    var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+    return num.toString().match(re)[0];
 }
 
 function traerReporte()
@@ -372,7 +379,7 @@ function traerReporte()
                 dataType: "text",
                 success: function (response)
                 {
-                    var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val());
+                    var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val()) + 1;
                     console.log(cantDias);
                     var datos = response.split("#");
                     var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
@@ -388,18 +395,25 @@ function traerReporte()
                     table += "<tr><td></td><td " + styleCabecera + ">TIPO</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera + ">HORARIO</td><td " + styleCabecera + ">HORAS TOTALES</td><td " + styleCabecera + ">HORAS RESERVADAS</td><td " + styleCabecera + ">OCUPACIÓN (%)</td></tr>";
                     var lasala = null;
                     var data = null;
+                    var ht = 0;
+                    var hr = 0;
+                    var result = 0;
                     for (var i = 0; i < datos.length; i++)
                     {
+                        debugger;
                         data = datos[i].split("|");
                         lasala = misSalas.find((x) => x.idSala == (data[0] * 1));
+                        ht = horasTotales(lasala["horario"], cantDias);
+                        hr = (data[1] / 60) * 1;
+                        result = hr / ht;
                         table += "<tr>";
                         table += "<td></td>";
                         table += "<td " + celdaComun + ">" + lasala["tipo"] + "</td>";
                         table += "<td " + celdaComun + ">" + lasala["nombreSala"] + "</td>";
                         table += "<td " + celdaComun + ">" + lasala["horario"] + "</td>";
-                        table += "<td " + celdaComun + ">" + horasTotales(lasala["horario"], cantDias) + "</td>";
-                        table += "<td " + celdaComun + ">" + (data[1] / 60) + "</td>";
-                        table += "<td " + celdaComun + ">" + (data[1] / 60) + "</td>";
+                        table += "<td " + celdaComun + ">" + ht + "</td>";
+                        table += "<td " + celdaComun + ">" + hr + "</td>";
+                        table += "<td " + celdaComun + ">" + toFixed((result * 100), 2) + "</td>";
                         table += "</tr>";
                     }
 
@@ -407,6 +421,125 @@ function traerReporte()
 
                     var nombreExcel = "Reporte_OCUPACION_" + $("#sede option:selected").text() + "_" + getcurrentDate() + ".xls";
                     generarExcel(table, nombreExcel, $("#sede option:selected").text());
+                }
+            });
+        } else
+        {
+            alert("faltan completar campos");
+        }
+    }
+    else if ($("#tipo").val() == "RESUMEN")
+    {
+        if ($("#tipo").val() != "0" && $("#fechaI").val() != "" && $("#fechaF").val() != "" && $("#sede").val() != "0" && $("#pais").val() != "0")
+        {
+            var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val()) + 1;
+            var contActivos = {};
+            var activos = null;
+            var keys = null;
+            for (var i = 0; i < misSalas.length; i++)
+            {
+                activos = misSalas[i]["activos"];
+                keys = Object.keys(activos);
+                for (var j = 0; j < keys.length; j++)
+                {
+                    if (contActivos[keys[j]] == undefined) contActivos[keys[j]] = activos[keys[j]];
+                    else contActivos[keys[j]] += activos[keys[j]];
+                }
+            }
+
+            console.log(contActivos);
+
+            $.ajax({
+                method: "POST",
+                url: "/Reportes/reporteResumen",
+                data: { sedeId: $("#sede").val() * 1, fechaI: $("#fechaI").val(), fechaF: $("#fechaF").val() },
+                dataType: "text",
+                success: function (response)
+                {//que pasa si un dia no hay check en la sala.. se debe considerar todo correcto?
+                    if (response.length > 0)
+                    {
+                        var data = response.split("#");
+                        var reservas = null;
+                        var find = null;
+                        var json = null;
+                        var keys = null;
+                        var result = {}; // todos los activos en buen estado (funcionales)
+                        var copy = misSalas;
+                        var index = 0;
+                        for (var j = 0; j < data.length; j++)
+                        {
+                            reservas = data[j].split("|");
+                            index = copy.findIndex((x) => x.idSala == (reservas[0] * 1));
+                            if(index>-1) copy.splice(index, 1);
+                            //find = misSalas.findIndex((x) => x.idSala == reservas[0] * 1);
+                            //if (find > -1)
+                            //{
+                                json = JSON.parse(reservas[2]); 
+                                keys = Object.keys(json["activos"]);
+                                for (var z = 0; z < keys.length; z++)
+                                {
+                                    if (result[keys[z]] == undefined) result[keys[z]] = contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
+                                    else result[keys[z]] += contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
+                                }
+                            //} else
+                        }
+
+                        var jsonActivos = null;
+                        var keysA = null;
+                        debugger;
+                        
+                        for (var n = 0; n < copy.length; n++) // si no hay checklist final en un dia va hacer esto o si no se le ha hecho checklist a una sala
+                        {
+                            keysA = Object.keys(copy[n]["activos"]);
+                            for (var m = 0; m < keysA.length; m++)
+                            {
+                                if (result[keysA[m]] == undefined) result[keysA[m]] = copy[n]["activos"][keysA[m]];
+                                else result[keysA[m]] += copy[n]["activos"][keysA[m]];
+                            }
+                        }
+                        var resultM = {};
+                        var keysM = Object.keys(contActivos);
+                        for (var i = 0; i < keysM.length; i++)
+                        {
+                            resultM[keysM[i]] = (contActivos[keysM[i]] * cantDias)- result[keysM[i]]
+                        }
+
+                        var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
+                        var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'";
+
+                        var table = "<table>";
+                        table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DETALLADO DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td colspan=" + keysM.length + " style='text-align:center;font-weight:bold;'>CANTIDAD DE ACTIVOS</td></tr></table>";
+                        table += "<table>";
+                        table += "<tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td><td></td><td></td><td></td>";
+                        for (var i = 0; i < keysM.length; i++)
+                        {
+                            table += "<td " + styleCabecera + ">" + keysM[i] + "</td>";
+                        }
+                        table += "</tr>";
+                        table += "<tr><td></td><td " + celdaComun + ">" + $("#pais option:selected").text() + "</td><td " + celdaComun + ">" + $("#sede option:selected").text() + "</td><td></td><td></td><td></td>";
+                        for (var i = 0; i < keysM.length; i++)
+                        {
+                            table += "<td " + celdaComun + ">" + contActivos[keysM[i]] + "</td>";
+                        }
+                        table += "</tr><tr></tr>";
+                        table += "</table>";
+                        table += "<table>";
+                        table += "<tr><td></td><td " + styleCabecera + ">ACTIVOS</td><td " + styleCabecera + ">FUNCIONALES</td><td " + styleCabecera + ">NO FUNCIONALES</td></tr>";
+                        var promB = 0;
+                        for (var i = 0; i < keysM.length; i++)
+                        {
+                            promB = Math.round(result[keysM[i]] / cantDias);
+                            table += "<tr><td></td><td " + celdaComun + ">" + keysM[i] + "</td>";
+                            table += "<td " + celdaComun + ">" + promB + "</td>";
+                            table += "<td " + celdaComun + ">" + (contActivos[keysM[i]]-promB) + "</td>";
+                            table += "</tr>"
+                        }
+
+                        table += "</table>";
+
+                        var nombreExcel = "Reporte_RESUMEN_" + $("#sala option:selected").text() + "_" + getcurrentDate() + ".xls";
+                        generarExcel(table, nombreExcel, $("#sala option:selected").text());
+                    }
                 }
             });
         } else
