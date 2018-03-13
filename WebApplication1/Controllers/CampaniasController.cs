@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Administrador")]
+        [Authorize(Roles = "Admin,Administrador,User")]
         public string listarCampanias(CampaniaDTO campania)
         {
             string result = "";

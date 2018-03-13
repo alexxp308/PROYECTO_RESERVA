@@ -1,0 +1,24 @@
+﻿div.esfera {
+    width: 25px;
+    height: 25px;
+    -ms-border-radius: 150px;
+    -moz-border-radius: 150px;
+    -webkit-border-radius: 150px;
+    -o-border-radius: 150px;
+    border-radius: 150px;
+    margin: 0px auto;
+}
+
+    div.esfera.espera {
+        background: radial-gradient(at top left, #0F0 20%, #040);
+    }
+
+    div.esfera.reserva {
+        background: radial-gradient(at top left, #FDA101 20%, #654000);
+    }
+    div.esfera.terminada {
+        background: radial-gradient(at top left, #F51E00 20%, #630C00);
+    }
+    div.esfera.cancelada {
+        background: radial-gradient(at top left, #D1D1D1 20%, #3E3E3E);
+    }

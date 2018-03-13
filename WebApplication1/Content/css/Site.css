@@ -24,7 +24,7 @@ textarea {
 }
 
 .table th {
-	text-align: center;
+    text-align: center;
 }
 
 .navbar-login {
@@ -50,10 +50,11 @@ textarea {
     opacity: 0;
     transition: opacity 0.6s;
     margin-bottom: 15px;
-    position:fixed;
-    right:0px;
-    z-index:1000;
+    position: fixed;
+    right: 0px;
+    z-index: 1000;
 }
+
 .closebtn {
     margin-left: 15px;
     color: white;
@@ -68,3 +69,4 @@ textarea {
     .closebtn:hover {
         color: black;
     }
+

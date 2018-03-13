@@ -4,7 +4,7 @@
 }
 
 <h2>Usuarios - <span style="font-style:italic;color:#BDBCBC;font-size:22px;" id="descr"></span></h2>
-<button type="button" class="btn btn-primary btn-number" data-type="plus" onclick="crearUsuario();">
+<button type="button" class="btn btn-success btn-number" data-type="plus" onclick="crearUsuario();">
     <span class="glyphicon glyphicon-plus"></span>
 </button>
 <input id="hdnSede" type="hidden" value="@ViewBag.sede" />
@@ -13,8 +13,8 @@
 <table class="table">
     <thead class="blue-grey lighten-4">
         <tr>
-            <th>#</th>
-            <th>Codigo</th>
+            <th>Nro</th>
+            <th>Cod. Empleado</th>
             <th>Nombre completo</th>
             <th>Rol</th>
             <th>Sede</th>
@@ -27,7 +27,7 @@
 <div class="modal fade" id="dvCrearUser" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCrearUserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:#428bca;text-align:center;">
+            <div class="modal-header" style="background-color:#5cb85c;text-align:center;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     ×
                 </button>
@@ -117,11 +117,13 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
                             <select class="form-control" id="cargo">
-                                <option value="0" selected>--SELECCIONAR--</option>
-                                <option value="Soporte">Soporte</option>
+                                <option value="0">--SELECCIONAR--</option>
                                 <option value="Supervisor">Supervisor</option>
+                                <option value="Ejecutivo">Ejecutivo</option>
+                                <option value="Jefe">Jefe</option>
                                 <option value="Coordinador">Coordinador</option>
                                 <option value="Gerente">Gerente</option>
+                                <option value="Gerente_general">Gerente general</option>
                             </select>
                         </div>
                     </div>
@@ -159,7 +161,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">
+                <button type="button" class="btn btn-success" onclick="guardarUsuario()">
                     Guardar&nbsp;&nbsp;<i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i>
                 </button>
                 <span style="display:none;" id="verifica"></span>

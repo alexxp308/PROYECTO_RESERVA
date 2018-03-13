@@ -61,7 +61,7 @@ namespace WebApplication1.Controllers
 
 			else
 			{
-				ModelState.AddModelError("", "Invalid login attempt.");
+				ModelState.AddModelError("", "");
 				return View(model);
 			}
 		}

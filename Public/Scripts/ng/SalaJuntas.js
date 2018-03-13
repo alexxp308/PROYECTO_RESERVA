@@ -82,7 +82,7 @@ var activos = {};
 var elFieldset = true;
 function agregarActivo()
 {
-	if ($("#iActivosS").val() == "")
+    if ($("#ActivosS").val() == "0")
 	{
 		alert("Escoja un activo");
 	} else
@@ -117,7 +117,7 @@ function agregarActivo()
 			str += '<div class="input-group">';
 			str += "<input type='number' id='activo_" + miactivo + "' class='form-control' onkeyup='cambiarActivo(\"" + miactivo + "\")' onmouseup='cambiarActivo(\"" + miactivo + "\")'/>";
 			str += '<div class="input-group-btn">';
-			str += "<button class='btn btn-contact btn-info' title='Eliminar' type='button' style='padding:6px 6px;' onclick='eliminarActivo(\"" + miactivo + "\");'>";
+			str += "<button class='btn btn-contact btn-warning' title='Eliminar' type='button' style='padding:6px 6px;' onclick='eliminarActivo(\"" + miactivo + "\");'>";
 			str += '<span class="glyphicon glyphicon-minus" style="font-size:10px;"></span>';
 			str += '</button></div></div></div><br/><br/></div>';
 			$("#listarActivos").append(str);
@@ -249,7 +249,7 @@ function guardarSala()
 						str += "<td align='center' >" + datos[6] + "</td>";
 						str += "<td align='center'>" + $("#SedeS option[value='"+datos[7]+"']").text() + "</td>";
 						str += "<td align='center'><label class='switch'><input type='checkbox' id='switch_"+datos[0]+"' checked onchange='cambioEstado(this)'/><span class='slider round'></span></label></td>";
-                        str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarSala(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[3] + "\"" + "," + "\"" + datos[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + datos[6] + "\"" + "," + "\"" + datos[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                        str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarSala(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[3] + "\"" + "," + "\"" + datos[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + datos[6] + "\"" + "," + "\"" + datos[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 						str += "</tr>";
 
 						$("#listarSala").append(str);
@@ -286,7 +286,7 @@ function guardarSala()
 						columna[2].innerHTML = "<button type='button' class='btn btn-default btn-sm' title='ver activos' onclick='mostrarActivos(\"" + paramActivos.substring(0, paramActivos.length - 1) + "\",\"" + datos[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button>";
 						columna[3].innerHTML = datos[6];
 						columna[4].innerHTML = $("#SedeS option[value='" + datos[7] + "']").text();
-						columna[6].innerHTML = "<button type='button' class='btn btn-primary btn-sm' onclick='editarSala(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[3] + "\"" + "," + "\"" + datos[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + datos[6] + "\"" + "," + "\"" + datos[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
+						columna[6].innerHTML = "<button type='button' class='btn btn-success btn-sm' onclick='editarSala(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[3] + "\"" + "," + "\"" + datos[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + datos[6] + "\"" + "," + "\"" + datos[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
 
 						$("#dvCrearSala").modal("hide");
 					}
@@ -354,7 +354,7 @@ function listarSalas()
 					str += "<td align='center' >" + fila[6] + "</td>";
 					str += "<td align='center'>" + $("#SedeS option[value='" + fila[7] + "']").text() + "</td>";
 					str += "<td align='center'><label class='switch'><input type='checkbox' id='switch_" + fila[0] + "' " + (fila[2]=="True" ? "checked" : "")+" onchange='cambioEstado(this)'/><span class='slider round'></span></label></td>";
-					str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarSala(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[3] + "\"" + "," + "\"" + fila[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + fila[6] + "\"" + "," + "\"" + fila[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                    str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarSala(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[3] + "\"" + "," + "\"" + fila[4] + "\"," + "\"" + paramActivos.substring(0, paramActivos.length - 1) + "\"" + "," + "\"" + fila[6] + "\"" + "," + "\"" + fila[7] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 					str += "</tr>";
 				}
 				$("#listarSala").html(str);
@@ -435,7 +435,7 @@ function editarSala(id,nombre,tipo,horario,misactivos,ubicacion,sede)
 		str += '<div class="input-group">';
 		str += "<input type='number' id='activo_" + keys[j] + "' class='form-control' onkeyup='cambiarActivo(\"" + keys[j] + "\")' onmouseup='cambiarActivo(\"" + keys[j] + "\")' value='" + activos[keys[j]]+"'/>";
 		str += '<div class="input-group-btn">';
-		str += "<button class='btn btn-contact btn-info' title='Eliminar' type='button' style='padding:6px 6px;' onclick='eliminarActivo(\"" + keys[j] + "\");'>";
+		str += "<button class='btn btn-contact btn-warning' title='Eliminar' type='button' style='padding:6px 6px;' onclick='eliminarActivo(\"" + keys[j] + "\");'>";
 		str += '<span class="glyphicon glyphicon-minus" style="font-size:10px;"></span>';
 		str += '</button></div></div></div><br/><br/></div>';
 		selecActivos = document.getElementById("ActivosS");

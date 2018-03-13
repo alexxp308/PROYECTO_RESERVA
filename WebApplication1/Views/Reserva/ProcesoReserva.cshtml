@@ -12,7 +12,7 @@
 <div id="main" role="tabpanel">
     <div id="cabecera" style="margin:0 auto;width:70%;">
         <ul class="nav nav-tabs" role="tablist" id="navegacion">
-            <li class="active"><a href="#Inicio" aria-controls="Inicio" role="tab" data-toggle="tab" id="liInicio" style="color:#398CD3;">1. Inicio</a></li>
+            <li class="active"><a href="#Inicio" aria-controls="Inicio" role="tab" data-toggle="tab" id="liInicio" style="color:#5cb85c;">1. Inicio</a></li>
             <li class="disabledli"><a href="#Seleccion" aria-controls="Seleccion" role="tab" data-toggle="tab" id="liSeleccion">2. Selección</a></li>
             <li class="disabledli"><a href="#Resumen" aria-controls="Resumen" role="tab" data-toggle="tab" id="liResumen">3. Resumen</a></li>
         </ul>
@@ -22,7 +22,7 @@
         <br />
         <br />
         <div role="tabpanel" class="tab-pane fade in active" id="Inicio" style="margin:0 auto;width:60%;">
-            <div class="panel panel-primary">
+            <div class="panel panel-success">
                 <div class="panel-heading" style="text-align:center;">RESERVA DE LA SALA DE JUNTAS</div>
                 <div class="panel-body">
                     <br />
@@ -148,7 +148,7 @@
     <br />
     <br />-->
                     <div style="text-align:center;">
-                        <button type="button" class="btn btn-primary" id="inicioButton">
+                        <button type="button" class="btn btn-success" id="inicioButton">
                             Continuar<i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -179,7 +179,7 @@
                                     <div class="col-sm-12 col-md-8 col-lg-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
-                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" style="cursor:pointer;">
+                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" style="cursor:pointer;" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -236,7 +236,7 @@
                         </div>
                         <div class="modal-footer" style="margin-top:0px;padding-top:5px;padding-bottom:5px;">
                             <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-                            <button class="btn btn-primary" id="btncue">Guardar</button>
+                            <button class="btn btn-success" id="btncue">Guardar</button>
                             <span id="idcue" style="display:none;"></span>
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                 </div>
                 <div class="col-xs-6 text-right">
                     <div class="next">
-                        <button type="button" class="btn btn-default btn-lg" title="ir a inicio" id="irAresumen">
+                        <button type="button" class="btn btn-success btn-lg" title="ir a inicio" id="irAresumen">
                             Continuar<span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
                     </div>
@@ -263,7 +263,7 @@
         <div role="tabpanel" class="tab-pane fade" id="Resumen" style="margin:0 auto;width:110%;">
             <div class="row row-eq-height">
                 <div class="col-sm-12 col-md-7 col-lg-7">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-success">
                         <div class="panel-heading" style="text-align:center;padding-bottom:0px;padding-top:2px;"><h4>SALA: <span id="salaSelect"></span></h4></div>
                         <div class="panel-body" style="padding-top:0px;padding-left:5px;">
                             <br />
@@ -321,7 +321,7 @@
                         </div>
                         <div class="col-xs-6 text-right">
                             <div class="next">
-                                <button type="button" class="btn btn-primary btn-lg" title="Guardar resrva" id="guardarReserva">
+                                <button type="button" class="btn btn-success btn-lg" title="Guardar resrva" id="guardarReserva">
                                     Guardar &nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span>
                                 </button>
                             </div>

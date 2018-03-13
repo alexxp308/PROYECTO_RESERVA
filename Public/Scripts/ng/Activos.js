@@ -25,7 +25,7 @@ function listarActivos()
 					str += "<tr id='tr_" + fila[0] + "'>";
 					str += "<th scope='row' align='center'><span style='display:none;' id='col_" + fila[0] + "'></span><p>" + cantActivos + "</p></th>";
 					str += "<td  align='center'>" + fila[1] + "</td>";
-					str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarActivo(" + fila[0] + "," + "\"" + fila[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                    str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarActivo(" + fila[0] + "," + "\"" + fila[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 					str += "</tr>";
 					losActivos.push(fila[1].toLowerCase());
 				}
@@ -81,7 +81,7 @@ function guardarActivo()
 						var str = "<tr id='tr_" + datos[0] + "'>";
 						str += "<th scope='row' align='center'><span style='display:none;' id='col_" + datos[0] + "'></span><p>" + cantActivos + "</p></th>";
 						str += "<td  align='center'>" + datos[1] + "</td>";
-						str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarActivo(" + datos[0] + "," + "\"" + datos[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                        str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarActivo(" + datos[0] + "," + "\"" + datos[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 						str += "</tr>";
 						$("#listarActivos").append(str);
 						$("#dvMisActivos").modal("hide");
@@ -110,7 +110,7 @@ function guardarActivo()
 					var datos = response.split("|");
 					var columna = document.getElementById("tr_" + datos[0]).getElementsByTagName("td");
 					columna[0].innerHTML = datos[1];
-					columna[1].innerHTML = "<button type='button' class='btn btn-primary btn-sm' onclick='editarActivo(" + datos[0] + "," + "\"" + datos[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
+                    columna[1].innerHTML = "<button type='button' class='btn btn-success btn-sm' onclick='editarActivo(" + datos[0] + "," + "\"" + datos[1] + "\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
 					$("#dvMisActivos").modal("hide");
 				}
 			}

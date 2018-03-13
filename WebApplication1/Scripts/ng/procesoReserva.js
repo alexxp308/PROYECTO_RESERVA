@@ -116,11 +116,11 @@
             {
                 if ((this.value.substring(8, 10) * 1) > (o.id("dfinR").value.substring(8, 10) * 1)) o.id("dfinR").value = "";
                 o.id("dfinR").setAttribute("min", this.value);
-                o.id("dfinR").removeAttribute("disabled");
+                //o.id("dfinR").removeAttribute("disabled");
             } else
             {
                 o.id("dfinR").removeAttribute("min");
-                o.id("dfinR").setAttribute("disabled", "disabled");
+                //o.id("dfinR").setAttribute("disabled", "disabled");
             }
         }
 
@@ -203,7 +203,7 @@
                 o.id("liInicio").style.color = "#A5A5A5";
                 o.id("liSeleccion").parentNode.removeAttribute("class");
                 o.id("liSeleccion").click();
-                o.id("liSeleccion").style.color = "#398CD3";
+                o.id("liSeleccion").style.color = "#5cb85c";
                 $(".loader").toggle(true);
                 //debugger;
                 if (data.idSala != o.volverAconsultar)
@@ -296,7 +296,7 @@
                         {
                             sede = sedes[i].split("|");
                             verifica = "";
-                            if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo" || o.id("rol-profile").innerHTML == "Jefe"))
+                            if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "Ejecutivo" || o.id("rol-profile").innerHTML == "Jefe"))
                             {
                                 if (sede[1] == o.id("sede-profile").innerHTML)
                                 {
@@ -312,7 +312,7 @@
                             });
                         }
                         $("#sedeR").html(str);
-                        if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "ejecutivo" || o.id("rol-profile").innerHTML == "Jefe"))
+                        if (window.cookie.getCookie()["role"] == "User" && (o.id("rol-profile").innerHTML == "Supervisor" || o.id("rol-profile").innerHTML == "Ejecutivo" || o.id("rol-profile").innerHTML == "Jefe"))
                         {
                             o.id("sedeR").setAttribute("disabled", "disabled");
                             o.id("sedeR").onchange();
@@ -363,8 +363,9 @@
 
         o.listarCampañasxSede = function ()
         {
+            
             var data = {};
-            data.idSede = o.id("sedeR").value;
+            data.idSede = o.id("sedeR").value*1;
             $(".loader").toggle(true);
             $.ajax({
                 method: "POST",
@@ -378,6 +379,7 @@
                     var str = "<option value='0'>--SELECCIONAR--</option>";
                     if (response.length > 0)
                     {
+                        debugger;
                         var campanias = response.split("#");
                         var campania = null;
                         for (var i = 0; i < campanias.length; i++)
@@ -479,8 +481,8 @@
             o.id("hinicioR").value = "0";
             o.id("hfinR").value = "0";
             o.id("tituloR").removeAttribute("disabled");
-            o.id("dinicioR").removeAttribute("disabled");
-            o.id("dfinR").removeAttribute("disabled");
+            //o.id("dinicioR").removeAttribute("disabled");
+            //o.id("dfinR").removeAttribute("disabled");
             o.id("hinicioR").removeAttribute("disabled");
             o.id("hfinR").removeAttribute("disabled");
             o.id("btncue").removeAttribute("disabled");
@@ -703,13 +705,13 @@
                         str += '</div></div></li>';
                         str += '<li class="list-group-item">'
                         str += '<div class="row">';
-                        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Día inicio:</label>';
+                        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Hora inicio:</label>';
                         str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
                         str += '<input type="text" class="form-control" readonly value="' + o.myevents[j].start.split("T")[1] + '"/>';
                         str += '</div></div></li>';
                         str += '<li class="list-group-item">'
                         str += '<div class="row">';
-                        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Día fin:</label>';
+                        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Hora fin:</label>';
                         str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
                         str += '<input type="text" class="form-control" readonly value="' + o.myevents[j].end.split("T")[1] + '"/>';
                         str += '</div></div></li>';
@@ -734,7 +736,7 @@
                 o.id("liSeleccion").style.color = "#A5A5A5";
                 o.id("liResumen").parentNode.removeAttribute("class");
                 o.id("liResumen").click();
-                o.id("liResumen").style.color = "#398CD3";
+                o.id("liResumen").style.color = "#5cb85c";
                 if (o.id("campania").value != "0")
                 {
                     o.id("campaniaSelect").value = o.id("campania").options[o.id("campania").selectedIndex].text;
@@ -790,7 +792,7 @@
             o.id("liResumen").style.color = "#A5A5A5";
             o.id("liSeleccion").parentNode.removeAttribute("class");
             o.id("liSeleccion").click();
-            o.id("liSeleccion").style.color = "#398CD3";
+            o.id("liSeleccion").style.color = "#5cb85c";
         }
 
         o.id("volverInicio").onclick = function ()
@@ -799,7 +801,7 @@
             o.id("liSeleccion").style.color = "#A5A5A5";
             o.id("liInicio").parentNode.removeAttribute("class");
             o.id("liInicio").click();
-            o.id("liInicio").style.color = "#398CD3";
+            o.id("liInicio").style.color = "#5cb85c";
         }
 
         return o;

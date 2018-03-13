@@ -553,7 +553,7 @@ select * from RESERVA
 select * from sala
 select * from Sede
 
-alter PROCEDURE USP_OBTENER_RESERVASXUSUARIO(
+ALTER PROCEDURE [dbo].[USP_OBTENER_RESERVASXUSUARIO](
 	@idSala int,
 	@userId int,
 	@idSede int,
@@ -567,7 +567,7 @@ BEGIN
 	begin
 		if(@estado=9)
 		begin
-			if(@rol='Administrador')
+			if(@rol='Administrador' or @rol='Admin')
 			begin
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
@@ -584,7 +584,7 @@ BEGIN
 		end
 		else
 		begin
-			if(@rol='Administrador')
+			if(@rol='Administrador' or @rol='Admin')
 			begin
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
@@ -604,7 +604,7 @@ BEGIN
 	begin
 		if(@estado=9)
 		begin
-			if(@rol='Administrador')
+			if(@rol='Administrador' or @rol='Admin')
 			begin
 				select * from RESERVA where idSala=@idSala order by fhinicio desc
 			end
@@ -615,7 +615,7 @@ BEGIN
 		end
 		else
 		begin
-			if(@rol='Administrador')
+			if(@rol='Administrador' or @rol='Admin')
 			begin
 				select * from RESERVA where idSala=@idSala and estadoReserva=@estado order by fhinicio desc
 			end
@@ -773,7 +773,7 @@ AS
 BEGIN
 	select a.idSala,
 	SUM(DATEDIFF(minute,convert(datetime,REPLACE(a.fhinicio,'T',' ')),convert(datetime,REPLACE(a.fhfin,'T',' ')))) HORAS_RESERVADAS 
-	from reserva a,SALA b where a.idSala=b.idSala and b.idSede=@sedeId and fhfin between @fechaI and @fechaF  group by a.idSala
+	from reserva a,SALA b where a.idSala=b.idSala and b.idSede=@sedeId and fhfin between @fechaI and @fechaF  group by a.idSala order by HORAS_RESERVADAS desc 
 END
 
 
@@ -820,4 +820,4 @@ select (select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' a
 (select top 1 * from RESERVA where SUBSTRING(fhfin,1,10) = '2018-03-09' and idSala=7 order by fhfin desc)
 
 
-select * from SALA
+select * from UserProfile

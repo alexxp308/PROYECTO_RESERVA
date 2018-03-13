@@ -17,17 +17,48 @@ function obtenerDatos() {
                 $("#sede-profile").html(data[6]);
                 $("#email-profile").html(data[5]);
                 $("#nombre-profile").html(data[4]);
-                $("#rol-profile").html(data[2]);
+                $("#rol-profile").html(data[3]);
                 $("#administrador-profile").html(data[8]);
                 $("#pais-profile").html(data[9]);
+                var nombreSala = data[10];
+                var fhinicio = data[11];
                 if (data[7] == "True") {
                     document.getElementById("obli").style.display = "block";
                     document.getElementById("cancelardvp").setAttribute("disabled", "disabled");
                     $("#dvPassword").modal("show");
                 }
+                if (nombreSala != "0") {
+                    mostrarAlerta(nombreSala,fhinicio);
+                }
             }
         }
     });
+}
+
+function mostrarAlerta(nombreSala, fhinicio) {
+    var div = document.getElementById("divAlert");
+    if (div != null)
+    {
+        div.style.opacity = "0.00";
+        document.getElementById("roomName").innerHTML = nombreSala;
+        document.getElementById("hourReservation").innerHTML = fhinicio;
+        var my = setInterval(function ()
+        {
+            if (div.style.opacity == "1")
+            {
+                clearInterval(my);
+            } else
+            {
+                div.style.opacity = div.style.opacity * 1 + 0.05;
+            }
+        }, 50)
+    }
+}
+
+function quitarAlerta(elem) {
+    var div = elem.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function () { div.style.display = "none"; }, 600);
 }
 
 function mostrardvContra() {

@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "_Header";
 }
-<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:#155100;">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @Html.ActionLink("Nombre de aplicación", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Reserva de salas", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -133,7 +133,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <p>
-                                            <button type="button" class="btn btn-primary btn-block btn-sm" onclick="mostrardvContra();">
+                                            <button type="button" class="btn btn-success btn-block btn-sm" onclick="mostrardvContra();">
                                                 <span class="glyphicon glyphicon-repeat"></span> Cambiar contraseña
                                             </button>
                                         </p>
@@ -150,7 +150,7 @@
                                             @using (Html.BeginForm("LogOff", "Login"))
                                             {
                                                 @Html.AntiForgeryToken()
-                                                <button type="submit" class="btn btn-info btn-block btn-sm">
+                                                <button type="submit" class="btn btn-warning btn-block btn-sm">
                                                     <span class="glyphicon glyphicon-log-out"></span> Cerrar sesion
                                                 </button>
                                             }
@@ -198,7 +198,7 @@
             </div>
             <div class="modal-footer" style="padding-bottom:5px;padding-top:5px;margin-top:0px;">
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true" id="cancelardvp">Cancelar</button>
-                <button class="btn btn-primary" aria-hidden="true" onclick="guardarPassword()">Guardar&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span></button>
+                <button class="btn btn-warning" aria-hidden="true" onclick="guardarPassword()">Guardar&nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span></button>
             </div>
         </div>
     </div>

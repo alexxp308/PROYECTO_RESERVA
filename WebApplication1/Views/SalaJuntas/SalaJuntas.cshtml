@@ -3,7 +3,7 @@
 	ViewBag.Title = "SalaJuntas";
 }
 <h3>SALA DE <span>@ViewBag.tipo</span> <span style="font-style:italic;color:#BDBCBC;font-size:22px;">- @ViewBag.pais</span></h3>
-<button type="button" class="btn btn-primary btn-number" data-type="plus" onclick="crearSala()">
+<button type="button" class="btn btn-success btn-number" data-type="plus" onclick="crearSala()">
 	<span class="glyphicon glyphicon-plus"></span>
 </button>
 <br />
@@ -31,7 +31,7 @@
 <div class="modal fade" id="dvCrearSala" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCrearSalaLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header" style="background-color:#428bca;text-align:center;">
+			<div class="modal-header" style="background-color:#5cb85c;text-align:center;">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					×
 				</button>
@@ -104,7 +104,7 @@
                                 <option value="0">--SELECCIONAR--</option>
 							</select>
 							<div class="input-group-btn">
-								<button class="btn btn-contact btn-info" title="Añadir" type="button" onclick="agregarActivo();">
+								<button class="btn btn-contact btn-warning" title="Añadir" type="button" onclick="agregarActivo();">
 									<span class="glyphicon glyphicon-plus"></span>
 								</button>
 							</div>
@@ -172,7 +172,7 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-				<button type="button" class="btn btn-primary" onclick="guardarSala()">Guardar</button>
+				<button type="button" class="btn btn-success" onclick="guardarSala()">Guardar</button>
 				<span style="display:none;" id="verifica"></span>
 			</div>
 		</div>
@@ -197,7 +197,7 @@
 				</fieldset>
 			</div>
 			<div class="modal-footer">
-				<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+				<button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Ok</button>
 			</div>
 		</div>
 	</div>

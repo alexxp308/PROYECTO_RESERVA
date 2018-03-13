@@ -5,14 +5,14 @@
 <div class="loader"></div>
 <input type="hidden" id="paramInicio" />
 <input type="hidden" id="salaSelect" />
-<div class="panel panel-primary">
+<div class="panel panel-success">
     <div class="panel-heading" style="padding-bottom:0px;"><h4>HISTORIAL RESERVAS</h4></div>
     <div class="panel-body">
         <div class="row">
             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                 <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="pais" style="padding-top:10px;padding-left:10px;">Pais:</label>
                 <div class="col-sm-12 col-md-8 col-lg-8">
-                    <select class="form-control" id="pais" disabled>
+                    <select class="form-control" id="pais" @Html.Raw((User.IsInRole("Admin") ? "" : "disabled")) onchange="listarAdmin(this)">
                         <option value="0">--SELEC--</option>
                         <option value="PERU">PERU</option>
                         <option value="MEXICO">MEXICO</option>
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" onclick="buscarReservas();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Buscar</button>
+        <button class="btn btn-success" onclick="buscarReservas();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Buscar</button>
     </div>
     <div class="panel-heading" style="padding-bottom:0px;background:#E7E7E7;color:black;border:1px solid #D6D6D6"><h4 style="font-weight:bold;">Resultado:</h4></div>
     <div class="panel-body" id="content" style="display:none;">
@@ -73,7 +73,7 @@
                 </fieldset>
             </div>
             <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
-                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Ok</button>
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Ok</button>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@
 <div class="modal fade" id="dvCalendario" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCalendarioLabel" aria-hidden="true">
     <div class="modal-dialog" style="width:60%;">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:#428bca;">
+            <div class="modal-header" style="background-color:#5cb85c;">
                 <button type="button" class="close" aria-hidden="true" @Html.Raw((User.IsInRole("Administrador") ? "onclick='cerrarModal()'" : "data-dismiss='modal'"))>
                     ×
                 </button>
@@ -94,11 +94,11 @@
                 @if (User.IsInRole("Administrador"))
                 {
                     <button class="btn btn-default" onclick="cerrarModal()">Cancelar</button>
-                    <button class="btn btn-primary" onclick="guardarAllUpdates()">Guardar</button>
+                    <button class="btn btn-success" onclick="guardarAllUpdates()">Guardar</button>
                 }
                 else
                 {
-                    <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    <button class="btn btn-success" data-dismiss="modal">Ok</button>
                 }
             </div>
         </div>
@@ -181,12 +181,12 @@
                 @if (User.IsInRole("Administrador"))
                 {
                     <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-primary" onclick="updateEvent()">Guardar</button>
+                    <button class="btn btn-success" onclick="updateEvent()">Guardar</button>
                     <span id="idcue" style="display:none;"></span>
                 }
                 else
                 {
-                    <button class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    <button class="btn btn-success" data-dismiss="modal">Ok</button>
                 }
             </div>
         </div>
@@ -196,7 +196,7 @@
 <div class="modal fade" id="dvCheck" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvCheckLabel" aria-hidden="true">
     <div class="modal-dialog" style="">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:#428bca;">
+            <div class="modal-header" style="background-color:#5cb85c;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     ×
                 </button>
@@ -206,7 +206,7 @@
             </div>
             <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
                 <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                <button type="button" class="btn btn-primary" title="Guardar CheckList" id="miCheck" onclick="guardarCheck()">
+                <button type="button" class="btn btn-success" title="Guardar CheckList" id="miCheck" onclick="guardarCheck()">
                     Guardar &nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span>
                 </button>
                 <span style="display:none;" id="idReserva"></span>
@@ -220,7 +220,7 @@
 <div class="modal fade" id="dvUpdateEvents" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="dvUpdateEvents" aria-hidden="true">
     <div class="modal-dialog" style="width:40%;">
         <div class="modal-content">
-            <div class="modal-header" style="background-color:#428bca;">
+            <div class="modal-header" style="background-color:#5cb85c;">
                 <button type="button" class="close" aria-hidden="true" onclick="cerrarModalUpdate();">
                     ×
                 </button>
@@ -238,7 +238,7 @@
             </div>
             <div class="modal-footer" style="padding-top:5px;padding-bottom:5px;">
                 <button class="btn btn-default" onclick="cerrarModalUpdate();">Cancelar</button>
-                <button class="btn btn-primary" onclick="EnviarUpdates()">Guardar</button>
+                <button class="btn btn-success" onclick="EnviarUpdates()">Guardar</button>
             </div>
         </div>
     </div>

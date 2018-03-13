@@ -30,7 +30,7 @@ function listarSedes()
                     str += "<td align='center'><button type='button' class='btn btn-default btn-sm' onclick='mostrarPisos(\"" + fila[3] + "\",\"" + fila[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button></td>";
                     str += "<td align='center'><button type='button' class='btn btn-default btn-sm' onclick='mostrarActivos(\"" + JSON.parse(fila[5]) + "\",\"" + fila[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button></td>";
 					str += "<td align='center'>" + fila[4] + "</td>";
-                    str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarSede(" + fila[0] + ",\"" + fila[1] + "\"," + fila[2] + ",\"" + fila[3] + "\",\"" + fila[4] + "\",\"" + JSON.parse(fila[5]) + "\",\"" + fila[6]+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                    str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarSede(" + fila[0] + ",\"" + fila[1] + "\"," + fila[2] + ",\"" + fila[3] + "\",\"" + fila[4] + "\",\"" + JSON.parse(fila[5]) + "\",\"" + fila[6]+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 					str += "</tr>";
 				}
 				$("#listarSedes").html(str);
@@ -75,7 +75,7 @@ function agregarActivo()
 	var str = "<tr id='fila_" + $("#activosS").val() +"'>";
 	str += "<th scope='row'><span style='display:none;' align='center'></span><p>" + cantActivos + "</p></th>";
 	str += "<td align='center'>" + $("#activosS").val().replace("_"," ") + "</td>";
-	str += "<td align= 'center'><button type='button' class='btn btn-info btn-sm' onclick='eliminarActivo(\"" + $("#activosS").val() + "\")'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td>";
+	str += "<td align= 'center'><button type='button' class='btn btn-warning btn-sm' onclick='eliminarActivo(\"" + $("#activosS").val() + "\")'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td>";
 	str += "</tr>";
 	activosXsede.push($("#activosS").val());
 	document.getElementById("activosS").remove(document.getElementById("activosS").selectedIndex);
@@ -167,7 +167,7 @@ function guardarSede()
 						str += "<td align='center'><button type='button' class='btn btn-default btn-sm' onclick='mostrarPisos(\"" + datos[3] + "\",\"" + datos[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button></td>";
                         str += "<td align='center'><button type='button' class='btn btn-default btn-sm' onclick='mostrarActivos(\"" + JSON.parse(datos[5]) + "\",\"" + datos[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button></td>";
 						str += "<td align='center'>" + datos[4] + "</td>";
-                        str += "<td align='center'><button type='button' class='btn btn-primary btn-sm' onclick='editarSede(" + datos[0] + ",\"" + datos[1] + "\"," + datos[2] + ",\"" + datos[3] + "\",\"" + datos[4] + "\",\"" + JSON.parse(datos[5])+"\",\""+datos[6]+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
+                        str += "<td align='center'><button type='button' class='btn btn-success btn-sm' onclick='editarSede(" + datos[0] + ",\"" + datos[1] + "\"," + datos[2] + ",\"" + datos[3] + "\",\"" + datos[4] + "\",\"" + JSON.parse(datos[5])+"\",\""+datos[6]+"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button></td>";
 						str += "</tr>";
 						$("#listarSedes").append(str);
 						$("#dvCrearSede").modal("hide");
@@ -194,7 +194,7 @@ function guardarSede()
 						ubicacion[2].innerHTML = "<button type='button' class='btn btn-default btn-sm' onclick='mostrarPisos(\"" + datos[3] + "\",\"" + datos[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button>";
 						ubicacion[3].innerHTML = "<button type='button' class='btn btn-default btn-sm' onclick='mostrarActivos(\"" + JSON.parse(datos[5]) + "\",\"" + datos[1] + "\")'><span class='glyphicon glyphicon-th-list' aria-hidden='true'></span></button>";
 						ubicacion[4].innerHTML = datos[4];
-                        ubicacion[5].innerHTML = "<button type='button' class='btn btn-primary btn-sm' onclick='editarSede(" + datos[0] + ",\"" + datos[1] + "\"," + datos[2] + ",\"" + datos[3] + "\",\"" + datos[4] + "\",\"" + JSON.parse(datos[5]) + "\",\"" + datos[6] +"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
+                        ubicacion[5].innerHTML = "<button type='button' class='btn btn-success btn-sm' onclick='editarSede(" + datos[0] + ",\"" + datos[1] + "\"," + datos[2] + ",\"" + datos[3] + "\",\"" + datos[4] + "\",\"" + JSON.parse(datos[5]) + "\",\"" + datos[6] +"\")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>";
 						$("#dvCrearSede").modal("hide");
 					}
 				}
@@ -241,7 +241,7 @@ function editarSede(id,nombre,torres,pisos,pais,activos,service)
 		strA += "<tr id='fila_" + misActivos[i] +"'>";
 		strA += "<th scope='row'><span style='display:none;' align='center'></span><p>" + (i+1) + "</p></th>";
 		strA += "<td align='center'>" + misActivos[i].replace("_"," ") + "</td>";
-		strA += "<td align= 'center'><button type='button' class='btn btn-info btn-sm' onclick='eliminarActivo(\"" + misActivos[i] + "\")'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td>";
+		strA += "<td align= 'center'><button type='button' class='btn btn-warning btn-sm' onclick='eliminarActivo(\"" + misActivos[i] + "\")'><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td>";
 		strA += "</tr>";
 		for (var z = 0; z < selecActivos.length; z++)
 		{

@@ -12,7 +12,7 @@
 <div id="main" role="tabpanel">
     <div id="cabecera" style="margin:0 auto;width:70%;">
         <ul class="nav nav-tabs" role="tablist" id="navegacion">
-            <li class="active"><a href="#Inicio" aria-controls="Inicio" role="tab" data-toggle="tab" id="liInicio" style="color:#398CD3;">1. Inicio</a></li>
+            <li class="active"><a href="#Inicio" aria-controls="Inicio" role="tab" data-toggle="tab" id="liInicio" style="color:#5cb85c;">1. Inicio</a></li>
             <li class="disabledli"><a href="#Seleccion" aria-controls="Seleccion" role="tab" data-toggle="tab" id="liSeleccion">2. Selección</a></li>
             <li class="disabledli"><a href="#Resumen" aria-controls="Resumen" role="tab" data-toggle="tab" id="liResumen">3. Resumen</a></li>
         </ul>
@@ -22,7 +22,7 @@
         <br />
         <br />
         <div role="tabpanel" class="tab-pane fade in active" id="Inicio" style="margin:0 auto;width:60%;">
-            <div class="panel panel-primary">
+            <div class="panel panel-success">
                 <div class="panel-heading" style="text-align:center;">RESERVA DE LA SALA DE JUNTAS</div>
                 <div class="panel-body">
                     <br />
@@ -39,6 +39,7 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
@@ -53,6 +54,7 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
@@ -69,10 +71,26 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
-                    <div class="form-group">
+                    <div class="form-group" id="divCampania" style="display:none;">
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="campania" style="padding-top:10px;padding-left:10px;">Campaña</label>
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building-o" aria-hidden="true"></i></span>
+                                <select class="form-control" id="campania">
+                                    <option value="0">--SELECCIONAR--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="form-group" style="padding-bottom:2px;">
                         <div class="col-sm-12 col-md-1 col-lg-1"></div>
                         <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="torreR" style="padding-top:10px;padding-left:10px;">Torre</label>
                         <div class="col-sm-12 col-md-8 col-lg-8">
@@ -83,6 +101,7 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
@@ -97,6 +116,7 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
@@ -111,23 +131,24 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
                     </div>
                     <br />
                     <br />
                     <!--<div class="form-group">
-                        <div class="col-sm-12 col-md-1 col-lg-1"></div>
-                        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="fechaR" style="padding-top:10px;padding-left:10px;">Día</label>
-                        <div class="col-sm-12 col-md-8 col-lg-8">
-                            <div id="groupfechaR" class="input-group date">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
-                                <input type="text" class="form-control" placeholder="YYYY-MM-DD" data-date-end-date="0d" id="fechaR" style="cursor:pointer;">
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <br />-->
+        <div class="col-sm-12 col-md-1 col-lg-1"></div>
+        <label class="col-sm-12 col-md-2 col-lg-2 control-label" for="fechaR" style="padding-top:10px;padding-left:10px;">Día</label>
+        <div class="col-sm-12 col-md-8 col-lg-8">
+            <div id="groupfechaR" class="input-group date">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
+                <input type="text" class="form-control" placeholder="YYYY-MM-DD" data-date-end-date="0d" id="fechaR" style="cursor:pointer;">
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />-->
                     <div style="text-align:center;">
-                        <button type="button" class="btn btn-primary" id="inicioButton">
+                        <button type="button" class="btn btn-success" id="inicioButton">
                             Continuar<i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -144,11 +165,13 @@
                             <fieldset class="border:solid 1px;padding:10px;">
                                 <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Nueva reserva</legend>
                                 <div class="form-group">
-                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Titulo:</label>
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tituloR" style="padding-top:10px;padding-left:10px;">Descripción:</label>
                                     <div class="col-sm-12 col-md-8 col-lg-8">
-                                        <input type="text" placeholder="descripición" id="tituloR" class="form-control" />
+                                        <textarea placeholder="Motivo de la reserva" id="tituloR" class="form-control" rows="3"></textarea>
                                     </div>
                                 </div>
+                                <br />
+                                <br />
                                 <br />
                                 <br />
                                 <div class="form-group">
@@ -156,7 +179,7 @@
                                     <div class="col-sm-12 col-md-8 col-lg-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></span>
-                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" style="cursor:pointer;">
+                                            <input type="date" class="form-control" placeholder="YYYY-MM-DD" id="dinicioR" max="2040-02-20" style="cursor:pointer;" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -197,6 +220,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br />
+                                <br />
+                                <div class="form-group">
+                                    <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="solicitante" style="padding-top:10px;padding-left:10px;">Solicitante:</label>
+                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                            <input type="text"  id="solicitante" class="form-control" disabled/>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--<input type="hidden" id="creadoPorR"/> usar cuando tengas el codigo de cookies!!!!!!!!!!!!!!!!!!-->
                             </fieldset>
                         </div>
@@ -219,7 +253,7 @@
                 </div>
                 <div class="col-xs-6 text-right">
                     <div class="next">
-                        <button type="button" class="btn btn-default btn-lg" title="ir a inicio" id="irAresumen">
+                        <button type="button" class="btn btn-success btn-lg" title="ir a inicio" id="irAresumen">
                             Continuar<span class="glyphicon glyphicon-chevron-right"></span>
                         </button>
                     </div>
@@ -229,7 +263,7 @@
         <div role="tabpanel" class="tab-pane fade" id="Resumen" style="margin:0 auto;width:110%;">
             <div class="row row-eq-height">
                 <div class="col-sm-12 col-md-7 col-lg-7">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-success">
                         <div class="panel-heading" style="text-align:center;padding-bottom:0px;padding-top:2px;"><h4>SALA: <span id="salaSelect"></span></h4></div>
                         <div class="panel-body" style="padding-top:0px;padding-left:5px;">
                             <br />
@@ -243,6 +277,7 @@
                                     <input type="text" id="sedeSelect" class="form-control" disabled />
                                 </div>
                             </div>
+                            <br />
                             <div class="form-group">
                                 <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:15px;">Tipo:</label>
                                 <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
@@ -253,19 +288,28 @@
                                     <input type="text" id="ubiSelect" class="form-control" disabled />
                                 </div>
                             </div>
-                            <fieldset style="margin: 0 auto;width:60%">
-                                <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">Activos:</legend>
-                                <table class="table">
-                                    <thead class="blue-grey lighten-4">
-                                        <tr>
-                                            <th>Activo</th>
-                                            <th>Cantidad</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="listActivos"></tbody>
-                                </table>
-                            </fieldset>
-                        </div>
+                            <div class="form-group" id="resultCampania" style="display:none;">
+                                <br />
+                                <label class="col-sm-12 col-md-2 col-lg-2 control-label" style="padding-top:8px;padding-left:0px;">Campaña:</label>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="padding-left:0px;">
+                                    <input type="text" id="campaniaSelect" class="form-control" disabled />
+                                </div>
+                                <div class="col-sm-12 col-md-6 col-lg-6"></div>
+                            </div>
+                                <br />
+                                <fieldset style="margin: 0 auto;width:60%">
+                                    <legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">Activos:</legend>
+                                    <table class="table">
+                                        <thead class="blue-grey lighten-4">
+                                            <tr>
+                                                <th>Activo</th>
+                                                <th>Cantidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="listActivos"></tbody>
+                                    </table>
+                                </fieldset>
+                            </div>
                     </div>
                     <div class="panel-footer row">
                         <div class="col-xs-6 text-left">
@@ -277,7 +321,7 @@
                         </div>
                         <div class="col-xs-6 text-right">
                             <div class="next">
-                                <button type="button" class="btn btn-primary btn-lg" title="Guardar resrva" id="guardarReserva">
+                                <button type="button" class="btn btn-success btn-lg" title="Guardar resrva" id="guardarReserva">
                                     Guardar &nbsp;&nbsp;<span class="glyphicon glyphicon-floppy-disk"></span>
                                 </button>
                             </div>

@@ -2,11 +2,14 @@
     var my = setInterval(function () {
         if ($("#pais-profile").html() != "" && $("#rol-profile").html() != "" && $("#sede-profile").html() != "") {
             clearInterval(my);
-            var pais = $("#pais-profile").html();
-            var rol = $("#rol-profile").html();
-            var sede = $("#sede-profile").html();
-            $("#pais").val(pais);
-            listarSedes(pais, rol, sede);
+            if (window.cookie.getCookie()["role"] != "Admin")
+            {
+                var pais = $("#pais-profile").html();
+                var rol = $("#rol-profile").html();
+                var sede = $("#sede-profile").html();
+                $("#pais").val(pais);
+                listarSedes(pais, rol, sede);
+            }
         }
     }, 0);
 
@@ -76,6 +79,11 @@
         });
     }
 });
+
+function listarAdmin(elem)
+{
+    listarSedes(elem.value,"Admin","0");
+}
 
 function cambioInicio(elem) {
     if (elem.value != "") {
@@ -428,7 +436,7 @@ function buscarReservas() {
                             campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'"))) + "'></div></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-info' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-warning' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
                             campos += "</tr>";
                         }
 
@@ -571,7 +579,7 @@ function realizarCheckList(idReserva, idSala, param) {
         str += '<div class="col-sm-12 col-md-9 col-lg-9">';
         str += '<div class="input-group">';
         str += '<input type="text" class="form-control" id="ticket" ' + ((isAdmin)?">": (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">"));
-        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#39b3d7;'><a onclick='redirect(\""+miLink+"\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
+        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#f0ad4e;'><a onclick='redirect(\""+miLink+"\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
         str += '</div></div></div><br><br>';
         str += '<div class="form-group">';
         str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
@@ -588,7 +596,7 @@ function realizarCheckList(idReserva, idSala, param) {
             str += '<div class="col-lg-12 col-sm-12 col-12">';
             str += '<div class="input-group">';
             str += '<label class="input-group-btn">';
-            str += '<span class="btn btn-info">';
+            str += '<span class="btn btn-warning">';
             str += 'Imagen&hellip; <input type="file" style="display: none;" multiple id="img_' + keys[i] + '" onchange="cambioFile(this)">';
             str += '</span></label><input type="text" class="form-control" readonly></div></div><br>';
             str += '<div class="form-group">';
@@ -619,7 +627,7 @@ function realizarCheckList(idReserva, idSala, param) {
         str += '<div class="col-sm-12 col-md-9 col-lg-9">';
         str += '<div class="input-group">';
         str += '<input type="text" class="form-control" id="ticket" value="'+arrayCheck["ticket"]+'" disabled>';
-        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#39b3d7;'><a onclick='redirect(\"" + miLink + "\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
+        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#f0ad4e;'><a onclick='redirect(\"" + miLink + "\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
         str += '</div></div></div><br><br>';
         str += '<div class="form-group">';
         str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
@@ -639,7 +647,7 @@ function realizarCheckList(idReserva, idSala, param) {
             {
                 str += '<img id="myImg_' + checkKey[i] + '" src="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" width="150" height="150" style="margin-bottom:10px;" path="' + arrayCheck["activos"][checkKey[i]]["img"] + '"><br>';
                 str += '<a href="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" download>';
-                str += '<button class="btn btn-primary" style="margin-bottom:8px;"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar Imagen</button>';
+                str += '<button class="btn btn-success" style="margin-bottom:8px;"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar Imagen</button>';
                 str += '</a><br>';
             }
 
@@ -647,7 +655,7 @@ function realizarCheckList(idReserva, idSala, param) {
                 str += '<div class="col-lg-12 col-sm-12 col-12">';
                 str += '<div class="input-group">';
                 str += '<label class="input-group-btn">';
-                str += '<span class="btn btn-info">';
+                str += '<span class="btn btn-warning">';
                 str += 'Imagen&hellip; <input type="file" style="display: none;" multiple id="img_' + checkKey[i] + '" onchange="cambioFile(this)">';
                 str += '</span></label><input type="text" class="form-control" readonly></div></div><br>';
             }

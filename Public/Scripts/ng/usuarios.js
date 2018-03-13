@@ -71,7 +71,7 @@ function listarUsuarios() {
                     str += "<td align='center'>" + fila[2] + "</td>";
                     str += "<td align='center'>" + miSede.find((x) => x.idSede == fila[6])["nombreSede"] + "</td>";
                     str += "<td align='center'><label class='switch'><input type='checkbox' id='switch_" + fila[0] + "' " + (fila[7] == "True" ? "checked" : "") + " onchange='cambioEstado(this)'/><span class='slider round'></span></label></td>";
-                    str += "<td align='center'><button title='editar usuario' type='button' class='btn btn-primary btn-sm' onclick='editarUsuario(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[2] + "\"" + "," + "\"" + fila[3] + "\"," + "\"" + fila[4] + "\"" + "," + "\"" + fila[5] + "\"," + "\"" + fila[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-info btn-sm' onclick='resetear(\"" + fila[0] +"\")'><i class='fa fa-undo'></i></button></td>";
+                    str += "<td align='center'><button title='editar usuario' type='button' class='btn btn-success btn-sm' onclick='editarUsuario(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[2] + "\"" + "," + "\"" + fila[3] + "\"," + "\"" + fila[4] + "\"" + "," + "\"" + fila[5] + "\"," + "\"" + fila[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-default btn-sm' onclick='resetear(\"" + fila[0] +"\")'><i class='fa fa-undo'></i></button></td>";
                     str += "</tr>";
                 }
                 $("#listarUsuarios").html(str);
@@ -85,7 +85,7 @@ function limpiar() {
     $("#nombre").val("");
     $("#userName").val("");
     $("#email").val("");
-    $("#cargo").val("");
+    $("#cargo").val("0");
     ($("#hdnSede").val() * 1 > 0) ? $("#sede").val($("#hdnSede").val()) : $("#sede").val("0");
     ($("#hdnSedes").val().length > 0) ? $("#role").val("Administrador") : $("#role").val("User");
 }
@@ -139,7 +139,7 @@ function guardarUsuario() {
                         str += "<td align='center'>" + fila[2] + "</td>";
                         str += "<td align='center'>" + miSede.find((x) => x.idSede == fila[6])["nombreSede"] + "</td>";
                         str += "<td align='center'><label class='switch'><input type='checkbox' id='switch_" + fila[0] + "' " + (fila[7] == "True" ? "checked" : "") + " onchange='cambioEstado(this)'/><span class='slider round'></span></label></td>";
-                        str += "<td align='center'><button title='editar usuario' type='button' class='btn btn-primary btn-sm' onclick='editarUsuario(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[2] + "\"" + "," + "\"" + fila[3] + "\"," + "\"" + fila[4] + "\"" + "," + "\"" + fila[5] + "\"," + "\"" + fila[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-info btn-sm' onclick='resetear(\"" + fila[0] + "\")'><i class='fa fa-undo'></i></button></td>";
+                        str += "<td align='center'><button title='editar usuario' type='button' class='btn btn-success btn-sm' onclick='editarUsuario(" + fila[0] + "," + "\"" + fila[1] + "\"" + "," + "\"" + fila[2] + "\"" + "," + "\"" + fila[3] + "\"," + "\"" + fila[4] + "\"" + "," + "\"" + fila[5] + "\"," + "\"" + fila[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-default btn-sm' onclick='resetear(\"" + fila[0] + "\")'><i class='fa fa-undo'></i></button></td>";
                         str += "</tr>";
 
                         $("#listarUsuarios").append(str);
@@ -167,7 +167,7 @@ function guardarUsuario() {
                         columna[1].innerHTML = datos[4];
                         columna[2].innerHTML = datos[2];
                         columna[3].innerHTML = miSede.find((x) => x.idSede == datos[6])["nombreSede"]; 
-                        columna[5].innerHTML = "<button title='editar usuario' type='button' class='btn btn-primary btn-sm' onclick='editarUsuario(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[2] + "\"" + "," + "\"" + datos[3] + "\"," + "\"" + datos[4] + "\"" + "," + "\"" + datos[5] + "\"," + "\"" + datos[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-info btn-sm' onclick='resetear(\"" + datos[0] + "\")'><i class='fa fa-undo'></i></button>";
+                        columna[5].innerHTML = "<button title='editar usuario' type='button' class='btn btn-success btn-sm' onclick='editarUsuario(" + datos[0] + "," + "\"" + datos[1] + "\"" + "," + "\"" + datos[2] + "\"" + "," + "\"" + datos[3] + "\"," + "\"" + datos[4] + "\"" + "," + "\"" + datos[5] + "\"," + "\"" + datos[6] + "\"" + ")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></button>&nbsp;&nbsp;<button title='resetear contraseña' type='button' class='btn btn-default btn-sm' onclick='resetear(\"" + datos[0] + "\")'><i class='fa fa-undo'></i></button>";
 
                         $("#dvCrearUser").modal("hide");
                     }

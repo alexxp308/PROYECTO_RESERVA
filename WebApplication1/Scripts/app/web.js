@@ -37,16 +37,22 @@ function obtenerDatos() {
 
 function mostrarAlerta(nombreSala, fhinicio) {
     var div = document.getElementById("divAlert");
-    div.style.opacity = "0.00";
-    document.getElementById("roomName").innerHTML = nombreSala;
-    document.getElementById("hourReservation").innerHTML = fhinicio;
-    var my = setInterval(function () {
-        if (div.style.opacity == "1") {
-            clearInterval(my);
-        } else {
-            div.style.opacity = div.style.opacity * 1 + 0.05;
-        }
-    }, 50)
+    if (div != null)
+    {
+        div.style.opacity = "0.00";
+        document.getElementById("roomName").innerHTML = nombreSala;
+        document.getElementById("hourReservation").innerHTML = fhinicio;
+        var my = setInterval(function ()
+        {
+            if (div.style.opacity == "1")
+            {
+                clearInterval(my);
+            } else
+            {
+                div.style.opacity = div.style.opacity * 1 + 0.05;
+            }
+        }, 50)
+    }
 }
 
 function quitarAlerta(elem) {
