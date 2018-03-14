@@ -5,15 +5,23 @@
         if ($("#pais-profile").html() != "" && $("#rol-profile").html() != "" && $("#sede-profile").html() != "")
         {
             clearInterval(my);
-            var pais = $("#pais-profile").html();
-            var rol = $("#rol-profile").html();
-            var sede = $("#sede-profile").html();
-            $("#pais").val(pais);
-            listarSedes(pais, rol, sede);
+            if (window.cookie.getCookie()["role"] != "Admin")
+            {
+                var pais = $("#pais-profile").html();
+                var rol = $("#rol-profile").html();
+                var sede = $("#sede-profile").html();
+                $("#pais").val(pais);
+                listarSedes(pais, rol, sede);
+            }
         }
     }, 0);
     obtenerCampañas();
 });
+
+function listarAdmin(elem)
+{
+    listarSedes(elem.value, "Admin", "0");
+}
 
 var misCampanias = [];
 function obtenerCampañas()
@@ -50,7 +58,7 @@ function listarSedes(pais, rol, sedep)
         {
             var sedes = response.split(";");
             var sede = null;
-            var str = "<option value='0'>--SELEC--</option>";
+            var str = "<option value='0'>--SELECCIONAR--</option>";
             var isRol = (window.cookie.getCookie()["role"] == "Administrador" || (rol == "Supervisor" || rol == "ejecutivo" || rol == "Jefe")) ? false : true;
             for (var i = 0; i < sedes.length; i++)
             {
@@ -102,12 +110,12 @@ function cambiarReporte(elem)
 {
     var ini = document.getElementById("fechaI");
     var fin = document.getElementById("fechaF");
-    if (elem.value == "OCUPACION" || elem.value == "RESUMEN")
+    if (elem.value == "OCUPACION" || elem.value == "ACTIVOS")
     {
         ini.value = "";
         fin.value = "";
         ini.setAttribute("max", atributosFecha());
-        fin.removeAttribute("max", atributosFecha());
+        fin.setAttribute("max", atributosFecha());
         document.getElementById("divsala").style.visibility = "hidden";
     } else
     {
@@ -147,7 +155,7 @@ function cambiarFormato(fecha)
 function DarNombreEstado(idEstado)
 {
     var result = "";
-    if (idEstado == 0)
+    if (idEstado == 4)
     {
         result = "Cancelada";
     } else if (idEstado == 1)
@@ -385,63 +393,69 @@ function traerReporte()
                 dataType: "text",
                 success: function (response)
                 {
-                    var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val()) + 1;
-                    console.log(cantDias);
-                    var datos = response.split("#");
-                    var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
-                    var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'";
-                    var table = "<table>";
-                    table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DE OCUPACIÓN DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr>";
-                    table += "</table>";
-                    table += "<table>";
-                    table += "<tr></tr><tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td></tr>";
-                    table += "<tr><td></td><td " + celdaComun + ">" + $("#pais option:selected").text() + "</td><td " + celdaComun + ">" + $("#sede option:selected").text() + "</td></tr><tr></tr>";
-                    table += "</table>";
-                    table += "<table>";
-                    table += "<tr><td></td><td " + styleCabecera + ">TIPO</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera + ">HORARIO</td><td " + styleCabecera + ">HORAS TOTALES</td><td " + styleCabecera + ">HORAS RESERVADAS</td><td " + styleCabecera + ">OCUPACIÓN (%)</td></tr>";
-                    var lasala = null;
-                    var data = null;
-                    var ht = 0;
-                    var hr = 0;
-                    var result = 0;
-                    var copy = misSalas;
-                    for (var i = 0; i < datos.length; i++)
+                    if (response.length > 0)
                     {
-                        //debugger;
-                        data = datos[i].split("|");
-                        lasala = misSalas.find((x) => x.idSala == (data[0] * 1));
-                        index = copy.findIndex((x) => x.idSala == (data[0] * 1));
-                        if (index > -1) copy.splice(index, 1);
-                        ht = horasTotales(lasala["horario"], cantDias);
-                        hr = (data[1] / 60) * 1;
-                        result = hr / ht;
-                        table += "<tr>";
-                        table += "<td></td>";
-                        table += "<td " + celdaComun + ">" + lasala["tipo"] + "</td>";
-                        table += "<td " + celdaComun + ">" + lasala["nombreSala"] + "</td>";
-                        table += "<td " + celdaComun + ">" + lasala["horario"] + "</td>";
-                        table += "<td " + celdaComun + ">" + ht + "</td>";
-                        table += "<td " + celdaComun + ">" + hr + "</td>";
-                        table += "<td " + celdaComun + ">" + toFixed((result * 100), 2) + "</td>";
-                        table += "</tr>";
-                    }
-                    for (var j = 0; j < copy.length; j++)//las salas q no fueron usadas .. si es q ubieran
+                        var cantDias = diferenciaDias($("#fechaI").val(), $("#fechaF").val()) + 1;
+                        console.log(cantDias);
+                        var datos = response.split("#");
+                        var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
+                        var celdaComun = "style='border:1px solid #000000;text-align:center;vertical-align:middle;'";
+                        var table = "<table>";
+                        table += "<tr><td colspan='6' style='font-size:24px;font-weight:bold'>REPORTE DE OCUPACIÓN DEL " + $("#fechaI").val() + " AL " + $("#fechaF").val() + "</td></tr>";
+                        table += "</table>";
+                        table += "<table>";
+                        table += "<tr></tr><tr><td></td><td " + styleCabecera + ">PAIS</td><td " + styleCabecera + ">SEDE</td></tr>";
+                        table += "<tr><td></td><td " + celdaComun + ">" + $("#pais option:selected").text() + "</td><td " + celdaComun + ">" + $("#sede option:selected").text() + "</td></tr><tr></tr>";
+                        table += "</table>";
+                        table += "<table>";
+                        table += "<tr><td></td><td " + styleCabecera + ">TIPO</td><td " + styleCabecera + ">SALA</td><td " + styleCabecera + ">HORARIO</td><td " + styleCabecera + ">HORAS TOTALES</td><td " + styleCabecera + ">HORAS RESERVADAS</td><td " + styleCabecera + ">OCUPACIÓN (%)</td></tr>";
+                        var lasala = null;
+                        var data = null;
+                        var ht = 0;
+                        var hr = 0;
+                        var result = 0;
+                        var copy = misSalas.slice();
+                        for (var i = 0; i < datos.length; i++)
+                        {
+                            debugger;
+                            data = datos[i].split("|");
+                            lasala = misSalas.find((x) => x.idSala == (data[0] * 1));
+                            index = copy.findIndex((x) => x.idSala == (data[0] * 1));
+                            if (index > -1) copy.splice(index, 1);
+                            ht = horasTotales(lasala["horario"], cantDias);
+                            hr = (data[1] / 60) * 1;
+                            result = hr / ht;
+                            table += "<tr>";
+                            table += "<td></td>";
+                            table += "<td " + celdaComun + ">" + lasala["tipo"] + "</td>";
+                            table += "<td " + celdaComun + ">" + lasala["nombreSala"] + "</td>";
+                            table += "<td " + celdaComun + ">" + lasala["horario"] + "</td>";
+                            table += "<td " + celdaComun + ">" + ht + "</td>";
+                            table += "<td " + celdaComun + ">" + hr + "</td>";
+                            table += "<td " + celdaComun + ">" + toFixed((result * 100), 2) + "</td>";
+                            table += "</tr>";
+                        }
+                        for (var j = 0; j < copy.length; j++)//las salas q no fueron usadas .. si es q ubieran
+                        {
+                            table += "<tr>";
+                            table += "<td></td>";
+                            table += "<td " + celdaComun + ">" + copy[j]["tipo"] + "</td>";
+                            table += "<td " + celdaComun + ">" + copy[j]["nombreSala"] + "</td>";
+                            table += "<td " + celdaComun + ">" + copy[j]["horario"] + "</td>";
+                            table += "<td " + celdaComun + ">" + horasTotales(copy[j]["horario"], cantDias) + "</td>";
+                            table += "<td " + celdaComun + ">0</td>";
+                            table += "<td " + celdaComun + ">0</td>";
+                            table += "</tr>";
+                        }
+
+                        table += "</table>";
+
+                        var nombreExcel = "Reporte_OCUPACION_" + $("#sede option:selected").text() + "_" + getcurrentDate() + ".xls";
+                        generarExcel(table, nombreExcel, $("#sede option:selected").text());
+                    } else
                     {
-                        table += "<tr>";
-                        table += "<td></td>";
-                        table += "<td " + celdaComun + ">" + copy[j]["tipo"] + "</td>";
-                        table += "<td " + celdaComun + ">" + copy[j]["nombreSala"] + "</td>";
-                        table += "<td " + celdaComun + ">" + copy[j]["horario"] + "</td>";
-                        table += "<td " + celdaComun + ">" + horasTotales(copy[j]["horario"], cantDias) + "</td>";
-                        table += "<td " + celdaComun + ">0</td>";
-                        table += "<td " + celdaComun + ">0</td>";
-                        table += "</tr>";
+                        alert("No hay datos para descargar");
                     }
-
-                    table += "</table>";
-
-                    var nombreExcel = "Reporte_OCUPACION_" + $("#sede option:selected").text() + "_" + getcurrentDate() + ".xls";
-                    generarExcel(table, nombreExcel, $("#sede option:selected").text());
                 }
             });
         } else
@@ -485,30 +499,30 @@ function traerReporte()
                         var json = null;
                         var keys = null;
                         var result = {}; // todos los activos en buen estado (funcionales)
-                        var copy = misSalas;
+                        var copy = misSalas.slice();
                         var index = 0;
                         for (var j = 0; j < data.length; j++)
                         {
                             reservas = data[j].split("|");
                             index = copy.findIndex((x) => x.idSala == (reservas[0] * 1));
-                            if(index>-1) copy.splice(index, 1);
+                            if (index > -1) copy.splice(index, 1);
                             //find = misSalas.findIndex((x) => x.idSala == reservas[0] * 1);
                             //if (find > -1)
                             //{
-                                json = JSON.parse(reservas[2]); 
-                                keys = Object.keys(json["activos"]);
-                                for (var z = 0; z < keys.length; z++)
-                                {
-                                    if (result[keys[z]] == undefined) result[keys[z]] = contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
-                                    else result[keys[z]] += contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
-                                }
+                            json = JSON.parse(reservas[2]);
+                            keys = Object.keys(json["activos"]);
+                            for (var z = 0; z < keys.length; z++)
+                            {
+                                if (result[keys[z]] == undefined) result[keys[z]] = contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
+                                else result[keys[z]] += contarDetalles(json["activos"][keys[z]]["Detalle"], 0);
+                            }
                             //} else
                         }
 
                         var jsonActivos = null;
                         var keysA = null;
                         //debugger;
-                        
+
                         for (var n = 0; n < copy.length; n++) // si no hay checklist final en un dia va hacer esto o si no se le ha hecho checklist a una sala
                         {
                             keysA = Object.keys(copy[n]["activos"]);
@@ -522,7 +536,7 @@ function traerReporte()
                         var keysM = Object.keys(contActivos);
                         for (var i = 0; i < keysM.length; i++)
                         {
-                            resultM[keysM[i]] = (contActivos[keysM[i]] * cantDias)- result[keysM[i]]
+                            resultM[keysM[i]] = (contActivos[keysM[i]] * cantDias) - result[keysM[i]]
                         }
 
                         var styleCabecera = "style='background:#FFFF00;border:1px solid #000000;text-align:center'";
@@ -552,14 +566,17 @@ function traerReporte()
                             promB = Math.round(result[keysM[i]] / cantDias);
                             table += "<tr><td></td><td " + celdaComun + ">" + keysM[i] + "</td>";
                             table += "<td " + celdaComun + ">" + promB + "</td>";
-                            table += "<td " + celdaComun + ">" + (contActivos[keysM[i]]-promB) + "</td>";
+                            table += "<td " + celdaComun + ">" + (contActivos[keysM[i]] - promB) + "</td>";
                             table += "</tr>"
                         }
 
                         table += "</table>";
 
-                        var nombreExcel = "Reporte_RESUMEN_" + $("#sala option:selected").text() + "_" + getcurrentDate() + ".xls";
-                        generarExcel(table, nombreExcel, $("#sala option:selected").text());
+                        var nombreExcel = "Reporte_ACTIVOS_" + $("#sede option:selected").text() + "_" + getcurrentDate() + ".xls";
+                        generarExcel(table, nombreExcel, $("#sede option:selected").text());
+                    } else
+                    {
+                        alert("No hay datos para descargar");
                     }
                 }
             });

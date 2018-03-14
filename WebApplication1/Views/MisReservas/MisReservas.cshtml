@@ -40,10 +40,10 @@
                 <div class="col-sm-12 col-md-8 col-lg-8">
                     <select class="form-control" id="estado">
                         <option value="9">--SELEC--</option>
-                        <option value="0">Cancelada</option>
-                        <option value="1">vigente</option>
-                        <option value="2">En reserva</option>
-                        <option value="3">Terminada</option>
+                        <option value="1" data-image="../Content/img/esferaverde.gif">Vigente</option>
+                        <option value="2" data-image="../Content/img/esferaamarilla.gif">En reserva</option>
+                        <option value="3" data-image="../Content/img/esferaroja.gif">Terminada</option>
+                        <option value="4" >Cancelada</option>
                     </select>
                 </div>
             </div>
@@ -148,7 +148,7 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <select class="form-control" id="hinicioR" onchange="changeHinicio(this);">
+                                <select class="form-control" id="hinicioR" onchange="changeHinicio(this);" @Html.Raw(((User.IsInRole("Administrador") || User.IsInRole("Admin")) ? "" : "disabled='disabled'"))>
                                     <option value="0">--SELECCIONAR--</option>
                                 </select>
                             </div>
@@ -161,7 +161,7 @@
                         <div class="col-sm-12 col-md-8 col-lg-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
-                                <select class="form-control" id="hfinR" disabled>
+                                <select class="form-control" id="hfinR" disabled="disabled">
                                     <option value="0">--SELECCIONAR--</option>
                                 </select>
                             </div>
@@ -200,7 +200,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     ×
                 </button>
-                <h4 class="modal-title" style="color:white;"><span id="checkList"></span><span id="checkRealizado"></span><span id="advertencia" style="font-style:italic;font-size:15px;color:#B4B4B4"></span></h4>
+                <h4 class="modal-title" style="color:white;"><span id="checkList"></span><span id="checkRealizado"></span><span id="advertencia" style="font-style:italic;font-size:15px;color:#fff"></span></h4>
             </div>
             <div class="modal-body" style="padding-bottom:0px;padding-top:10px;" id="bodyCheck">
             </div>

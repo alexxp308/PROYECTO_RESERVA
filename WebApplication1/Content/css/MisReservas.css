@@ -22,3 +22,21 @@
     div.esfera.cancelada {
         background: radial-gradient(at top left, #D1D1D1 20%, #3E3E3E);
     }
+
+.green {
+    font-weight: bold;
+    color: green;
+}
+
+.yellow {
+    font-weight: bold;
+    color: #EDC84A;
+}
+.red {
+    font-weight: bold;
+    color: red;
+}
+.black {
+    font-weight: bold;
+    color: black;
+}

@@ -1,0 +1,7 @@
+Nombre:		blCampania_listarCampanias
+URL:		http://localhost:58901/Reportes
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlCampania.listarCampanias(Int32 idSede, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlCampania.cs:línea 46
+   en SalaJuntas.BL.blCampania.listarCampanias(Int32 idSede) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blCampania.cs:línea 41

@@ -184,6 +184,7 @@
     <Content Include="Content\css\MisReservas.css" />
     <Content Include="Content\css\ProcesoReserva.css" />
     <Content Include="Content\css\SalaJuntas.css" />
+    <Content Include="Content\css\select\dd.css" />
     <Content Include="Content\css\vendor\animate.css" />
     <Content Include="Content\css\vendor\hamburgers.min.css" />
     <Content Include="Content\css\vendor\main.css" />
@@ -202,6 +203,10 @@
     <Content Include="Content\img\juntas2_1.jpg" />
     <Content Include="Content\img\juntas_3.jpg" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="Content\img\title-bg.gif" />
+    <Content Include="Content\img\esferaverde.gif" />
+    <Content Include="Content\img\esferaamarilla.gif" />
+    <Content Include="Content\img\esferaroja.gif" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -231,6 +236,7 @@
     <Content Include="Scripts\lib\fullCalendar\es.js" />
     <Content Include="Scripts\lib\fullCalendar\fullcalendar.min.js" />
     <Content Include="Scripts\lib\fullCalendar\moment.min.js" />
+    <Content Include="Scripts\lib\select\jquery.dd.min.js" />
     <Content Include="Scripts\ng\Activos.js" />
     <Content Include="Scripts\ng\Campañas.js" />
     <Content Include="Scripts\ng\Login.js" />

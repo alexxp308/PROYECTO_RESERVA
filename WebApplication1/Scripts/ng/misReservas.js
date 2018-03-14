@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(function (e) {
     var my = setInterval(function () {
         if ($("#pais-profile").html() != "" && $("#rol-profile").html() != "" && $("#sede-profile").html() != "") {
             clearInterval(my);
@@ -77,6 +77,14 @@
                 }
             }
         });
+    }
+
+    try
+    {
+        $("#estado").msDropDown();
+    } catch (e)
+    {
+        alert(e.message);
     }
 });
 
@@ -269,8 +277,8 @@ function showDetailEvent(inicio, fin, title, id) {
 
     if (window.cookie.getCookie()["role"] == "Administrador") {
         $("#tituloR").removeAttr("disabled");
-        $("#dinicioR").removeAttr("disabled");
-        $("#dfinR").removeAttr("disabled");
+        //$("#dinicioR").removeAttr("disabled");
+        //$("#dfinR").removeAttr("disabled");
         $("#hinicioR").removeAttr("disabled");
         $("#hfinR").removeAttr("disabled");
     }
@@ -433,10 +441,10 @@ function buscarReservas() {
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhfin.substring(0, 16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 0) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'"))) + "'></div></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 0) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
-                            campos += "<td align='center'><button type='button' class='btn btn-warning' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 0 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 4) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'"))) + "'></div></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 4) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 4) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
+                            campos += "<td align='center'><button type='button' class='btn btn-warning' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 4 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
                             campos += "</tr>";
                         }
 
@@ -481,12 +489,13 @@ function eliminarReserva(id, fechaIni, elem) {
                 dataType: "text",
                 success: function (response) {
                     if (response * 1 > 0) {
-                        elem.setAttribute("disabled", "disabled");
+                        /*elem.setAttribute("disabled", "disabled");
                         elem.parentNode.previousSibling.firstChild.setAttribute("disabled", "disabled");
                         elem.parentNode.previousSibling.previousSibling.firstChild.setAttribute("disabled", "disabled");
                         elem.parentNode.previousSibling.previousSibling.previousSibling.firstChild.setAttribute("class", "esfera cancelada");
                         elem.parentNode.previousSibling.previousSibling.previousSibling.firstChild.setAttribute("title", "cancelada");
-                        elem.parentNode.parentNode.style.opacity = "0.65";
+                        elem.parentNode.parentNode.style.opacity = "0.65";*/
+                        buscarReservas();
                         alert("Cancelada correctamente");
                     } else {
                         alert("Error");
@@ -888,7 +897,7 @@ function changeHinicio(elem) {
         }
         elfin.innerHTML = str;
         elfin.value = "0";
-        elfin.removeAttribute("disabled");
+        if (window.cookie.getCookie()["role"] == "Administrador" || window.cookie.getCookie()["role"] == "Admin") elfin.removeAttribute("disabled");
     } else {
         elfin.setAttribute("disabled", "disabled");
     }

@@ -24,7 +24,7 @@
             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                 <label class="col-sm-12 col-md-4 col-lg-4 control-label" for="pais" style="padding-top:10px;padding-left:10px;">Pais:</label>
                 <div class="col-sm-12 col-md-8 col-lg-8">
-                    <select class="form-control" id="pais" disabled>
+                    <select class="form-control" id="pais" @Html.Raw((User.IsInRole("Admin") ? "" : "disabled")) onchange="listarAdmin(this)">
                         <option value="0">--SELECCIONAR--</option>
                         <option value="PERU">PERU</option>
                         <option value="MEXICO">MEXICO</option>

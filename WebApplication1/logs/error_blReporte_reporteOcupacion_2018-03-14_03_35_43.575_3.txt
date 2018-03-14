@@ -1,0 +1,7 @@
+Nombre:		blReporte_reporteOcupacion
+URL:		http://localhost:58901/Reportes/reporteOcupacion
+Mensaje:	La longitud no puede ser inferior a cero.
+Nombre del parámetro: length
+Detalle:	en System.String.Substring(Int32 startIndex, Int32 length)
+   en SalaJuntas.Librerias.DL.dlReporte.reporteOcupacion(Int32 sedeId, String fechaI, String fechaF, SqlConnection con) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.Librerias.DL\dlReporte.cs:línea 55
+   en SalaJuntas.BL.blReporte.reporteOcupacion(Int32 sedeId, String fechaI, String fechaF) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blReporte.cs:línea 41

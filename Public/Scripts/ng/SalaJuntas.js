@@ -112,7 +112,7 @@ function agregarActivo()
 			//var miactivo = $("#ActivosS").val();
 			var str = "";
 			str += '<div class="form-group" id="div_' + miactivo + '">';
-			str += '<label class="col-sm-12 col-md-5 col-lg-5 control-label" for="activo_' + miactivo + '" style="padding-top:10px;padding-left:10px;">' + replace + ': </label>';
+            str += '<label class="col-sm-12 col-md-5 col-lg-5 control-label" for="activo_' + miactivo + '" style="padding-top:10px;padding-left:10px;">' + replace.replace("_", " ") + ': </label>';
 			str += '<div class="col-sm-12 col-md-7 col-lg-7">';
 			str += '<div class="input-group">';
 			str += "<input type='number' id='activo_" + miactivo + "' class='form-control' onkeyup='cambiarActivo(\"" + miactivo + "\")' onmouseup='cambiarActivo(\"" + miactivo + "\")'/>";

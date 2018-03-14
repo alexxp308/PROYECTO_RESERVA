@@ -11,9 +11,9 @@
 <input id="hdnSedes" type="hidden" value="@ViewBag.sedexPais" />
 <input id="hdnPais" type="hidden" value="@ViewBag.pais" />
 <input id="hdnTipo" type="hidden" value="@ViewBag.tipo" />
-<table class="table">
+<table class="table table-bordered">
 	<thead class="blue-grey lighten-4">
-		<tr>
+		<tr class="success">
 			<th align="center">Nro</th>
 			<th align="center">Sala</th>
 			<!--<th align="center">Tipo</th>-->
@@ -113,17 +113,17 @@
 				</div>
 				<br />
 				<div class="row" style="margin: 0 auto;">
-					<div class="col-sm-12 col-md-3 col-lg-3"></div>
-					<div class="col-sm-12 col-md-6 col-lg-6" id="misActivos"></div>
-					<div class="col-sm-12 col-md-3 col-lg-3"></div>
+					<div class="col-sm-12 col-md-3 col-lg-2"></div>
+					<div class="col-sm-12 col-md-6 col-lg-8" id="misActivos" style="margin-left:10px;"></div>
+					<div class="col-sm-12 col-md-3 col-lg-2"></div>
 				</div>
 				<br />
 				<div class="form-group">
 					<div class="col-sm-12 col-md-1 col-lg-1"></div>
 					<label class="col-sm-12 col-md-4 col-lg-4" style="padding-top:10px;padding-left:10px;">Horario de atención:</label>
-					<table class="table">
+					<table class="table table-bordered">
 						<thead class="blue-grey lighten-4">
-                            <tr>
+                            <tr class="success">
                                 <th>&nbsp;</th>
                                 <th>Día</th>
                                 <th>Hora</th>
@@ -185,9 +185,9 @@
 			<div class="modal-body">
 				<fieldset class="border:solid 1px;padding:10px;">
 					<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala"></legend>
-					<table class="table">
+					<table class="table table-bordered">
 						<thead class="blue-grey lighten-4">
-							<tr>
+							<tr class="success">
 								<th>Activo</th>
 								<th>Cantidad</th>
 							</tr>

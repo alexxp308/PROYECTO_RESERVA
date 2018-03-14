@@ -572,14 +572,14 @@ BEGIN
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-				where a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+				where a.idSala=b.idSala and b.idSede=@idSede order by estadoReserva asc, fhinicio desc
 			end
 			else
 			begin
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by fhinicio desc
+				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede order by estadoReserva asc, fhinicio desc
 			end
 		end
 		else
@@ -589,14 +589,14 @@ BEGIN
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-				where a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+				where a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by estadoReserva asc, fhinicio desc
 			end
 			else
 			begin
 				select a.idReserva,a.estadoReserva,a.idSala,a.idCampania,a.descripcion,a.fhCreacion,a.fhinicio,a.fhfin,a.idCreator,
 				a.UserNameCreator,a.nombreCompletoCreator,
 				a.idCharge,a.UserNameCharge,a.nombreCompletoCharge,a.checklistInicial,a.fhCheckInicial,a.checklistFinal,a.fhCheckFinal from RESERVA a,SALA b 
-				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by fhinicio desc
+				where idCreator=@userId and a.idSala=b.idSala and b.idSede=@idSede and a.estadoReserva=@estado order by estadoReserva asc, fhinicio desc
 			end
 		end
 	end
@@ -606,22 +606,22 @@ BEGIN
 		begin
 			if(@rol='Administrador' or @rol='Admin')
 			begin
-				select * from RESERVA where idSala=@idSala order by fhinicio desc
+				select * from RESERVA where idSala=@idSala order by estadoReserva asc, fhinicio desc
 			end
 			else
 			begin
-				select * from RESERVA where idSala=@idSala and idCreator=@userId order by fhinicio desc
+				select * from RESERVA where idSala=@idSala and idCreator=@userId order by estadoReserva asc, fhinicio desc
 			end
 		end
 		else
 		begin
 			if(@rol='Administrador' or @rol='Admin')
 			begin
-				select * from RESERVA where idSala=@idSala and estadoReserva=@estado order by fhinicio desc
+				select * from RESERVA where idSala=@idSala and estadoReserva=@estado order by estadoReserva asc, fhinicio desc
 			end
 			else
 			begin
-				select * from RESERVA where idSala=@idSala and idCreator=@userId and estadoReserva=@estado order by fhinicio desc
+				select * from RESERVA where idSala=@idSala and idCreator=@userId and estadoReserva=@estado order by estadoReserva asc, fhinicio desc
 			end
 		end
 	end
@@ -632,7 +632,7 @@ create procedure USP_ELIMINAR_RESERVA(
 )
 as
 begin
-	update RESERVA set estadoReserva=0 where idReserva=@idReserva
+	update RESERVA set estadoReserva=4 where idReserva=@idReserva
 end
 
 exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
