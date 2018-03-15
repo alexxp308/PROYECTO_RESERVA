@@ -1,5 +1,6 @@
 ﻿$(function () {
     obtenerDatos();
+
 });
 
 function obtenerDatos() {
@@ -27,32 +28,70 @@ function obtenerDatos() {
                     document.getElementById("cancelardvp").setAttribute("disabled", "disabled");
                     $("#dvPassword").modal("show");
                 }
-                if (nombreSala != "0") {
-                    mostrarAlerta(nombreSala,fhinicio);
+                if (nombreSala != "0")
+                {
+                    mostrarAlertaWindow(nombreSala, fhinicio);
+                } else
+                {
+                    localStorage.setItem("alert", "0");
                 }
             }
         }
     });
 }
 
-function mostrarAlerta(nombreSala, fhinicio) {
-    var div = document.getElementById("divAlert");
-    if (div != null)
+function mostrarAlertaWindow(nombreSala, fhinicio)
+{
+    var verifica = setInterval(function ()
     {
-        div.style.opacity = "0.00";
-        document.getElementById("roomName").innerHTML = nombreSala;
-        document.getElementById("hourReservation").innerHTML = fhinicio;
-        var my = setInterval(function ()
+        var fhInicio = new Date(fhinicio);
+        var actual = new Date();
+        var timeDiff = Math.abs(fhInicio.getTime() - actual.getTime());
+        var diffDays = Math.ceil(timeDiff / (1000));
+        if (diffDays < 600)
         {
-            if (div.style.opacity == "1")
+            clearInterval(verifica);
+            if (localStorage.getItem("alert") == null || localStorage.getItem("alert") == "0")
             {
-                clearInterval(my);
+                var myWindow = window.open("", "Reserva proxima", "width=300,height=70")
+                var str = "<style>.alert{padding: 20px;background-color: #ff9800;color: white;}</style>";
+                str += "<div class='alert'>";
+                str += "<strong>Alerta: </strong>Su reserva esta por iniciar.<br />";
+                str += "Sala: " + nombreSala + "; Hora: " + fhinicio.substring(11, 16);
+                str += "</div>";
+                myWindow.document.write(str);
+                localStorage.setItem("alert", "1");
             } else
             {
-                div.style.opacity = div.style.opacity * 1 + 0.05;
+                var div = document.getElementById("divAlert");
+                if (div != null)
+                {
+                    div.style.opacity = "0.00";
+                    document.getElementById("roomName").innerHTML = nombreSala;
+                    document.getElementById("hourReservation").innerHTML = fhinicio.substring(10, 16);
+                    var my = setInterval(function ()
+                    {
+                        if (div.style.opacity == "1")
+                        {
+                            clearInterval(my);
+                        } else
+                        {
+                            div.style.opacity = div.style.opacity * 1 + 0.05;
+                        }
+                    }, 50);
+                }
             }
-        }, 50)
-    }
+            var iniciarAlert = setInterval(function ()
+            {
+                clearInterval(iniciarAlert);
+                localStorage.setItem("alert", "0");
+            }, 610000);
+
+        } else
+        {
+            localStorage.setItem("alert", "0");
+        }
+    }, 1000);
 }
 
 function quitarAlerta(elem) {

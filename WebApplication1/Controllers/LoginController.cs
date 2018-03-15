@@ -77,6 +77,11 @@ namespace WebApplication1.Controllers
                 Cookie.EraseCookie("sedeId");
                 Cookie.EraseCookie("adminId");
                 Cookie.EraseCookie("userNameAdmin");
+
+                if(Request.Cookies["alert"] != null)
+                {
+                    Cookie.EraseCookie("alert");
+                }
             }
 
 			Response.Cache.SetCacheability(HttpCacheability.NoCache);

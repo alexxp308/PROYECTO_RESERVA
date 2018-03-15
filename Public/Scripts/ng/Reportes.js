@@ -84,6 +84,7 @@ function listarSalas(elem)
         dataType: "text",
         success: function (response)
         {
+            misSalas = [];
             var salas = response.split("#");
             var sala = null;
             var descrpt = "";

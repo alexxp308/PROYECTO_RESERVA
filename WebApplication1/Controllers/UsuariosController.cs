@@ -109,5 +109,12 @@ namespace WebApplication1.Controllers
             result = oblUser.cambiarContrasenia(usuario.UserId,usuario.password);
             return result;
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrador,User")]
+        public void cookieAlert()
+        {
+            Cookie.CreateCookie("alert", "1", (1/24));
+        }
     }
 }

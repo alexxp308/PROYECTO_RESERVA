@@ -197,6 +197,10 @@
     <Content Include="Content\fonts\icon-font.min.css" />
     <Content Include="Content\img\arrowdown.gif" />
     <Content Include="Content\img\avatar-01.jpg" />
+    <Content Include="Content\img\esferaAmbar.png" />
+    <Content Include="Content\img\esferaNegra.png" />
+    <Content Include="Content\img\esferaRoja.png" />
+    <Content Include="Content\img\esferaVerde.png" />
     <Content Include="Content\img\img-01.jpg" />
     <Content Include="Content\img\juntas.jpg" />
     <Content Include="Content\img\juntas2.jpg" />
@@ -204,9 +208,6 @@
     <Content Include="Content\img\juntas_3.jpg" />
     <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\title-bg.gif" />
-    <Content Include="Content\img\esferaverde.gif" />
-    <Content Include="Content\img\esferaamarilla.gif" />
-    <Content Include="Content\img\esferaroja.gif" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

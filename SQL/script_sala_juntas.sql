@@ -100,17 +100,21 @@ declare @sql nvarchar(max);
 declare @cont int;
 if(@sede!=0)
 begin
-	set @cont = (select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
-	and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser);
+	--set @cont = (select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
+	--and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=@iduser);
+	
+	set @cont = (select COUNT(*) from RESERVA r,SALA s where r.idSala = s.idSala 
+	and idCreator=@iduser and r.estadoReserva=1
+	and convert(datetime,REPLACE(r.fhinicio,'T',' '),102)>GETDATE() and DATEDIFF(HOUR,GETDATE(),convert(datetime,REPLACE(r.fhinicio,'T',' '),102))<6)
+	
 	if(@cont>0)
 	begin
 		select top 1 a.UserName,a.[Password],a.Roles,a.cargo,a.NombreCompleto,
-		a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,s.nombreSala ,substring(r.fhinicio,12,5) fhinicio
+		a.Email,b.nombreSede ,a.firstTime,adm.NombreCompleto,b.PAIS,s.nombreSala,r.fhinicio
 		from UserProfile a,sede b,UserProfile adm, RESERVA r,SALA s
 		where a.idSede = b.idSede and a.UserId = @iduser and a.idSede = adm.idSede and adm.Roles='Administrador'
-		and r.idSala = s.idSala and a.idSede = s.idSede and r.idCreator = @iduser and 
-		fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
-		and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T')
+		and r.idSala = s.idSala and a.idSede = s.idSede and r.idCreator = @iduser and r.estadoReserva=1 and
+		convert(datetime,REPLACE(r.fhinicio,'T',' '),102)>GETDATE() and DATEDIFF(HOUR,GETDATE(),convert(datetime,REPLACE(r.fhinicio,'T',' '),102))<6 order by r.fhinicio asc
 	end
 	else
 	begin
@@ -127,14 +131,17 @@ begin
 end
 END
 
-exec USP_OBTENER_USUARIO 7
+exec USP_OBTENER_USUARIO 3
 
 select COUNT(*) from RESERVA where fhinicio between replace(CONVERT(nvarchar(16), GETDATE(), 120)+':00',' ','T')
 and replace(CONVERT(nvarchar(16),DATEADD([MINUTE],10,GETDATE()), 120)+':00',' ','T') and idCreator=4
 select replace(CONVERT(nvarchar(16), DATEADD([MINUTE],-10,GETDATE()), 120)+':00',' ','T')
 
+select top 1 r.fhinicio,s.nombreSala from RESERVA r,SALA s where r.idSala = s.idSala and idCreator=7 
+and convert(datetime,REPLACE(r.fhinicio,'T',' '),102)>GETDATE() order by r.fhinicio asc
 
-
+select DATEDIFF(HOUR,GETDATE(),convert(datetime,REPLACE('2018-03-16T08:30:00','T',' '),102))
+select convert(datetime,REPLACE('2018-03-16T08:30:00','T',' '),102)
 select *  from UserProfile
 
 
@@ -404,7 +411,7 @@ ALTER procedure [dbo].[USP_LISTAR_SALASXSEDE]
 )
 AS
 BEGIN
-	SELECT idSala,nombreSala,tipo,horario,activos,ubicacion from SALA where idSede=@SEDE and estado=1
+	SELECT idSala,nombreSala,tipo,horario,activos,ubicacion from SALA where idSede=@SEDE
 END
 
 exec USP_LISTAR_SALASXSEDE 1
