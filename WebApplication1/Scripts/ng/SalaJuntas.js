@@ -75,7 +75,14 @@ function crearSala()
 {
 	limpiar();
 	$('#dvCrearSala').modal();
-	$('#verifica').html('0');
+    $('#verifica').html('0');
+    var sedeId = window.cookie.getCookie()["sedeId"];
+    if ((sedeId * 1) > 0)
+    {
+        $("#SedeS").val(sedeId);
+        var elemSede = document.getElementById("SedeS");
+        listarTorres(elemSede); listarActivos(elemSede);
+    }
 }
 
 var activos = {};
@@ -318,10 +325,11 @@ function mostrarActivos(sactivos,nombre)
 
 function listarSalas()
 {
+    var sedeId = window.cookie.getCookie()["sedeId"];
 	$.ajax({
 		method: "POST",
 		url: "/SalaJuntas/ListarSalas",
-		data: { param: $("#hdnPais").val() + "|" + $("#hdnTipo").val()},
+        data: { param: $("#hdnPais").val() + "|" + $("#hdnTipo").val() + "|" + sedeId},
 		dataType: "text",
 		success: function (response)
 		{

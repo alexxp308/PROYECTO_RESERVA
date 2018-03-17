@@ -1,0 +1,8 @@
+Nombre:		blReserva_actualizarReserva
+URL:		http://localhost:58901/MisReservas/actualizarReserva
+Mensaje:	Error en la transacción. La respuesta del servidor fue: 5.7.1 <servicedeskmg@mdycontactcenter.com>: Sender address rejected: Access denied
+Detalle:	en System.Net.Mail.RecipientCommand.CheckResponse(SmtpStatusCode statusCode, String response)
+   en System.Net.Mail.SmtpTransport.SendMail(MailAddress sender, MailAddressCollection recipients, String deliveryNotify, Boolean allowUnicode, SmtpFailedRecipientException& exception)
+   en System.Net.Mail.SmtpClient.Send(MailMessage message)
+   en SalaJuntas.BL.blReserva.EnviarVariosCorreo(String correo) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blReserva.cs:línea 263
+   en SalaJuntas.BL.blReserva.actualizarReserva(List`1 lelReserva) en C:\Users\Administrador\Desktop\webReserva\SalaJuntas.BL\blReserva.cs:línea 98

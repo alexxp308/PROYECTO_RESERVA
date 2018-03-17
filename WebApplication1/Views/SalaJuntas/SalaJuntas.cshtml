@@ -52,7 +52,7 @@
 					<div class="col-sm-12 col-md-1 col-lg-1"></div>
 					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="SedeS" style="padding-top:10px;padding-left:10px;">Sede:</label>
 					<div class="col-sm-12 col-md-6 col-lg-6">
-						<select class="form-control" id="SedeS" onchange="listarTorres(this); listarActivos(this);">
+						<select class="form-control" id="SedeS" onchange="listarTorres(this); listarActivos(this);" @Html.Raw((User.IsInRole("Admin") ? "" : "disabled"))>
 							<option value="0">--SELECCIONAR--</option>
 						</select>
 					</div>
@@ -86,11 +86,6 @@
 					<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="tipoS" style="padding-top:10px;padding-left:10px;">Tipo:</label>
 					<div class="col-sm-12 col-md-6 col-lg-6">
 						<input type="text" id="tipoS" class="form-control" value="@ViewBag.tipo" readonly/>
-						<!--<select class="form-control" id="tipoS">
-							<option value="0">--SELECCIONAR--</option>
-							<option value="JUNTAS">JUNTAS</option>
-							<option value="CAPACITACION">CAPACITACION</option>
-						</select>-->
 					</div>
 				</div>
 				<br />

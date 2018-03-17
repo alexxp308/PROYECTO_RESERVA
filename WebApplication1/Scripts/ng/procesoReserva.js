@@ -682,7 +682,17 @@
                         });
 
                         cont++;
-                        str += '<div class="card-block">';
+                        str+="<tr>"
+                        str +="<th scope='row' align='center'>" + (cont) + "</th>";
+                        str += "<td  align='center'>" + descripcion + "</td>";
+                        str += "<td  align='center'>" + o.myevents[j].start.split("T")[0] + "</td>";
+                        str += "<td  align='center'>" + o.myevents[j].end.split("T")[0] + "</td>";
+                        str += "<td  align='center'>" + o.myevents[j].start.split("T")[1] + "</td>";
+                        str += "<td  align='center'>" + o.myevents[j].end.split("T")[1] + "</td>";
+                        str += "<td  align='center'>" + o.id("nombre-profile").innerHTML + "</td>";
+                        str += "<td  align='center'>" + o.id("hdnuserNc").value + "</td>";
+                        str +="</tr>"
+                        /*str += '<div class="card-block">';
                         str += '<h4 class="card-title">Reserva #' + (cont) + '</h4>';
                         str += '<ul class="list-group list-group-flush">';
                         str += '<li class="list-group-item">'
@@ -726,7 +736,7 @@
                         str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" style="padding-top:8px;padding-left:15px;">Encargado:</label>';
                         str += '<div class="col-sm-12 col-md-8 col-lg-8" style="padding-left:0px;">';
                         str += '<input type="text" class="form-control" readonly value="' + o.id("hdnuserNc").value + '"/>';
-                        str += '</div></div></li></ul></div>';
+                        str += '</div></div></li></ul></div>';*/
                     }
                 }
 
@@ -767,13 +777,13 @@
                     {
                         $(".loader").toggle(false);
                         var datos = response.split("|");
-                        if (datos[0] == "1" && datos[1] == "1")
+                        if (datos[0]*1 > 0 && datos[1]*1>0)
                         {
                             alert("Se ha realizado la reserva exitosamente!");
-                        } else if (datos[0] == "0" && datos[1] == "1")
+                        } else if (datos[0] == "0" && datos[1]*1 >0)
                         {
                             alert("Se envio correctamente al correo pero no a la base");
-                        } else if (datos[1] == "0" && datos[0] == "1")
+                        } else if (datos[1] == "0" && datos[0]*1 > 1)
                         {
                             alert("Se guardo en la base pero no se envio al correo");
                         } else

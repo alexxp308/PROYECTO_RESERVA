@@ -1,6 +1,5 @@
 ﻿$(function () {
     obtenerDatos();
-
 });
 
 function obtenerDatos() {

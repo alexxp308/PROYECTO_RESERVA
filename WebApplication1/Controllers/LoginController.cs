@@ -55,6 +55,7 @@ namespace WebApplication1.Controllers
                 Cookie.CreateCookie("sedeId", param[3], 1);
                 Cookie.CreateCookie("adminId", param[4], 1);
                 Cookie.CreateCookie("userNameAdmin", param[5], 1);
+                Cookie.CreateCookie("PAIS", param[6], 1);
 
                 return RedirectToAction("Index", "Home");
 			}
@@ -69,7 +70,7 @@ namespace WebApplication1.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff()
 		{
-			if (Request.Cookies["userId"] != null && Request.Cookies["userName"] != null && Request.Cookies["role"] != null && Request.Cookies["sedeId"] != null && Request.Cookies["adminId"] != null && Request.Cookies["userNameAdmin"] != null)
+			if (Request.Cookies["userId"] != null && Request.Cookies["userName"] != null && Request.Cookies["role"] != null && Request.Cookies["sedeId"] != null && Request.Cookies["adminId"] != null && Request.Cookies["userNameAdmin"] != null && Request.Cookies["PAIS"] != null)
 			{
                 Cookie.EraseCookie("userId");
                 Cookie.EraseCookie("userName");
@@ -77,11 +78,7 @@ namespace WebApplication1.Controllers
                 Cookie.EraseCookie("sedeId");
                 Cookie.EraseCookie("adminId");
                 Cookie.EraseCookie("userNameAdmin");
-
-                if(Request.Cookies["alert"] != null)
-                {
-                    Cookie.EraseCookie("alert");
-                }
+                Cookie.EraseCookie("PAIS");
             }
 
 			Response.Cache.SetCacheability(HttpCacheability.NoCache);

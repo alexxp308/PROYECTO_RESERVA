@@ -29,7 +29,7 @@ namespace SalaJuntas.BL
 			return result;
 		}
 
-		public string ListarSalas(string pais,string tipo)
+		public string ListarSalas(string pais,string tipo,int sedeId)
 		{
 			string result = "";
 			using (SqlConnection con = new SqlConnection(ConnectionString))
@@ -38,7 +38,7 @@ namespace SalaJuntas.BL
 				{
 					con.Open();
 					dlSala odlSala = new dlSala();
-					result = odlSala.ListarSalas(pais,tipo,con);
+					result = odlSala.ListarSalas(pais,tipo,sedeId,con);
 				}
 				catch (Exception ex)
 				{

@@ -714,11 +714,14 @@ function realizarCheckList(idReserva, idSala, param)
             {
                 if (j != 0) str += "<tr>";
                 str += "<td>";
+                str += '<div class="form-group">';
+                str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + keys[i] + (j + 1) + '" style="padding-top:10px;padding-left:10px;">' + keys[i] + ' ' + (j + 1) + ':</label>';
+                str += '<div class="col-sm-12 col-md-8 col-lg-8">';
                 str += '<select class="form-control checkSelect" id="' + keys[i] + (j + 1) + '" ' + ((isAdmin) ? ">" : (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">")) + '>';
                 str += '<option value="0">--SELECCIONAR--</option>';
                 str += '<option value="funcional">funcional</option>';
                 str += '<option value="no_funcional">no funcional</option>';
-                str += '</select>';
+                str += '</select></div></div>';
                 str += "</td>";
                 str += "</tr>";
             }
@@ -786,11 +789,14 @@ function realizarCheckList(idReserva, idSala, param)
             {
                 if (j != 0) str += "<tr>";
                 str += "<td>";
+                str += '<div class="form-group">';
+                str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + checkKey[i] + (j + 1) + '" style="padding-top:10px;padding-left:10px;">' + checkKey[i] + ' ' + (j + 1) + ':</label>';
+                str += '<div class="col-sm-12 col-md-8 col-lg-8">';
                 str += '<select class="form-control checkSelect" id="' + checkKey[i] + (j + 1) + '" ' + ((isAdmin) ? ">" : "disabled >");
                 str += '<option value="0">--SELECCIONAR--</option>';
                 str += '<option value="funcional" ' + ((detalle[j] == "funcional") ? "selected" : "") + '>funcional</option>';
                 str += '<option value="no_funcional" ' + ((detalle[j] == "no_funcional") ? "selected" : "") + '>no funcional</option>';
-                str += '</select>';
+                str += '</select></div></div>';
                 str += "</td>";
                 str += "</tr>";
             }
@@ -806,104 +812,9 @@ function realizarCheckList(idReserva, idSala, param)
     $("#dvCheck").modal();
 }
 
-
-/*for (var i = 0; i < keys.length; i++)
-{
-    str += '<fieldset style="padding-left:25px;padding-right:25px;padding-top:10px;padding-bottom:10px;">';
-    str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">' + keys[i] + '</legend>';
-    str += '<div class="col-lg-12 col-sm-12 col-12">';
-    str += '<div class="input-group">';
-    str += '<label class="input-group-btn">';
-    str += '<span class="btn btn-warning">';
-    str += 'Imagen&hellip; <input type="file" style="display: none;" multiple id="img_' + keys[i] + '" onchange="cambioFile(this)">';
-    str += '</span></label><input type="text" class="form-control" readonly></div></div><br>';
-    str += '<div class="form-group">';
-    str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="detalle_' + keys[i] + '" style="padding-top:10px;padding-left:10px;">Detalle:</label>';
-    str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-    str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_' + keys[i] + '"' + ((isAdmin) ? ">" : (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">"))  + '</textarea>';
-    str += '</div></div><br><br><br><br>';
-    for (var j = 0; j < activos[keys[i]]; j++)
-    {
-        str += '<div class="form-group">';
-        str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + keys[i] + (j + 1) + '" style="padding-top:10px;padding-left:10px;">' + keys[i] + ' ' + (j + 1) + ':</label>';
-        str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-        str += '<select class="form-control checkSelect" id="' + keys[i] + (j + 1) + '" ' + ((isAdmin) ? ">" : (((actual < reserva["fhinicio"]) || (actual > reserva["fhfin"])) ? "disabled >" : ">")) + '>';
-        str += '<option value="0">--SELECCIONAR--</option>';
-        str += '<option value="funcional">funcional</option>';
-        str += '<option value="no_funcional">no funcional</option>';
-        str += '</select></div></div><br><br>';
-    }
-    str += '</fieldset>';
-
-
--------------------------------------------------------------------------------
-
-str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
-        str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Detalles de la sala:</legend>';
-        str += '<div class="form-group">';
-        str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="ticket" style="padding-top:10px;padding-left:10px;">Ticket ServiceDesk:</label>';
-        str += '<div class="col-sm-12 col-md-9 col-lg-9">';
-        str += '<div class="input-group">';
-        str += '<input type="text" class="form-control" id="ticket" value="' + arrayCheck["ticket"] + '" disabled>';
-        str += "<span class='input-group-addon' id='basic-addon1' style='cursor:pointer;background:#f0ad4e;'><a onclick='redirect(\"" + miLink + "\")' style='color:#fff'>Ir a ServiceDesk</a></span>";
-        str += '</div></div></div><br><br>';
-        str += '<div class="form-group">';
-        str += '<label class="col-sm-12 col-md-3 col-lg-3 control-label" for="detalle_sala" style="padding-top:10px;padding-left:10px;">Descripción:</label>';
-        str += '<div class="col-sm-12 col-md-9 col-lg-9">';
-        str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_sala" disabled>' + arrayCheck["detalle_sala"] + '</textarea>';
-        str += '</div></div>';
-        str += '</fieldset>';
-        str += '<fieldset style="padding-left:50px;padding-right:50px;padding-top:10px;padding-bottom:10px;">';
-        str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;">Activos:</legend>';
-var checkKey = Object.keys(arrayCheck["activos"]);
-        var detalle = [];
-
-for (var i = 0; i < checkKey.length; i++)
-        {
-            str += '<fieldset style="padding-left:25px;padding-right:25px;padding-top:10px;padding-bottom:10px;text-align:center;">';
-            str += '<legend class="ng-binding" style="width:auto;border-bottom:0;margin-bottom:10px;font-size:16px;font-style:italic;color:#B7B7B7;" id="nameSala">' + checkKey[i] + '</legend>';
-            if (arrayCheck["activos"][checkKey[i]]["img"] != "")
-            {
-                str += '<img id="myImg_' + checkKey[i] + '" src="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" width="150" height="150" style="margin-bottom:10px;" path="' + arrayCheck["activos"][checkKey[i]]["img"] + '"><br>';
-                str += '<a href="/Img/' + arrayCheck["activos"][checkKey[i]]["img"] + '" download>';
-                str += '<button class="btn btn-success" style="margin-bottom:8px;"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Descargar Imagen</button>';
-                str += '</a><br>';
-            }
-
-            if (window.cookie.getCookie()["role"] == "Administrador")
-            {
-                str += '<div class="col-lg-12 col-sm-12 col-12">';
-                str += '<div class="input-group">';
-                str += '<label class="input-group-btn">';
-                str += '<span class="btn btn-warning">';
-                str += 'Imagen&hellip; <input type="file" style="display: none;" multiple id="img_' + checkKey[i] + '" onchange="cambioFile(this)">';
-                str += '</span></label><input type="text" class="form-control" readonly></div></div><br>';
-            }
-            str += '<div class="form-group">';
-            str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="detalle_' + checkKey[i] + '" style="padding-top:10px;padding-left:10px;">Detalle:</label>';
-            str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-            str += '<textarea class="form-control checkDetalle" rows="3" id="detalle_' + checkKey[i] + '"' + ((isAdmin) ? ">" : "disabled >") + '' + arrayCheck["activos"][checkKey[i]]["descripcion"] + '</textarea>';
-            str += '</div></div><br><br><br><br>';
-            detalle = arrayCheck["activos"][checkKey[i]]["Detalle"];
-            for (var j = 0; j < detalle.length; j++)
-            {
-                str += '<div class="form-group">';
-                str += '<label class="col-sm-12 col-md-4 col-lg-4 control-label" for="' + checkKey[i] + (j + 1) + '" style="padding-top:10px;padding-left:10px;">' + checkKey[i] + ' ' + (j + 1) + ':</label>';
-                str += '<div class="col-sm-12 col-md-8 col-lg-8">';
-                str += '<select class="form-control checkSelect" id="' + checkKey[i] + (j + 1) + '" ' + ((isAdmin) ? ">" : "disabled >");
-                str += '<option value="0">--SELECCIONAR--</option>';
-                str += '<option value="funcional" ' + ((detalle[j] == "funcional") ? "selected" : "") + '>funcional</option>';
-                str += '<option value="no_funcional" ' + ((detalle[j] == "no_funcional") ? "selected" : "") + '>no funcional</option>';
-                str += '</select></div></div><br><br>';
-            }
-            str += '</fieldset>';
-        }
-        str += "</fieldset>";
-}*/
-
 function redirect(link)
 {
-    window.open("http://www." + link, "_blank");
+    window.open("http://" + link, "_blank");
 }
 
 function cambioFile(elem)

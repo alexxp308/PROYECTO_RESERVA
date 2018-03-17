@@ -17,7 +17,7 @@ namespace WebApplication1.Controllers
         {
 			string pais = Request.QueryString["Pais"];
 			string tipo = Request.QueryString["tipo"];
-			if (pais != null && pais!="" && tipo!="")
+            if (pais != null && pais!="" && tipo!="")
 			{
 				string result = "";
 				blSede oblSede = new blSede();
@@ -51,7 +51,7 @@ namespace WebApplication1.Controllers
 			string result = "";
 			blSala oblSala = new blSala();
 			string[] datos = param.Split('|'); 
-			result = oblSala.ListarSalas(datos[0],datos[1]);
+			result = oblSala.ListarSalas(datos[0],datos[1],Convert.ToInt32(datos[2]));
 			return result;
 		}
 

@@ -35,7 +35,7 @@ namespace SalaJuntas.Librerias.DL
 			return result;
 		}
 
-		public string ListarSalas(string pais,string tipo,SqlConnection con)
+		public string ListarSalas(string pais,string tipo,int sedeId,SqlConnection con)
 		{
 			string result = "";
 			SqlCommand cmd = new SqlCommand("USP_LISTAR_SALA", con);
@@ -43,7 +43,8 @@ namespace SalaJuntas.Librerias.DL
 			cmd.CommandTimeout = 1800;
 			cmd.Parameters.AddWithValue("@pais", pais);
 			cmd.Parameters.AddWithValue("@tipo", tipo);
-			SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
+            cmd.Parameters.AddWithValue("@sedeId", sedeId);
+            SqlDataReader drd = cmd.ExecuteReader(CommandBehavior.SingleResult);
 			if (drd != null)
 			{
 				while (drd.Read())
