@@ -48,6 +48,7 @@ namespace WebApplication1.Controllers
                 Cookie.EraseCookie("sedeId");
                 Cookie.EraseCookie("adminId");
                 Cookie.EraseCookie("userNameAdmin");
+                Cookie.EraseCookie("PAIS");
 
                 Cookie.CreateCookie("userId", param[0], 1);
 				Cookie.CreateCookie("userName", param[1], 1);

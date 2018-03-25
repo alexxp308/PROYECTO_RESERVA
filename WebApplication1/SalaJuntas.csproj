@@ -198,6 +198,7 @@
     <Content Include="Content\img\arrowdown.gif" />
     <Content Include="Content\img\avatar-01.jpg" />
     <Content Include="Content\img\esferaAmbar.png" />
+    <Content Include="Content\img\esferaMorada.png" />
     <Content Include="Content\img\esferaNegra.png" />
     <Content Include="Content\img\esferaRoja.png" />
     <Content Include="Content\img\esferaVerde.png" />

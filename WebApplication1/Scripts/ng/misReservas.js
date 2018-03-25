@@ -508,8 +508,8 @@ function buscarReservas()
                             if (window.cookie.getCookie()["role"] == "Administrador" || window.cookie.getCookie()["role"] == "Admin") campos += "<td align='center'>" + reservas[i].nombreCompletoCreator + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhCreacion + "</td>";
                             campos += "<td align='center'>" + reservas[i].fhinicio.substring(0, 16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'>" + reservas[i].fhfin.substring(0, 16).replace("T", " ") + "</td>";
-                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 4) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en reserva'" : "terminada' title='terminada'"))) + "'></div></td>";
+                            campos += "<td align='center'>" + reservas[i].fhfin.substring(0, 16).replace("T", " ") + "</td>";//(reservas[i].estadoReserva == 1) ? "espera' title='vigente'" :
+                            campos += "<td align='center'><div class='esfera " + ((reservas[i].estadoReserva == 4) ? "cancelada' title='cancelada'" : ((reservas[i].estadoReserva == 2) ? "reserva' title='en curso'" : ((reservas[i].estadoReserva == 3) ? "terminada' title='terminada'" : ((reservas[i].estadoReserva == 1) ? "espera' title='vigente'" : "noUtilizada' title='No utilizada'")))) + "'></div></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist inicial' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",0)' " + ((reservas[i].estadoReserva == 4) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-default' title='realizar checklist final' onclick='realizarCheckList(\"" + reservas[i].idReserva + "\"," + keys[z] + ",1)' " + ((reservas[i].estadoReserva == 4) ? "disabled" : "") + "><span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span></button></td>";
                             campos += "<td align='center'><button type='button' class='btn btn-warning' title='cancelar reserva' onclick='eliminarReserva(" + reservas[i].idReserva + ",\"" + reservas[i].fhinicio + "\",this)' " + ((reservas[i].estadoReserva == 4 || getcurrentDate() > reservas[i].fhinicio) ? "disabled" : "") + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span></button></td>";
@@ -920,19 +920,16 @@ function guardarCheck()
                         {
                             var datos = response.split("|");
                             var esfera = document.getElementById("tr_" + idReserva).children[((window.cookie.getCookie()["role"] == "Administrador") ? 5 : 4)].firstChild;
+                            var er = datos[2] * 1;
+                            debugger;
+                            esfera.setAttribute("class", "esfera " + ((er == 4) ? "cancelada" : ((er == 2) ? "reserva" : ((er == 3) ? "terminada" : ((er == 1) ? "espera" :"noUtilizada")))));
+                            esfera.setAttribute("title", ((er == 4) ? "cancelada" : ((er == 2) ? "en curso" : ((er == 3) ? "terminada" : ((er == 1) ? "vigente" : "No utilizada")))));
                             if (iniFin == 0)
                             {
-                                if (esfera.getAttribute("class") != "esfera terminada")
-                                {
-                                    esfera.setAttribute("class", "esfera reserva");
-                                    esfera.setAttribute("title", "en reserva");
-                                }
                                 salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListInicial"] = datos[0];
                                 salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckInicial"] = datos[1];
                             } else
                             {
-                                esfera.setAttribute("class", "esfera terminada");
-                                esfera.setAttribute("title", "terminada");
                                 salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["checkListFinal"] = datos[0];
                                 salas[idSala + ""].reservas.find((x) => x.idReserva == idReserva)["fhCheckFinal"] = datos[1];
                             }

@@ -221,7 +221,7 @@ namespace SalaJuntas.Librerias.DL
             {
                 while (drd.Read())
                 {
-                    result = drd.GetString(0) + "|" + drd.GetString(1) ;
+                    result = drd.GetString(0) + "|" + drd.GetString(1) + "|" + drd.GetInt32(2);
                 }
                 drd.Close();
             }

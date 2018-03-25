@@ -22,6 +22,9 @@
     div.esfera.cancelada {
         background: radial-gradient(at top left, #D1D1D1 20%, #3E3E3E);
     }
+    div.esfera.noUtilizada {
+        background: radial-gradient(at top left, #C46CFD 20%, #280241);
+    }
 
 .green {
     font-weight: bold;

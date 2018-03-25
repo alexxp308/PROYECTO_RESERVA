@@ -569,7 +569,7 @@ values (1,2,'prueba1','2018-03-01 09:00','2018-03-02T10:00:00','2018-03-02T11:30
 select * from RESERVA
 select * from sala
 select * from Sede
-
+select replace(CONVERT(varchar(19),getdate(),120),' ','T')
 ALTER PROCEDURE [dbo].[USP_OBTENER_RESERVASXUSUARIO](
 	@idSala int,
 	@userId int,
@@ -578,6 +578,9 @@ ALTER PROCEDURE [dbo].[USP_OBTENER_RESERVASXUSUARIO](
 )
 AS
 BEGIN
+	-- actualiza los estados a no utlizados cuando ya vencio su tiempo y no hizo checklist
+	update RESERVA SET estadoReserva=5 WHERE (estadoReserva=1 or estadoReserva=2) and fhCheckFinal='' and fhfin<replace(CONVERT(varchar(19),getdate(),120),' ','T')
+
 	declare @rol varchar(20)= (select Roles from UserProfile where UserId=@userId);
 	declare @val int = @idSala;
 	if(@val=0)
@@ -655,14 +658,31 @@ end
 exec USP_OBTENER_RESERVASXUSUARIO 0,2,1
 select * from RESERVA
 
-alter PROCEDURE USP_GUARDAR_CHECKLIST
+ALTER PROCEDURE [dbo].[USP_GUARDAR_CHECKLIST]
 (
 	@idReserva int,
 	@iniFin int,
 	@checkList nvarchar(max)
 )
 AS
-BEGIN 
+BEGIN
+update RESERVA SET estadoReserva=5 WHERE (estadoReserva=1 or estadoReserva=2) and fhCheckFinal='' and fhfin<replace(CONVERT(varchar(19),getdate(),120),' ','T')
+declare @isUse INT = (select estadoReserva from RESERVA WHERE idReserva=@idReserva)
+if(@isUse = 5)
+begin
+	if(@iniFin=0)
+	begin
+		update RESERVA set checklistInicial=@checkList,fhCheckInicial= CONVERT(nvarchar(16), getdate(), 120) where idReserva=@idReserva
+		select checklistInicial,fhCheckInicial from RESERVA where idReserva=@idReserva;
+	end
+	else
+	begin
+		update RESERVA set checklistFinal=@checkList,fhCheckFinal= CONVERT(nvarchar(16), getdate(), 120) where idReserva=@idReserva
+		select checklistFinal,fhCheckFinal from RESERVA where idReserva=@idReserva;
+	end
+end
+else
+begin
 	if(@iniFin=0)
 	begin
 		declare @EcheckIni char(19) = (select fhCheckInicial from RESERVA where idReserva=@idReserva);
@@ -682,6 +702,7 @@ BEGIN
 	update RESERVA set checklistFinal=@checkList,fhCheckFinal= CONVERT(nvarchar(16), getdate(), 120),estadoReserva=3 where idReserva=@idReserva
 	select checklistFinal,fhCheckFinal from RESERVA where idReserva=@idReserva;
 	end
+end
 END
 
 exec USP_GUARDAR_CHECKLIST 4,0,'hola'

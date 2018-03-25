@@ -165,9 +165,12 @@ function DarNombreEstado(idEstado)
     } else if (idEstado == 2)
     {
         result = "En reserva";
+    } else if (idEstado == 3)
+    {
+        result = "Finalizada";
     } else
     {
-        result = "Finalizada"
+        result = "No utilizada";
     }
 
     return result;

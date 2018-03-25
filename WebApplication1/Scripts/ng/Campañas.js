@@ -48,9 +48,9 @@ function editarCampaña(id, nombre) {
 }
 
 function guardarCampaña() {
-    var data = {}
+    var data = {};
     data.nombreCampania = $("#campania").val();
-    data.idSede = window.cookie.getCookie()["sedeId"] * 1
+    data.idSede = window.cookie.getCookie()["sedeId"] * 1;
     var verifica = $("#verifica").html();
     if (verifica == "0") {
         $.ajax({
